@@ -7,7 +7,7 @@
 **.iml
 *.idea
 **/build
-**.gradle
+**/.gradle/**
 **.ipr
 **.iws
 

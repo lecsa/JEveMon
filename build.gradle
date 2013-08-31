@@ -1,0 +1,33 @@
+allprojects {
+    apply plugin: 'idea';
+
+    ext.jUnitVersion="4.+";
+    ext.sqliteVersion="3.7.2";
+    ext.slf4jVersion="1.7.5";
+    ext.logbackVersion="1.0.13";
+
+    repositories {
+        flatDir { dirs "lib" }
+        mavenCentral();
+    }
+
+    task initDirs () << {
+        project.sourceSets*.allSource.srcDirs.flatten().each { dir ->
+            dir.mkdirs()
+        }
+    }
+
+}
+
+project("JEveMon") {
+    apply plugin: 'java';
+
+    dependencies {
+        compile "org.xerial:sqlite-jdbc:$sqliteVersion";
+        compile "org.slf4j:slf4j-api:$slf4jVersion";
+        runtime "ch.qos.logback:logback-classic:$logbackVersion";
+        testCompile "junit:junit:$jUnitVersion";
+    }
+}
+
+
