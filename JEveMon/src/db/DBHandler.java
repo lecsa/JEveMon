@@ -7,6 +7,11 @@ package db;
 import API.APIHandler;
 import data.Station;
 import data.Type;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -90,5 +95,42 @@ public class DBHandler {
         }
     return h;
     }
-    
+//    private void createSolarSystems(){
+//        String query = "CREATE TABLE staStations(stationID int,security int,dockingCostPerVolume float,maxShipVolumeDockable float,officeRentalCost int,operationID int,stationTypeID int,corporationID int,solarSystemID int,constellationID int,regionID int,stationName varchar(100),x float,y float,z float,reprocessingEfficiency float,reprocessingStationsTake float,reprocessingHangarFlag int,PRIMARY KEY (stationID))";
+//        try{
+//            PreparedStatement st = c.prepareStatement(query);
+//            st.execute();
+//        }catch(SQLException e){
+//            //JOptionPane.showMessageDialog(null, "Adatbázis lekérés hiba. getStationByID()", "Hiba", JOptionPane.ERROR_MESSAGE);
+//            e.printStackTrace();
+//        }
+//    }
+//    private void exe(String q){
+//        try{
+//            PreparedStatement st = c.prepareStatement(q);
+//            st.execute();
+//        }catch(SQLException e){
+//            //JOptionPane.showMessageDialog(null, "Adatbázis lekérés hiba. getStationByID()", "Hiba", JOptionPane.ERROR_MESSAGE);
+//            e.printStackTrace();
+//        }
+//    }
+//    public static void main(String[] args) throws Exception{
+//        DBHandler db = new DBHandler();
+//        db.createSolarSystems();
+//        
+//        File f = new File("sta.sql");
+////        FileOutputStream fos = new FileOutputStream(new File("sta.sql"));
+//        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+//        String line = "";
+//        while((line=br.readLine())!=null){
+//            if(line.startsWith("INSERT INTO `staStations`")){
+//                db.exe(line);
+////                fos.write(line.getBytes());
+//            
+//            }
+//        }
+////        fos.flush();
+//        br.close();
+////        fos.close();
+//    }
 }
