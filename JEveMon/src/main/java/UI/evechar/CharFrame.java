@@ -20,16 +20,13 @@ import javax.swing.JTabbedPane;
 public class CharFrame extends JFrame implements WindowListener{
     private Toolkit tk;
     private final static int DW=1024,DH=768;
-    private EVECharacter character;
     private ExtendedCharPanel parent;
     private JTabbedPane tabbedPane = new JTabbedPane();
     
     public CharFrame(ExtendedCharPanel parent){
-        APIHandler.fillCharacterAssets(parent.getCharacter());
         this.parent = parent;
-        this.character = parent.getCharacter();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setTitle(character.name+" - "+character.corpName);
+        setTitle(parent.getCharacter().name+" - "+parent.getCharacter().corpName);
         tk=getToolkit();
         if( tk.getScreenSize().width >= DW && tk.getScreenSize().height >= DH ){
             setBounds((tk.getScreenSize().width-DW)/4, (tk.getScreenSize().height-DH)/2, DW, DH);
@@ -38,8 +35,9 @@ public class CharFrame extends JFrame implements WindowListener{
         }
         addWindowListener(this);
         setVisible(true);
-        SkillsPanel s = new SkillsPanel(character);
+        SkillsPanel s = new SkillsPanel(parent.getCharacter());
         tabbedPane.addTab("Skills", s);
+        tabbedPane.addTab("Assets", new AssetListPanel(parent.getCharacter()));
         add(tabbedPane);
     }
 
@@ -78,5 +76,7 @@ public class CharFrame extends JFrame implements WindowListener{
     public void windowDeactivated(WindowEvent e) {
         
     }
-    
+    public EVECharacter getCharacter(){
+        return this.parent.getCharacter();
+    }
 }

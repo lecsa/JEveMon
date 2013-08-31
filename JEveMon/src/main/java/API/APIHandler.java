@@ -465,7 +465,7 @@ public class APIHandler {
                         System.out.println("NFE: "+ex.getMessage());
                     }
                 }
-                
+//                System.out.println("asset size: "+c.assets.size());
             }catch(SAXException ex){
                 System.out.println("SAXE: "+ex.getMessage());
             }catch(ParserConfigurationException ex){

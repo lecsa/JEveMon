@@ -56,9 +56,11 @@ public class EVECharacter {
     
     public void addAsset(Item i,long stationID){
         Station s = getStation(stationID);
+        
         if( s == null ){
             DBHandler db = new DBHandler();
             s = db.getStationByLocationID(stationID);
+            assets.add(s);
         }
         s.items.add(i);
         //System.out.println("Adding: "+i.name+" x"+i.quantity+" to "+s.name);
