@@ -4,6 +4,8 @@
  */
 package db;
 
+import API.APIHandler;
+import data.Station;
 import data.Type;
 
 import java.sql.*;
@@ -53,6 +55,36 @@ public class DBHandler {
             System.out.println("SQLE: " + ex.getMessage());
         }
         return retval;
+    }
+    public Station getStationByLocationID(long locationID){
+        Station station = null;
+        station = APIHandler.getStationByID(locationID);
+        if( station.stationID == 0 ){//NPC station
+            station = this.getStationByID(locationID);
+        }
+        if( station.stationID == 0 ){//not found
+            station = new Station(0,"Unknown location: "+locationID);
+        }
+        return station;
+    }
+    public Station getStationByID(long stationID){
+    
+    Station h=new Station(0,"Unknown station: "+stationID);
+        try{
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM staStations WHERE stationID='"+Long.toString(stationID)+"'");
+            ResultSet rs = st.executeQuery();
+            String name=null;
+        while(rs.next()!=false){
+            name=rs.getString("stationName");
+        }
+        if(name!=null){
+            h=new Station(stationID, name);
+        }
+        }catch(SQLException e){
+            //JOptionPane.showMessageDialog(null, "Adatbázis lekérés hiba. getStationByID()", "Hiba", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    return h;
     }
 
 }
