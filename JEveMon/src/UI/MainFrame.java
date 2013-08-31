@@ -18,17 +18,19 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
 
 /**
  *
  * @author lecsa
  */
-public class MainFrame extends JFrame implements ActionListener, Runnable{
+public class MainFrame extends JFrame implements ActionListener{
     private Toolkit tk;
     private final static int DW=1360,DH=960;
     private JMenuBar jmb = new JMenuBar();
@@ -38,7 +40,7 @@ public class MainFrame extends JFrame implements ActionListener, Runnable{
     private ArrayList<APIKey> keys = new ArrayList();
     private ArrayList<EVECharacter> characters = new ArrayList();
     public static boolean isDebug = true;
-    public static JProgressBar jpb = new JProgressBar(JProgressBar.HORIZONTAL, 0, 0);
+    public static volatile JProgressBar jpb = new JProgressBar(JProgressBar.HORIZONTAL, 0, 0);
     
     private boolean isRunning = false;
     private boolean inited = false;
@@ -79,33 +81,44 @@ public class MainFrame extends JFrame implements ActionListener, Runnable{
             }
         });
         initThread.start();
+        
         isRunning = true;
-        Thread updater = new Thread(this);
-        updater.start();
-    }
-    
-    @Override
-    public void run() {
-        //update thread
-        while( isRunning ){
-            try {
-                if( inited ){
-                    initProgress(characters.size());
-                    for(int i=0;i<characters.size();i++){
-                        try{
-                            APIHandler.fillCharacterData(characters.get(i));
-                        }catch(NullPointerException ex){
+        
+        SwingWorker worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                while( isRunning ){
+                    try {
+                        if( inited ){
+                            initProgress(characters.size());
+                            for(int i=0;i<characters.size();i++){
+                                try{
+                                    APIHandler.fillCharacterData(characters.get(i));
+                                }catch(NullPointerException ex){
+                                }
+                                setProgressBar(i+1);
+                            }
+                            finishProgress();
                         }
-                        setProgress(i+1);
+                        //TODO: check account training
+                        publish();
+                        Thread.sleep(1000*60*10);//10 min
+                        //Thread.sleep(1000*5);
+                    } catch (InterruptedException ex) {
+                        System.out.println("IEX: "+ex.getMessage());
                     }
-                    finishProgress();
                 }
-                //TODO: check account training
-                Thread.sleep(1000*60*10);//10 min
-            } catch (InterruptedException ex) {
-                System.out.println("IEX: "+ex.getMessage());
+                return null;
             }
-        }
+
+            @Override
+            protected void process(List<Void> chunks) {
+                
+            }
+            
+        };
+        worker.execute();
+        
     }
     
     private void fillKeys(){
@@ -123,7 +136,7 @@ public class MainFrame extends JFrame implements ActionListener, Runnable{
                     if( o instanceof APIKey ){
                         if( isDebug ) System.out.println("Adding key: "+((APIKey)o).getName());
                         keys.add((APIKey)o);
-                        setProgress(i+1);
+                        setProgressBar(i+1);
                     }
                 }catch(IOException ex){
                     System.out.println("IOE: "+ex.getMessage());
@@ -155,7 +168,7 @@ public class MainFrame extends JFrame implements ActionListener, Runnable{
                 }catch(NullPointerException ex){
                 }
             }
-            setProgress(i+1);
+            setProgressBar(i+1);
             
         }
         finishProgress();
@@ -185,10 +198,10 @@ public class MainFrame extends JFrame implements ActionListener, Runnable{
     
     public static void initProgress(int max){
         jpb.setMaximum(max);
-        setProgress(0);
+        setProgressBar(0);
     }
     
-    public static void setProgress(int val){
+    public static void setProgressBar(int val){
         jpb.setValue(val);
         if( jpb.getMaximum() != val ){
             jpb.setString(Integer.toString(val)+" / "+jpb.getMaximum());
@@ -197,7 +210,7 @@ public class MainFrame extends JFrame implements ActionListener, Runnable{
         }
     }
     public static void finishProgress(){
-        setProgress(jpb.getMaximum());
+        setProgressBar(jpb.getMaximum());
     }
     public static void main(String[] args) {
         new MainFrame();

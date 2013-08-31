@@ -57,6 +57,8 @@ public class APIHandler {
         f.mkdirs();
         f = new File("cache/char");
         f.mkdirs();
+        f = new File("cache/static");
+        f.mkdirs();
     }
     
     public static boolean isCacheNeeded(File f){
@@ -154,6 +156,40 @@ public class APIHandler {
                 }
             }
         }
+    }
+    
+    public static Station getStationByID(long stationID){
+    Station h=new Station(0,"Unknown station");
+    File cache = new File("cache/static/outposts.xml");
+        if( isCacheNeeded(cache) ){
+            try{
+                URL url = new URL("https://"+Defaults.SERVER+"/eve/ConquerableStationList.xml.aspx");
+                cache(cache, url);
+            }catch(MalformedURLException ex){
+                System.out.println("MUE: "+ex.getMessage());
+            }
+        }
+        if( cache.exists() && cache.isFile() ){
+            try{
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(cache);
+            NodeList rows = doc.getElementsByTagName("row");
+            for(int i=0;i<rows.getLength();i++){
+                Element row = (Element)rows.item(i);
+                if(Long.parseLong(row.getAttribute("stationID"))==stationID){
+                    h = new Station(stationID, row.getAttribute("stationName"));
+                }
+            }
+            }catch(SAXException ex){
+                System.out.println("SAXE: "+ex.getMessage());
+            }catch(ParserConfigurationException ex){
+                System.out.println("PCE: "+ex.getMessage());
+            }catch(IOException ex){
+                System.out.println("IOE: "+ex.getMessage());
+            }    
+        }
+    return h;
     }
     
     public static JLabel getCharacterIMG(int characterID){
@@ -374,10 +410,5 @@ public class APIHandler {
         }
         
         return chars;
-    }
-    
-    public static Station getStationByID(){
-        
-        return null;
     }
 }

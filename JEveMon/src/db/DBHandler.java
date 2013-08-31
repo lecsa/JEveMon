@@ -4,6 +4,7 @@
  */
 package db;
 
+import API.APIHandler;
 import data.Station;
 import data.Type;
 import java.sql.Connection;
@@ -59,15 +60,14 @@ public class DBHandler {
     }
     
     public Station getStationByLocationID(long locationID){
-        Station station=null;
+        Station station=new Station(0,"Unknown station");
         long realID=0;
         if(Long.toString(locationID).startsWith("66")){//station
             realID=locationID-6000001;
             station=getStationByID(realID);
         }else if(Long.toString(locationID).startsWith("67")){//outpost
             realID=locationID-6000000;
-//            EveAPIOutposts api = new EveAPIOutposts();
-//            station=api.getStationByID(realID);
+            station=APIHandler.getStationByID(realID);
         }
         return station;
     }
