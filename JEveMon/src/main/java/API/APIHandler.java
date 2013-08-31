@@ -161,7 +161,7 @@ public class APIHandler {
     }
     
     public static Station getStationByID(long stationID){
-    Station h=new Station(0,"Unknown station: "+stationID);
+    Station h=new Station(stationID,"Unknown station: "+stationID);
     File cache = new File("cache/static/outposts.xml");
         if( isCacheNeeded(cache) ){
             try{
@@ -448,8 +448,19 @@ public class APIHandler {
                     long locationID = Long.parseLong(locRows.get(i).getAttribute("locationID"));
                     int typeID = Integer.parseInt(locRows.get(i).getAttribute("typeID"));
                     int quantity = Integer.parseInt(locRows.get(i).getAttribute("quantity"));
-                    Item parent;
+                    Item parent = new Item(db.getTypeByID(typeID), quantity);
                     
+                    if( locRows.get(i).hasChildNodes() ){
+                        NodeList childRows = locRows.get(i).getElementsByTagName("row");
+                        for(int n=0;n<childRows.getLength();n++){
+                            Element e = (Element)childRows.item(n);
+                            int childTypeID = Integer.parseInt(e.getAttribute("typeID"));
+                            int childQuantity = Integer.parseInt(e.getAttribute("quantity"));
+                            Item child = new Item(db.getTypeByID(childTypeID),childQuantity);
+                            parent.containedItems.add(child);
+                        }
+                    }
+                    c.addAsset(parent, locationID);
                     }catch(NumberFormatException ex){
                         System.out.println("NFE: "+ex.getMessage());
                     }

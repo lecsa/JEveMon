@@ -61,6 +61,7 @@ public class EVECharacter {
             s = db.getStationByLocationID(stationID);
         }
         s.items.add(i);
+        //System.out.println("Adding: "+i.name+" x"+i.quantity+" to "+s.name);
     }
     
     private Station getStation(long stationID){

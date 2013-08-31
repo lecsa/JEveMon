@@ -28,7 +28,7 @@ public class DBHandler {
     }
 
     public Type getTypeByID(int typeID) {
-        Type t = null;
+        Type t = new Type(typeID, "Unknown item: "+typeID, "Unknown", 0, 0);
         try {
             PreparedStatement st = connection.prepareStatement("SELECT * FROM invtypes WHERE typeid='" + typeID + "'");
             ResultSet rs = st.executeQuery();
@@ -59,17 +59,17 @@ public class DBHandler {
     public Station getStationByLocationID(long locationID){
         Station station = null;
         station = APIHandler.getStationByID(locationID);
-        if( station.stationID == 0 ){//NPC station
+        if( station.name.startsWith("Unknown") ){//NPC station
             station = this.getStationByID(locationID);
         }
-        if( station.stationID == 0 ){//not found
-            station = new Station(0,"Unknown location: "+locationID);
+        if( station.name.startsWith("Unknown") ){//not found
+            station = new Station(locationID,"Unknown location: "+locationID);
         }
         return station;
     }
     public Station getStationByID(long stationID){
     
-    Station h=new Station(0,"Unknown station: "+stationID);
+    Station h=new Station(stationID,"Unknown station: "+stationID);
         try{
             PreparedStatement st = connection.prepareStatement("SELECT * FROM staStations WHERE stationID='"+Long.toString(stationID)+"'");
             ResultSet rs = st.executeQuery();
@@ -86,8 +86,8 @@ public class DBHandler {
         }
     return h;
     }
-    public static void main(String[] args) {
-        DBHandler db = new DBHandler();
-        System.out.println(db.getTypeByID(601).name+"");
-    }
+//    public static void main(String[] args) {
+//        DBHandler db = new DBHandler();
+//        System.out.println(db.getTypeByID(601).name+"");
+//    }
 }
