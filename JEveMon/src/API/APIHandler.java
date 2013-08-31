@@ -159,7 +159,7 @@ public class APIHandler {
     }
     
     public static Station getStationByID(long stationID){
-    Station h=new Station(0,"Unknown station");
+    Station h=new Station(0,"Unknown station: "+stationID);
     File cache = new File("cache/static/outposts.xml");
         if( isCacheNeeded(cache) ){
             try{

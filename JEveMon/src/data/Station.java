@@ -4,6 +4,8 @@
  */
 package data;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author lecsa
@@ -11,8 +13,8 @@ package data;
 public class Station{
     public long stationID;
     public String name;
-      
-
+    public ArrayList<Item> items = new ArrayList();
+    
     public Station(long stationID, String name) {
         this.stationID = stationID;
         this.name = name;

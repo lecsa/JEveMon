@@ -65,20 +65,19 @@ public class DBHandler {
     }
     
     public Station getStationByLocationID(long locationID){
-        Station station=new Station(0,"Unknown station");
-        long realID=0;
-        if(Long.toString(locationID).startsWith("66")){//station
-            realID=locationID-6000001;
-            station=getStationByID(realID);
-        }else if(Long.toString(locationID).startsWith("67")){//outpost
-            realID=locationID-6000000;
-            station=APIHandler.getStationByID(realID);
+        Station station = null;
+        station = APIHandler.getStationByID(locationID);
+        if( station.stationID == 0 ){//NPC station
+            station = this.getStationByID(locationID);
+        }
+        if( station.stationID == 0 ){//not found
+            station = new Station(0,"Unknown location: "+locationID);
         }
         return station;
     }
     public Station getStationByID(long stationID){
     
-    Station h=null;
+    Station h=new Station(0,"Unknown station: "+stationID);
         try{
             PreparedStatement st = c.prepareStatement("SELECT * FROM staStations WHERE stationID='"+Long.toString(stationID)+"'");
             ResultSet rs = st.executeQuery();
@@ -133,4 +132,5 @@ public class DBHandler {
 //        br.close();
 ////        fos.close();
 //    }
+    
 }
