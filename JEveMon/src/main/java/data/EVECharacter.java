@@ -29,6 +29,7 @@ public class EVECharacter {
     public int cloneSkillpoints = 0;
     public int intelligence,memory,perception,charisma,willpower;
     public APIKey key;
+    public ArrayList<Station> assets = new ArrayList();
     
     public EVECharacter(int id, String name, APIKey key){
         this.id = id;

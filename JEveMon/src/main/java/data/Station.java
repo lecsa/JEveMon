@@ -22,7 +22,7 @@ public class Station{
 
     @Override
     public String toString() {
-        return "Hangar{" + "stationID=" + stationID + ", name=" + name + '}';
+        return "Station{" + "stationID=" + stationID + ", name=" + name + '}';
     }
     
     
