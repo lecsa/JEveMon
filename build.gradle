@@ -1,26 +1,33 @@
+def databaseDir = new File("database");
+def scriptsDir = new File("scripts");
+def archivesBaseName = 'perec'
+
 allprojects {
     apply plugin: 'idea';
 
-    ext.jUnitVersion="4.+";
-    ext.sqliteVersion="3.7.2";
-    ext.slf4jVersion="1.7.5";
-    ext.logbackVersion="1.0.13";
+    ext.jUnitVersion = "4.+";
+    ext.sqliteVersion = "3.7.2";
+    ext.slf4jVersion = "1.7.5";
+    ext.logbackVersion = "1.0.13";
+    ext.databaseFolder = new File('database')
 
     repositories {
         flatDir { dirs "lib" }
         mavenCentral();
     }
 
-    task initDirs () << {
+    task initDirs() << {
         project.sourceSets*.allSource.srcDirs.flatten().each { dir ->
             dir.mkdirs()
         }
     }
 
 }
-
 project("JEveMon") {
     apply plugin: 'java';
+
+    configurations {
+    }
 
     dependencies {
         compile "org.xerial:sqlite-jdbc:$sqliteVersion";
@@ -30,10 +37,38 @@ project("JEveMon") {
     }
 
     jar {
-        manifest.attributes("Main-Class": "UI.MainFrame")
+        def manifestClasspath = configurations.runtime.collect { File file -> "libs/" + file.name }.join(' ');
+        def mainClassName = "UI.MainFrame";
+        manifest {
+            attributes(
+                    "Main-Class": mainClassName,
+                    "Class-Path": manifestClasspath,
+                    "Version": mainClassName
+            )
+        };
     }
 
+    task distZip(type: Zip) {
+        dependsOn jar;
+        from "$buildDir/libs";
+        from "$buildDir/scripts";
+        into('libs') {
+            from configurations.runtime;
+        }
+        into('database') {
+            from databaseDir;
+        }
+    }
 
+    task buildScripts(type: Copy) {
+        from scriptsDir;
+        into("$buildDir/scripts");
+        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [jarName: jar.archiveName])
+    }
+
+    task dist {
+        dependsOn distZip, buildScripts;
+    }
 }
 
 

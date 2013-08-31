@@ -18,10 +18,10 @@ public class DBHandler {
 
         try {
             Class.forName("org.sqlite.JDBC");
-            String databaseFile = this.getClass().getClassLoader().getResource("database/eve.db").getFile();
-            connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
+            //relative to jar location
+            connection = DriverManager.getConnection("jdbc:sqlite:database/eve.db");
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
