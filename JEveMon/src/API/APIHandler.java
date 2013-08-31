@@ -7,6 +7,7 @@ package API;
 import data.EVECharacter;
 import data.Skill;
 import data.SkillInTraining;
+import data.Station;
 import db.DBHandler;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -373,5 +374,10 @@ public class APIHandler {
         }
         
         return chars;
+    }
+    
+    public static Station getStationByID(){
+        
+        return null;
     }
 }
