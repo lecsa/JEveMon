@@ -4,6 +4,8 @@
  */
 package UI.evechar;
 
+import API.APIHandler;
+import UI.APIFrame;
 import data.EVECharacter;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
@@ -23,6 +25,7 @@ public class CharFrame extends JFrame implements WindowListener{
     private JTabbedPane tabbedPane = new JTabbedPane();
     
     public CharFrame(ExtendedCharPanel parent){
+        APIHandler.fillCharacterAssets(parent.getCharacter());
         this.parent = parent;
         this.character = parent.getCharacter();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

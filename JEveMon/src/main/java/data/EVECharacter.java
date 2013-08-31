@@ -5,6 +5,7 @@
 package data;
 
 import API.APIKey;
+import db.DBHandler;
 import java.util.ArrayList;
 import java.util.Date;
 import utils.Utils;
@@ -52,4 +53,24 @@ public class EVECharacter {
             }
         return retval;
     }
+    
+    public void addAsset(Item i,long stationID){
+        Station s = getStation(stationID);
+        if( s == null ){
+            DBHandler db = new DBHandler();
+            s = db.getStationByLocationID(stationID);
+        }
+        s.items.add(i);
+    }
+    
+    private Station getStation(long stationID){
+    Station sta = null;
+        for(int i=0;i<assets.size() && sta == null;i++){
+            if( assets.get(i).stationID == stationID ){
+                sta = assets.get(i);
+            }
+        }
+    return sta;
+    }
+    
 }

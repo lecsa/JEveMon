@@ -86,5 +86,8 @@ public class DBHandler {
         }
     return h;
     }
-    
+    public static void main(String[] args) {
+        DBHandler db = new DBHandler();
+        System.out.println(db.getTypeByID(601).name+"");
+    }
 }

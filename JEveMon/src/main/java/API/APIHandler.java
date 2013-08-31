@@ -5,6 +5,7 @@
 package API;
 
 import data.EVECharacter;
+import data.Item;
 import data.Skill;
 import data.SkillInTraining;
 import data.Station;
@@ -24,6 +25,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 import javax.imageio.ImageIO;
@@ -410,5 +412,57 @@ public class APIHandler {
         }
         
         return chars;
+    }
+    
+    public static void fillCharacterAssets(EVECharacter c){
+        File cache = new File("cache/char/assets_"+c.id+".xml");
+        if( isCacheNeeded(cache) ){
+            try{
+                URL url = new URL(c.key.getURL("char", "AssetList.xml.aspx")+"&characterID="+c.id);
+                cache(cache, url);
+            }catch(MalformedURLException ex){
+                System.out.println("MUE: "+ex.getMessage());
+            }
+        }
+        if( cache.exists() && cache.isFile() ){
+            try{
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(cache);
+                NodeList allRows = doc.getElementsByTagName("row");
+                ArrayList<Element> locRows = new ArrayList();
+                
+                for(int i=0;i<allRows.getLength();i++){
+                    if( allRows.item(i).getNodeType() != Node.TEXT_NODE ){
+                        if( allRows.item(i).hasAttributes() ){
+                            Element e = (Element)allRows.item(i);
+                            if( e.hasAttribute("locationID") ){
+                                locRows.add(e);
+                            }
+                        }
+                    }
+                }
+                DBHandler db = new DBHandler();
+                for(int i=0;i<locRows.size();i++){
+                    try{
+                    long locationID = Long.parseLong(locRows.get(i).getAttribute("locationID"));
+                    int typeID = Integer.parseInt(locRows.get(i).getAttribute("typeID"));
+                    int quantity = Integer.parseInt(locRows.get(i).getAttribute("quantity"));
+                    Item parent;
+                    
+                    }catch(NumberFormatException ex){
+                        System.out.println("NFE: "+ex.getMessage());
+                    }
+                }
+                
+            }catch(SAXException ex){
+                System.out.println("SAXE: "+ex.getMessage());
+            }catch(ParserConfigurationException ex){
+                System.out.println("PCE: "+ex.getMessage());
+            }catch(IOException ex){
+                System.out.println("IOE: "+ex.getMessage());
+            }finally{
+            }
+        }
     }
 }
