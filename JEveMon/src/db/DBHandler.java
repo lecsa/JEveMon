@@ -4,6 +4,7 @@
  */
 package db;
 
+import data.Station;
 import data.Type;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,7 +29,7 @@ public class DBHandler {
     }
     
     public Type getTypeByID(int typeID){
-        Type t = null;
+        Type t = new Type(0, "Unknown", "Unknown", 0, 0);
         try{
             PreparedStatement st = c.prepareStatement("SELECT * FROM invtypes WHERE typeid='"+typeID+"'");
             ResultSet rs = st.executeQuery();
@@ -55,6 +56,39 @@ public class DBHandler {
             System.out.println("SQLE: "+ex.getMessage());
         }
         return retval;
+    }
+    
+    public Station getStationByLocationID(long locationID){
+        Station station=null;
+        long realID=0;
+        if(Long.toString(locationID).startsWith("66")){//station
+            realID=locationID-6000001;
+            station=getStationByID(realID);
+        }else if(Long.toString(locationID).startsWith("67")){//outpost
+            realID=locationID-6000000;
+//            EveAPIOutposts api = new EveAPIOutposts();
+//            station=api.getStationByID(realID);
+        }
+        return station;
+    }
+    public Station getStationByID(long stationID){
+    
+    Station h=null;
+        try{
+            PreparedStatement st = c.prepareStatement("SELECT * FROM staStations WHERE stationID='"+Long.toString(stationID)+"'");
+            ResultSet rs = st.executeQuery();
+            String name=null;
+        while(rs.next()!=false){
+            name=rs.getString("stationName");
+        }
+        if(name!=null){
+            h=new Station(stationID, name);
+        }
+        }catch(SQLException e){
+            //JOptionPane.showMessageDialog(null, "Adatbázis lekérés hiba. getStationByID()", "Hiba", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    return h;
     }
     
 }

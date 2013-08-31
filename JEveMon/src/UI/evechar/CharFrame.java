@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
 
 /**
  *
@@ -19,6 +20,7 @@ public class CharFrame extends JFrame implements WindowListener{
     private final static int DW=1024,DH=768;
     private EVECharacter character;
     private ExtendedCharPanel parent;
+    private JTabbedPane tabbedPane = new JTabbedPane();
     
     public CharFrame(ExtendedCharPanel parent){
         this.parent = parent;
@@ -34,7 +36,8 @@ public class CharFrame extends JFrame implements WindowListener{
         addWindowListener(this);
         setVisible(true);
         SkillsPanel s = new SkillsPanel(character);
-        add(s);
+        tabbedPane.addTab("Skills", s);
+        add(tabbedPane);
     }
 
     @Override
