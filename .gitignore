@@ -10,4 +10,6 @@
 **/.gradle/**
 **.ipr
 **.iws
-
+**/out/**
+**/cache/**
+**/apikeys/**

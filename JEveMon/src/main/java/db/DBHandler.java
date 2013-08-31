@@ -5,6 +5,8 @@
 package db;
 
 import data.Type;
+
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,12 +18,13 @@ import java.sql.SQLException;
  * @author lecsa
  */
 public class DBHandler {
-    Connection c = null;
+    Connection connection = null;
     public DBHandler(){
         
         try {
           Class.forName("org.sqlite.JDBC");
-          c = DriverManager.getConnection("jdbc:sqlite:eve.db");
+          String databaseFile = this.getClass().getClassLoader().getResource("database/eve.db").getFile();
+          connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
         } catch ( Exception e ) {
           System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
@@ -30,7 +33,7 @@ public class DBHandler {
     public Type getTypeByID(int typeID){
         Type t = null;
         try{
-            PreparedStatement st = c.prepareStatement("SELECT * FROM invtypes WHERE typeid='"+typeID+"'");
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM invtypes WHERE typeid='"+typeID+"'");
             ResultSet rs = st.executeQuery();
             while(rs.next()){
                 t = new Type(rs.getInt("typeID"), rs.getString("typeName"), rs.getString("description"), rs.getInt("marketGroupID"), rs.getInt("groupID"));
@@ -45,7 +48,7 @@ public class DBHandler {
     public String getGroupNameByID(int groupID){
         String retval = "Unknown";
         try{
-            PreparedStatement st = c.prepareStatement("SELECT groupName FROM invgroups WHERE groupID='"+groupID+"'");
+            PreparedStatement st = connection.prepareStatement("SELECT groupName FROM invgroups WHERE groupID='"+groupID+"'");
             ResultSet rs = st.executeQuery();
             while(rs.next()){
                 retval = rs.getString("groupName");
