@@ -4,3 +4,12 @@
 *.jar
 *.war
 *.ear
+**.iml
+*.idea
+**/build
+**/.gradle/**
+**.ipr
+**.iws
+**/out/**
+**/cache/**
+**/apikeys/**
