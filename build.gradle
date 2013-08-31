@@ -28,6 +28,12 @@ project("JEveMon") {
         runtime "ch.qos.logback:logback-classic:$logbackVersion";
         testCompile "junit:junit:$jUnitVersion";
     }
+
+    jar {
+        manifest.attributes("Main-Class": "UI.MainFrame")
+    }
+
+
 }
 
 
