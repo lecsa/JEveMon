@@ -19,13 +19,13 @@ import javax.swing.JTabbedPane;
  */
 public class CharFrame extends JFrame implements WindowListener{
     private Toolkit tk;
-    private final static int DW=1024,DH=768;
+    private final static int DW=1380,DH=768;
     private ExtendedCharPanel parent;
     private JTabbedPane tabbedPane = new JTabbedPane();
     
     public CharFrame(ExtendedCharPanel parent){
         this.parent = parent;
-//        System.out.println(parent.getCharacter().id);
+
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle(parent.getCharacter().name+" - "+parent.getCharacter().corpName);
         tk=getToolkit();
@@ -39,6 +39,7 @@ public class CharFrame extends JFrame implements WindowListener{
         SkillsPanel s = new SkillsPanel(parent.getCharacter());
         tabbedPane.addTab("Skills", s);
         tabbedPane.addTab("Assets", new AssetListPanel(parent.getCharacter()));
+        tabbedPane.addTab("Journal", new JournalPanel(parent.getCharacter()));
         add(tabbedPane);
     }
 

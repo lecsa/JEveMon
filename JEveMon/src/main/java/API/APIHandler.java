@@ -4,12 +4,14 @@
  */
 package API;
 
+import UI.Msg;
 import data.EVECharacter;
 import data.Item;
 import data.JournalElement;
 import data.Skill;
 import data.SkillInTraining;
 import data.Station;
+import data.TransactionElement;
 import db.DBHandler;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -17,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,6 +31,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.TimeZone;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -49,10 +53,9 @@ import org.xml.sax.SAXException;
  */
 public class APIHandler {
     
+    private static boolean msgApiServerOffline = true;
+    private static boolean msgImgServerOffline = true;
     
-    public APIHandler(){
-        
-    }
     public static void createdirs(){
         File f = new File("cache/account");
         f.mkdirs();
@@ -96,8 +99,8 @@ public class APIHandler {
             }finally{
                 try{
                     fis.close();
-                }catch(IOException ex){
-                    System.out.println("IOE: "+ex);
+                }catch(Exception ex){
+                    
                 }
             }
         }else{
@@ -106,62 +109,84 @@ public class APIHandler {
     return needed;
     }
     
-    public static void cache(File cache, URL url){
-        BufferedReader br = null;
-        FileOutputStream fos = null;
-        String xml = "";
-        try{
-
-            URLConnection conn = url.openConnection();
-            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine;
-
-            while ((inputLine = br.readLine()) != null) {
-                xml += inputLine;
-            }
-
-            if( cache.exists() ){
-                cache.delete();
-            }
-
-            cache.createNewFile();
-            fos = new FileOutputStream(cache);
-            fos.write(xml.getBytes());
-
-        }catch(IOException ex){
-            System.out.println("IOE: "+ex.getMessage());
-        }finally{
+    public static boolean cache(File cache, URL url){
+        boolean success = false;
+        if(isURLexists(url)){
+            BufferedReader br = null;
+            FileOutputStream fos = null;
+            String xml = "";
             try{
-                br.close();
-                fos.close();
-            }catch(Exception ex){
+
+                URLConnection conn = url.openConnection();
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String inputLine;
+
+                while ((inputLine = br.readLine()) != null) {
+                    xml += inputLine;
+                }
+
+                if( cache.exists() ){
+                    cache.delete();
+                }
+
+                cache.createNewFile();
+                fos = new FileOutputStream(cache);
+                fos.write(xml.getBytes());
+                success = true;
+            }catch(IOException ex){
+                System.out.println("IOE: "+ex.getMessage());
+            }finally{
+                try{
+                    br.close();
+                    fos.close();
+                }catch(Exception ex){
+                }
+            }
+        }else{
+            System.out.println("API server unavailable.");
+            if( msgApiServerOffline ){
+                Msg.errorMsg("<html>API server unreachable. Working with cached data.<br />This message won't appear again until you restart the application.</html>");
+                msgApiServerOffline = false;
             }
         }
+        return success;
     }
     
-    private static void cacheCharacterIMG(int characterID){
+    private static boolean cacheCharacterIMG(int characterID){
+        boolean success = false;
         File f = new File("cache/img/"+Integer.toString(characterID)+"_128.jpg");
         if( !f.exists() ){//cache
             FileOutputStream fos = null;
             try{
-                URL website = new URL("http://image.eveonline.com/character/"+Integer.toString(characterID)+"_128.jpg");
-                ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-                fos = new FileOutputStream(f);
-                fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                URL url = new URL("http://image.eveonline.com/character/"+Integer.toString(characterID)+"_128.jpg");
+                if(isURLexists(url)){
+                    ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+                    fos = new FileOutputStream(f);
+                    fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                    success = true;
+                }else{
+                    System.out.println("Image server unavailable.");
+                    if( msgImgServerOffline ){
+                        Msg.errorMsg("<html>Image server unreachable.<br />This message won't appear again until you restart the application.</html>");
+                        msgImgServerOffline = false;
+                    }
+                }
             }catch(IOException ex){
                 System.out.println("IOE: "+ex.getMessage());
                 
             }finally{
                 try{
                     fos.close();
-                }catch(IOException ex){
-                    System.out.println("IOE: "+ex.getMessage());
+                }catch(Exception ex){
+                    
                 }
             }
         }
+        return success;
     }
     
     public static Station getStationByID(long stationID){
+    
     Station h=new Station(stationID,"Unknown station: "+stationID);
     File cache = new File("cache/static/outposts.xml");
         if( isCacheNeeded(cache) ){
@@ -211,7 +236,8 @@ public class APIHandler {
     }
     
     private static void initRefTypes(){
-        File cache = new File("cache/eve/reftypes.xml");
+        JournalElement.refTypes = new HashMap();
+        File cache = new File("cache/static/reftypes.xml");
         if( isCacheNeeded(cache) ){
             try{
                 URL url = new URL("https://"+Defaults.SERVER+"/eve/RefTypes.xml.aspx");
@@ -261,11 +287,56 @@ public class APIHandler {
                 System.out.println("MUE: "+ex.getMessage());
             }
         }
+        File cache2 = new File("cache/char/transactions_"+c.id+".xml");
+        if( isCacheNeeded(cache2) ){
+            try{
+                URL url = new URL(c.key.getURL("char", "WalletTransactions.xml.aspx")+"&characterID="+c.id);
+                cache(cache2, url);
+            }catch(MalformedURLException ex){
+                System.out.println("MUE: "+ex.getMessage());
+            }
+        }
         if( cache.exists() && cache.isFile() ){
             try{
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                 Document doc = dBuilder.parse(cache);
+                NodeList rows = doc.getElementsByTagName("row");
+                for(int i=0;i<rows.getLength();i++){
+                    if( rows.item(i).getNodeType() != Node.TEXT_NODE ){
+                        Element e = (Element)rows.item(i);
+                        try{
+                            long refID          = Long.parseLong(e.getAttribute("refID").toString());
+                            double iskAmount      = Double.parseDouble(e.getAttribute("amount").toString());
+                            long balance        = (long)Double.parseDouble(e.getAttribute("balance").toString());
+                            int refTypeID       = Integer.parseInt(e.getAttribute("refTypeID").toString());
+                            String date         = e.getAttribute("date").toString();
+                            String owner1Name   = e.getAttribute("ownerName1").toString();
+                            String owner2Name   = e.getAttribute("ownerName2").toString();
+                            String reason       = e.getAttribute("reason").toString();
+                            String refTypeName  = JournalElement.refTypes.get(new Integer(refTypeID));
+                            JournalElement je = new JournalElement(date, refID, refTypeID, refTypeName, owner1Name, owner2Name, iskAmount, balance, reason);
+                            if( refTypeID == 42 ){//market escrow
+                                Element domElement = getTransactionDOMElement(c, refID);
+                                double prize            = Double.parseDouble(domElement.getAttribute("price").toString());
+                                int quantity            = Integer.parseInt(domElement.getAttribute("quantity").toString());
+                                String typeName         = domElement.getAttribute("typeName").toString();
+                                String clientName       = domElement.getAttribute("clientName").toString();
+                                String stationName      = domElement.getAttribute("stationName").toString();
+                                String transactionType  = domElement.getAttribute("transactionType").toString();
+                                String transactionFor   = domElement.getAttribute("transactionFor").toString();
+                                je.transaction = new TransactionElement(typeName, prize, clientName, stationName, transactionType, quantity, transactionFor);
+                            }else if( refTypeID == 10 || refTypeID == 37 ){
+                                je.transaction.clientName = je.owner2Name;
+                                je.transaction.transactionType = "donation";
+                            }
+                            
+                            c.walletJournal.add(je);
+                        }catch(NumberFormatException ex){
+                            System.out.println("NEX: "+ex.getMessage());
+                        }
+                    }
+                }//for rows
             }catch(SAXException ex){
                 System.out.println("SAXE: "+ex.getMessage());
             }catch(ParserConfigurationException ex){
@@ -276,22 +347,39 @@ public class APIHandler {
         }
     }
     
-    public static Element getTransactionElement(EVECharacter c, long refID){
-    Element el = null;
-        File cache = new File("cache/char/transactions_"+c.id+".xml");
-        if( isCacheNeeded(cache) ){
-            try{
-                URL url = new URL(c.key.getURL("char", "WalletTransactions.xml.aspx")+"&characterID="+c.id);
-                cache(cache, url);
-            }catch(MalformedURLException ex){
-                System.out.println("MUE: "+ex.getMessage());
+    private static boolean isURLexists(URL url){
+        boolean result = false;
+            try {
+                InputStream input = url.openStream();
+                result = true;
+            } catch (Exception ex) {
+                System.out.println("EX: "+ex.getMessage());
             }
-        }
+        return result;
+    }
+    
+    public static Element getTransactionDOMElement(EVECharacter c, long refID){
+        Element el = null;
+        File cache = new File("cache/char/transactions_"+c.id+".xml");
         if( cache.exists() && cache.isFile() ){
             try{
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                 Document doc = dBuilder.parse(cache);
+                NodeList rows = doc.getElementsByTagName("row");
+                for(int i=0;i<rows.getLength() && el == null;i++){
+                    if( rows.item(i).getNodeType() != Node.TEXT_NODE ){
+                        Element e = (Element)rows.item(i);
+                        try{
+                            long id = Long.parseLong(e.getAttribute("journalTransactionID").toString());
+                            if( id == refID ){
+                                el = e;
+                            }
+                        }catch(NumberFormatException ex){
+                            System.out.println("NEX: "+ex.getMessage());
+                        }
+                    }
+                }
             }catch(SAXException ex){
                 System.out.println("SAXE: "+ex.getMessage());
             }catch(ParserConfigurationException ex){
@@ -300,7 +388,7 @@ public class APIHandler {
                 System.out.println("IOE: "+ex.getMessage());
             }
         }
-    return el;
+        return el;
     }
     
     public static EVECharacter fillCharacterData(EVECharacter c){
