@@ -27,7 +27,10 @@ public class Item extends Type implements Comparable{
         super(t.id, t.name, t.description, t.marketGroupID, t.groupID);
         this.quantity = quantity;
     }
-
+    @Override
+    public String toString() {
+        return name;
+    }
     @Override
     public int compareTo(Object o) {
         int retval = 0;

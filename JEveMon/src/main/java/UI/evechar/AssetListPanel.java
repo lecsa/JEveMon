@@ -67,17 +67,17 @@ public class AssetListPanel extends JPanel implements ActionListener{
         for(int i=0;i<character.assets.size();i++){
             //stations
             Station sta = character.assets.get(i);
-            DefaultMutableTreeNode stationNode = new DefaultMutableTreeNode("<html><b>"+sta.name+"</b></html>");
+            DefaultMutableTreeNode stationNode = new DefaultMutableTreeNode(sta);
             for(int n=0;n<sta.items.size();n++){
                 Item parent = sta.items.get(n);
                 DefaultMutableTreeNode parentItemNode;
                 if(parent.containedItems.isEmpty()){
-                    parentItemNode = new DefaultMutableTreeNode("<html>"+parent.name+"  x"+parent.quantity+"</html>");
+                    parentItemNode = new DefaultMutableTreeNode(parent);
                 }else{
-                    parentItemNode = new DefaultMutableTreeNode("<html>"+parent.name+"</html>");
+                    parentItemNode = new DefaultMutableTreeNode(parent);
                     for(int k=0;k<parent.containedItems.size();k++){
                         Item child = parent.containedItems.get(k);
-                        parentItemNode.add(new DefaultMutableTreeNode("<html>"+child.name+"  x"+child.quantity+"</html>"));
+                        parentItemNode.add(new DefaultMutableTreeNode(child));
                     }
                 }
                 stationNode.add(parentItemNode);
@@ -85,6 +85,8 @@ public class AssetListPanel extends JPanel implements ActionListener{
             top.add(stationNode);
         }
         tree = new JTree(top);
+        TypeTreeCellRenderer renderer = new TypeTreeCellRenderer();
+        tree.setCellRenderer(renderer);
         treeView = new JScrollPane(tree);
         treeView.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         add(treeView,BorderLayout.CENTER);

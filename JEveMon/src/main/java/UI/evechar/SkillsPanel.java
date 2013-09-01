@@ -50,13 +50,13 @@ public class SkillsPanel extends JPanel{
             for(int n=0;n<groups.get(i).getSkills().size();n++){
                 Skill currentSkill = groups.get(i).getSkills().get(n);
                 if( currentSkill.skillevel == 4 ){
-                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#117777>"+currentSkill.type.name+" - lvl "+currentSkill.skillevel+"</font></html>");
+                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#117777>"+currentSkill+" - lvl "+currentSkill.skillevel+"</font></html>");
                     currentGroup.add(currSkillNode);
                 }else if( currentSkill.skillevel == 5 ){
-                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#117711>"+currentSkill.type.name+" - lvl "+currentSkill.skillevel+"</font></html>");
+                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#117711>"+currentSkill+" - lvl "+currentSkill.skillevel+"</font></html>");
                     currentGroup.add(currSkillNode);
                 }else{
-                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#771111>"+currentSkill.type.name+" - lvl "+currentSkill.skillevel+"</font></html>");
+                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#771111>"+currentSkill+" - lvl "+currentSkill.skillevel+"</font></html>");
                     currentGroup.add(currSkillNode);
                 }
             }

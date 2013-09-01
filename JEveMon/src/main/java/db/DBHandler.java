@@ -103,7 +103,7 @@ public class DBHandler {
     }
     public static void main(String[] args) {
         DBHandler db = new DBHandler();
-        Type[] t = db.getTypeByName("Spaceship");
+        Type[] t = db.getTypeByName("station");
         for(int i=0;i<t.length;i++){
             System.out.println(t[i].name+" - "+t[i].id+" - "+t[i].groupID);
         }

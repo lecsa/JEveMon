@@ -18,5 +18,8 @@ public class Skill {
         this.skillpoints = skillpoints;
         this.skillevel = skillevel;
     }
-    
+    @Override
+    public String toString() {
+        return type.name;
+    }
 }

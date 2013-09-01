@@ -22,7 +22,7 @@ public class Station implements Comparable{
 
     @Override
     public String toString() {
-        return "Station{" + "stationID=" + stationID + ", name=" + name + '}';
+        return name;
     }
 
     @Override

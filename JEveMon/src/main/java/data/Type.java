@@ -22,6 +22,9 @@ public class Type {
         this.marketGroupID = marketGroupID;
         this.groupID = groupID;
     }
-    
+    @Override
+    public String toString() {
+        return name;
+    }
     
 }
