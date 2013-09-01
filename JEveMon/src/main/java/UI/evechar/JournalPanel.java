@@ -89,12 +89,16 @@ public class JournalPanel extends JPanel implements ActionListener{
         for(int i=0;i<character.walletJournal.size();i++){
             JournalElement e = character.walletJournal.get(i);
             DecimalFormat f = new DecimalFormat("###,###,###,###");
+            String s,c = "</font></html>";
+            if( e.iskAmount < 0 ){
+                s = "<html><font color=#991111>";
+            }else{
+                s = "<html><font color=#119911>";
+            }
             data[i][0] = (Object)e.date;
             data[i][1] = (Object)e.refTypeName;
             data[i][2] = (Object)e.owner1Name;
-            data[i][3] = (Object)f.format(e.iskAmount);
-//            System.out.println("o: "+(Object)f.format(e.iskAmount));
-//            System.out.println("n: "+f.format(e.iskAmount));
+            data[i][3] = (Object)s+f.format(e.iskAmount)+c;
             data[i][4] = (Object)f.format(e.balance);
             data[i][5] = (Object)e.transaction.typeName;
             data[i][6] = (Object)f.format(e.transaction.price);
@@ -117,7 +121,7 @@ public class JournalPanel extends JPanel implements ActionListener{
                         return false;
                     }
                 };
-                table.setDefaultRenderer(Object.class, new CellRenderer());
+//                table.setDefaultRenderer(Object.class, new CellRenderer());
                 table.setRowHeight(25);
                 table.setModel(model);
                 
