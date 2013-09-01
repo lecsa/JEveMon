@@ -124,7 +124,9 @@ public class JournalPanel extends JPanel implements ActionListener{
 //                table.setDefaultRenderer(Object.class, new CellRenderer());
                 table.setRowHeight(25);
                 table.setModel(model);
-                
+                table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                TableColumnAdjuster tca = new TableColumnAdjuster(table);
+                tca.adjustColumns();
             }
         });
     }
