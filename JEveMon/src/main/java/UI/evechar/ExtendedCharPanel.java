@@ -52,7 +52,6 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
         JLabel img = APIHandler.getCharacterIMG(character.id);
         img.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
         add(img,BorderLayout.WEST);
-        setPreferredSize(new Dimension(600, 200));
         initGrid();
         setBorder(BorderFactory.createLineBorder(Color.gray,2));
         setBackground(Color.WHITE);
