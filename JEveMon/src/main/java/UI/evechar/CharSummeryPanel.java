@@ -5,9 +5,8 @@
 package UI.evechar;
 
 import data.EVECharacter;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -31,13 +30,14 @@ public class CharSummeryPanel extends JPanel implements ActionListener{
     public CharSummeryPanel(ArrayList<EVECharacter> characters){
         setLayout(new BorderLayout());
         panels = new ExtendedCharPanel[characters.size()];
+        JPanel spaceFillerPanel = new JPanel();
         for(int i=0;i<characters.size();i++){
             panels[i] = new ExtendedCharPanel(characters.get(i));
             if(characters.get(i).isTraining){
                 visiblePanels.add(panels[i]);
             }
+
         }
-        
         JPanel pnTop = new JPanel(new FlowLayout());
         cbActive.addActionListener(this);
         cbInactive.addActionListener(this);
@@ -45,12 +45,12 @@ public class CharSummeryPanel extends JPanel implements ActionListener{
         pnTop.add(cbActive);
         cbActive.setSelected(true);
         add(pnTop,BorderLayout.NORTH);
-        grid = new JPanel(new GridLayout(visiblePanels.size(), 1,0,5));
+        grid = new JPanel(new GridBagLayout());
         jsp = new JScrollPane(grid);
         add(jsp,BorderLayout.CENTER);
         updateGrid();
     }
-    
+
     private void updateVisibility(){
         visiblePanels = new ArrayList();
         for(int i=0;i<panels.length;i++){
@@ -68,11 +68,18 @@ public class CharSummeryPanel extends JPanel implements ActionListener{
             public void run() {
                 updateVisibility();
                 remove(jsp);
-                grid = new JPanel(new GridLayout(visiblePanels.size(), 1,0,5));
+                grid = new JPanel(new GridBagLayout());
                 grid.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-                for(int i=0;i<visiblePanels.size();i++){
-                    grid.add(visiblePanels.get(i));
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.anchor = GridBagConstraints.NORTH;
+
+                for (int i = 0; i < visiblePanels.size(); i++) {
+                    gbc.gridy = gbc.gridy + 1;
+                    grid.add(visiblePanels.get(i), gbc);
                 }
+                gbc.weighty=1;
+                grid.add(new JPanel(), gbc);
                 jsp = new JScrollPane(grid);
                 jsp.getVerticalScrollBar().setUnitIncrement(16);
                 add(jsp,BorderLayout.CENTER);
@@ -88,5 +95,5 @@ public class CharSummeryPanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         updateGrid();
     }
-    
+
 }
