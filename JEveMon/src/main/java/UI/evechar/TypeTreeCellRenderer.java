@@ -27,7 +27,7 @@ public class TypeTreeCellRenderer implements TreeCellRenderer{
             if (o instanceof Item) {
                 String amount = "";
                 Item item = (Item)o;
-                if(item.containedItems.isEmpty()){
+                if( item.containedItems.isEmpty() && item.quantity != 0 ){
                     amount = " x"+item.quantity;
                 }
                 label.setIcon(APIHandler.getTypeIMG(item.id));
