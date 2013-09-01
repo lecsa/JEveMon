@@ -30,6 +30,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
@@ -59,7 +60,9 @@ public class APIHandler {
     public static void createdirs(){
         File f = new File("cache/account");
         f.mkdirs();
-        f = new File("cache/img");
+        f = new File("cache/img/char");
+        f.mkdirs();
+        f = new File("cache/img/type");
         f.mkdirs();
         f = new File("cache/char");
         f.mkdirs();
@@ -154,7 +157,7 @@ public class APIHandler {
     
     private static boolean cacheCharacterIMG(int characterID){
         boolean success = false;
-        File f = new File("cache/img/"+Integer.toString(characterID)+"_128.jpg");
+        File f = new File("cache/img/char/"+Integer.toString(characterID)+"_128.jpg");
         if( !f.exists() ){//cache
             FileOutputStream fos = null;
             try{
@@ -185,6 +188,38 @@ public class APIHandler {
         return success;
     }
     
+    private static boolean cacheTypeIMG(int typeID){
+        boolean success = false;
+        File f = new File("cache/img/type/"+Integer.toString(typeID)+"_32.png");
+        if( !f.exists() ){//cache
+            FileOutputStream fos = null;
+            try{
+                URL url = new URL("http://image.eveonline.com/type/"+Integer.toString(typeID)+"_32.png");
+                if(isURLexists(url)){
+                    ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+                    fos = new FileOutputStream(f);
+                    fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                    success = true;
+                }else{
+                    System.out.println("Image server unavailable.");
+                    if( msgImgServerOffline ){
+                        Msg.errorMsg("<html>Image server unreachable.<br />This message won't appear again until you restart the application.</html>");
+                        msgImgServerOffline = false;
+                    }
+                }
+            }catch(IOException ex){
+                System.out.println("IOE: "+ex.getMessage());
+                
+            }finally{
+                try{
+                    fos.close();
+                }catch(Exception ex){
+                    
+                }
+            }
+        }
+        return success;
+    }
     public static Station getStationByID(long stationID){
     
     Station h=new Station(stationID,"Unknown station: "+stationID);
@@ -221,8 +256,11 @@ public class APIHandler {
     }
     
     public static JLabel getCharacterIMG(int characterID){
-    File f = new File("cache/img/"+Integer.toString(characterID)+"_128.jpg");
+    File f = new File("cache/img/char/"+Integer.toString(characterID)+"_128.jpg");
     JLabel retval = new JLabel("IMG unavailable");
+    if( !f.exists() ){
+        cacheCharacterIMG(characterID);
+    }
     if( f.exists() ){
         try{
             BufferedImage img = ImageIO.read(f);
@@ -235,6 +273,23 @@ public class APIHandler {
     return retval;
     }
     
+    public static ImageIcon getTypeIMG(int typeID){
+    File f = new File("cache/img/type/"+Integer.toString(typeID)+"_32.png");
+    ImageIcon retval = null;
+    if( !f.exists() ){
+        cacheTypeIMG(typeID);
+    }
+    if( f.exists() ){
+        try{
+            BufferedImage img = ImageIO.read(f);
+            retval = new ImageIcon(img);
+
+        }catch(IOException ex){
+            System.out.println("IOE: "+ex.getMessage());
+        }
+    }
+    return retval;
+    }
     private static void initRefTypes(){
         JournalElement.refTypes = new HashMap();
         File cache = new File("cache/static/reftypes.xml");
@@ -579,7 +634,6 @@ public class APIHandler {
                         if( charID != -1 ){
                             chars[i] = new EVECharacter(charID, charName, key);
                             chars[i].corpName = corpName;
-                            cacheCharacterIMG(charID);
                         }
                         
                     }
@@ -646,6 +700,10 @@ public class APIHandler {
                     }catch(NumberFormatException ex){
                         System.out.println("NFE: "+ex.getMessage());
                     }
+                }
+                Collections.sort(c.assets);
+                for(int i=0;i<c.assets.size();i++){
+                    Collections.sort(c.assets.get(i).items);
                 }
 //                System.out.println("asset size: "+c.assets.size());
             }catch(SAXException ex){

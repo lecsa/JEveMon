@@ -9,6 +9,7 @@ import data.Station;
 import data.Type;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * @author lecsa
@@ -41,7 +42,21 @@ public class DBHandler {
         }
         return t;
     }
+    public Type[] getTypeByName(String typeNamePart) {
+        ArrayList<Type> t = new ArrayList();
+        
+        try {
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM invtypes WHERE typeName LIKE '%" + typeNamePart + "%'");
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                t.add(new Type(rs.getInt("typeID"), rs.getString("typeName"), rs.getString("description"), rs.getInt("marketGroupID"), rs.getInt("groupID")));
 
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQLE: " + ex.getMessage());
+        }
+        return t.toArray(new Type[t.size()]);
+    }
     public String getGroupNameByID(int groupID) {
         String retval = "Unknown";
         try {
@@ -88,6 +103,10 @@ public class DBHandler {
     }
 //    public static void main(String[] args) {
 //        DBHandler db = new DBHandler();
-//        System.out.println(db.getTypeByID(601).name+"");
+//        Type[] t = db.getTypeByName("Spaceship");
+//        for(int i=0;i<t.length;i++){
+//            System.out.println(t[i].name+" - "+t[i].id+" - "+t[i].groupID);
+//        }
+//        
 //    }
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author lecsa
  */
-public class Item extends Type{
+public class Item extends Type implements Comparable{
 
     public int quantity = 0;
     public ArrayList<Item> containedItems = new ArrayList();
@@ -27,4 +27,25 @@ public class Item extends Type{
         super(t.id, t.name, t.description, t.marketGroupID, t.groupID);
         this.quantity = quantity;
     }
+
+    @Override
+    public int compareTo(Object o) {
+        int retval = 0;
+        if( o != null ){
+            if( o instanceof Item ){
+                Item c = (Item)o;
+                if( c.containedItems.size() > 0 && this.containedItems.isEmpty() ){
+                    retval = 1;
+                }else if( c.containedItems.isEmpty() && this.containedItems.size() > 0 ){
+                    retval = -1;
+                }else{
+                    retval = this.name.compareTo(c.name);
+                }
+            }
+        }
+        return retval;
+    }
+    
+    
+    
 }

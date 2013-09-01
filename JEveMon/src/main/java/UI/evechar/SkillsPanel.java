@@ -4,6 +4,7 @@
  */
 package UI.evechar;
 
+import API.APIHandler;
 import data.EVECharacter;
 import data.Skill;
 import data.SkillGroup;
@@ -11,10 +12,12 @@ import db.DBHandler;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import utils.Utils;
 
 /**
@@ -42,7 +45,6 @@ public class SkillsPanel extends JPanel{
         }
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("Skills");
         int countlvl5=0;
-        
         for(int i=0;i<groups.size();i++){
             DefaultMutableTreeNode currentGroup = new DefaultMutableTreeNode(groups.get(i).name+" - "+Utils.formatLong(groups.get(i).groupSP)+" SP - "+groups.get(i).lvl5+" skills on lvl5");
             for(int n=0;n<groups.get(i).getSkills().size();n++){
@@ -63,6 +65,18 @@ public class SkillsPanel extends JPanel{
         }
         top.setUserObject("Skills - "+Utils.formatLong(character.skillpoints)+" - "+countlvl5+" skills on lvl5");
         tree = new JTree(top);
+        DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
+        ImageIcon leaf = APIHandler.getTypeIMG(character.skills.get(0).type.id);
+        ImageIcon b = APIHandler.getTypeIMG(353368);
+        System.out.println(character.skills.get(0).type.name);
+        if( leaf != null ){
+            renderer.setLeafIcon(leaf);
+            
+        }
+        if( b != null ){
+            renderer.setClosedIcon(b);
+        }
+        tree.setCellRenderer(renderer);
         JScrollPane treeView = new JScrollPane(tree);
         treeView.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         add(treeView,BorderLayout.CENTER);
