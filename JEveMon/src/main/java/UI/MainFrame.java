@@ -25,7 +25,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
-
+/*
+ * TODO: 
+ * - Account expires DoB helyett
+ * - SP / hour
+ * - Skill queue gui
+ * 
+ * 
+ * 
+ */
 /**
  *
  * @author lecsa
