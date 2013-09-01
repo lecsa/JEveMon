@@ -25,6 +25,7 @@ public class CharFrame extends JFrame implements WindowListener{
     
     public CharFrame(ExtendedCharPanel parent){
         this.parent = parent;
+//        System.out.println(parent.getCharacter().id);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle(parent.getCharacter().name+" - "+parent.getCharacter().corpName);
         tk=getToolkit();

@@ -31,6 +31,7 @@ public class EVECharacter {
     public int intelligence,memory,perception,charisma,willpower;
     public APIKey key;
     public ArrayList<Station> assets = new ArrayList();
+    public ArrayList<JournalElement> walletJournal = new ArrayList();
     
     public EVECharacter(int id, String name, APIKey key){
         this.id = id;

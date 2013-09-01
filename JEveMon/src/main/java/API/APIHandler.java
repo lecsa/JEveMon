@@ -6,6 +6,7 @@ package API;
 
 import data.EVECharacter;
 import data.Item;
+import data.JournalElement;
 import data.Skill;
 import data.SkillInTraining;
 import data.Station;
@@ -207,6 +208,99 @@ public class APIHandler {
         }
     }
     return retval;
+    }
+    
+    private static void initRefTypes(){
+        File cache = new File("cache/eve/reftypes.xml");
+        if( isCacheNeeded(cache) ){
+            try{
+                URL url = new URL("https://"+Defaults.SERVER+"/eve/RefTypes.xml.aspx");
+                cache(cache, url);
+            }catch(MalformedURLException ex){
+                System.out.println("MUE: "+ex.getMessage());
+            }
+        }
+        if( cache.exists() && cache.isFile() ){
+            try{
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(cache);
+                NodeList rows = doc.getElementsByTagName("row");
+                for(int i=0;i<rows.getLength();i++){
+                    if( rows.item(i).getNodeType() != Node.TEXT_NODE ){
+                        Element e = (Element)rows.item(i);
+                        try{
+                            int id = Integer.parseInt(e.getAttribute("refTypeID").toString());
+                            String name = e.getAttribute("refTypeName").toString();
+                            JournalElement.refTypes.put(new Integer(id), name);
+                        }catch(NumberFormatException ex){
+                            System.out.println("NEX: "+ex.getMessage());
+                        }
+                    }
+                }
+            }catch(SAXException ex){
+                System.out.println("SAXE: "+ex.getMessage());
+            }catch(ParserConfigurationException ex){
+                System.out.println("PCE: "+ex.getMessage());
+            }catch(IOException ex){
+                System.out.println("IOE: "+ex.getMessage());
+            }
+        }
+    }
+    
+    public static void fillCharacterWalletJournal(EVECharacter c){
+        if( JournalElement.refTypes == null ){
+            initRefTypes();
+        }
+        File cache = new File("cache/char/journal_"+c.id+".xml");
+        if( isCacheNeeded(cache) ){
+            try{
+                URL url = new URL(c.key.getURL("char", "WalletJournal.xml.aspx")+"&characterID="+c.id);
+                cache(cache, url);
+            }catch(MalformedURLException ex){
+                System.out.println("MUE: "+ex.getMessage());
+            }
+        }
+        if( cache.exists() && cache.isFile() ){
+            try{
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(cache);
+            }catch(SAXException ex){
+                System.out.println("SAXE: "+ex.getMessage());
+            }catch(ParserConfigurationException ex){
+                System.out.println("PCE: "+ex.getMessage());
+            }catch(IOException ex){
+                System.out.println("IOE: "+ex.getMessage());
+            }
+        }
+    }
+    
+    public static Element getTransactionElement(EVECharacter c, long refID){
+    Element el = null;
+        File cache = new File("cache/char/transactions_"+c.id+".xml");
+        if( isCacheNeeded(cache) ){
+            try{
+                URL url = new URL(c.key.getURL("char", "WalletTransactions.xml.aspx")+"&characterID="+c.id);
+                cache(cache, url);
+            }catch(MalformedURLException ex){
+                System.out.println("MUE: "+ex.getMessage());
+            }
+        }
+        if( cache.exists() && cache.isFile() ){
+            try{
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(cache);
+            }catch(SAXException ex){
+                System.out.println("SAXE: "+ex.getMessage());
+            }catch(ParserConfigurationException ex){
+                System.out.println("PCE: "+ex.getMessage());
+            }catch(IOException ex){
+                System.out.println("IOE: "+ex.getMessage());
+            }
+        }
+    return el;
     }
     
     public static EVECharacter fillCharacterData(EVECharacter c){

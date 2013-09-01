@@ -49,7 +49,7 @@ public class MainFrame extends JFrame implements ActionListener{
     public MainFrame(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         APIHandler.createdirs();
-        setTitle("JEVE");
+        setTitle("JEveMon");
         setLayout(new BorderLayout());
         tk=getToolkit();
         if( tk.getScreenSize().width >= DW && tk.getScreenSize().height >= DH ){
