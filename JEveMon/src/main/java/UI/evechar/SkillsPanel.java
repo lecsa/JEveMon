@@ -67,14 +67,11 @@ public class SkillsPanel extends JPanel{
         tree = new JTree(top);
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
         ImageIcon leaf = APIHandler.getTypeIMG(character.skills.get(0).type.id);
-        ImageIcon b = APIHandler.getTypeIMG(353368);
-        System.out.println(character.skills.get(0).type.name);
         if( leaf != null ){
             renderer.setLeafIcon(leaf);
+            renderer.setClosedIcon(leaf);
+            renderer.setOpenIcon(leaf);
             
-        }
-        if( b != null ){
-            renderer.setClosedIcon(b);
         }
         tree.setCellRenderer(renderer);
         JScrollPane treeView = new JScrollPane(tree);
