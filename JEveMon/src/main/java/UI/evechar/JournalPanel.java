@@ -43,6 +43,7 @@ public class JournalPanel extends JPanel implements ActionListener{
         table.setColumnSelectionAllowed(false);
         table.setRowSelectionAllowed(true);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
         view = new JScrollPane(table);
         view.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         add(view,BorderLayout.CENTER);
@@ -116,7 +117,10 @@ public class JournalPanel extends JPanel implements ActionListener{
                         return false;
                     }
                 };
+                table.setDefaultRenderer(Object.class, new CellRenderer());
+                table.setRowHeight(25);
                 table.setModel(model);
+                
             }
         });
     }
