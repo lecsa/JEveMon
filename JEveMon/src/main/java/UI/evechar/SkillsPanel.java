@@ -10,7 +10,9 @@ import data.Skill;
 import data.SkillGroup;
 import db.DBHandler;
 import java.awt.BorderLayout;
+import java.io.File;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -67,10 +69,21 @@ public class SkillsPanel extends JPanel{
         tree = new JTree(top);
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
         ImageIcon leaf = APIHandler.getTypeIMG(character.skills.get(0).type.id);
+        ImageIcon root = null;
+        try{
+            root = new ImageIcon(ImageIO.read(new File("img/0_32.png")));
+        }catch(Exception ex){
+            System.out.println("EX: "+ex.getMessage());
+        }
         if( leaf != null ){
             renderer.setLeafIcon(leaf);
-            renderer.setClosedIcon(leaf);
-            renderer.setOpenIcon(leaf);
+            if( root != null ){
+                renderer.setClosedIcon(root);
+                renderer.setOpenIcon(root);
+            }else{
+                renderer.setClosedIcon(leaf);
+                renderer.setOpenIcon(leaf);
+            }
             
         }
         tree.setCellRenderer(renderer);
