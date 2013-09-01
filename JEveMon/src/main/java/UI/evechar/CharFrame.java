@@ -4,8 +4,6 @@
  */
 package UI.evechar;
 
-import API.APIHandler;
-import UI.APIFrame;
 import data.EVECharacter;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;

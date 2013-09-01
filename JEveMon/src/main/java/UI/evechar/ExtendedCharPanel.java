@@ -139,7 +139,7 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
             Date now = Utils.getNowUTC();
             Date fin = Utils.getUTC(currSkill.endTime);
             int s = (int)((fin.getTime()-now.getTime())/1000);
-            if(s <= UPDATE_RATE){
+            if( (s*1000) <= UPDATE_RATE ){
                 MainFrame.noti.addLine("Skill training completed: "+character.name+" "+currSkill.type.name+" lvl "+currSkill.skillevel);
             }
             lbFinishes.setText(Utils.formatTime(s));
