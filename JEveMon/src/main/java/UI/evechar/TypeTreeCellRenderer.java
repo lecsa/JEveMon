@@ -4,15 +4,14 @@
  */
 package UI.evechar;
 
-import API.APIHandler;
 import data.Item;
 import data.Station;
 import java.awt.Component;
-import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
+import utils.ImageHandler;
 
 /**
  *
@@ -30,12 +29,12 @@ public class TypeTreeCellRenderer implements TreeCellRenderer{
                 if( item.containedItems.isEmpty() && item.quantity != 0 ){
                     amount = " x"+item.quantity;
                 }
-                label.setIcon(APIHandler.getTypeIMG(item.id));
+                label.setIcon(ImageHandler.getTypeIMG(item.id));
                 label.setText(item.name+amount);
             } else if( o instanceof Station ) {
                 Station station = (Station)o;
-                label = new JLabel(APIHandler.getTypeIMG(17366));
-                label.setIcon(APIHandler.getTypeIMG(17366));
+                label = new JLabel(ImageHandler.getTypeIMG(17366));
+                label.setIcon(ImageHandler.getTypeIMG(17366));
                 label.setText(station.name);
                 //17366
             }else{

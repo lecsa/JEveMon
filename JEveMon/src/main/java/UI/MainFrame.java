@@ -25,6 +25,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
+import utils.ImageHandler;
 /*
  * TODO: 
  * - Account expires DoB helyett
@@ -57,6 +58,7 @@ public class MainFrame extends JFrame implements ActionListener{
     public MainFrame(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         APIHandler.createdirs();
+        ImageHandler.createdirs();
         setTitle("JEveMon");
         setLayout(new BorderLayout());
         tk=getToolkit();

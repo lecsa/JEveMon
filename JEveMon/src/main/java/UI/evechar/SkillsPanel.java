@@ -4,7 +4,6 @@
  */
 package UI.evechar;
 
-import API.APIHandler;
 import data.EVECharacter;
 import data.Skill;
 import data.SkillGroup;
@@ -20,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import utils.ImageHandler;
 import utils.Utils;
 
 /**
@@ -68,7 +68,7 @@ public class SkillsPanel extends JPanel{
         top.setUserObject("Skills - "+Utils.formatLong(character.skillpoints)+" - "+countlvl5+" skills on lvl5");
         tree = new JTree(top);
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
-        ImageIcon leaf = APIHandler.getTypeIMG(character.skills.get(0).type.id);
+        ImageIcon leaf = ImageHandler.getTypeIMG(character.skills.get(0).type.id);
         ImageIcon root = null;
         try{
             root = new ImageIcon(ImageIO.read(new File("img/0_32.png")));

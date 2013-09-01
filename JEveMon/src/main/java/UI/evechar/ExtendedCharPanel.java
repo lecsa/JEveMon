@@ -4,14 +4,12 @@
  */
 package UI.evechar;
 
-import API.APIHandler;
 import UI.MainFrame;
 import UI.Msg;
 import data.EVECharacter;
 import data.SkillInTraining;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -19,6 +17,7 @@ import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import utils.ImageHandler;
 import utils.Utils;
 
 /**
@@ -49,7 +48,7 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
     public ExtendedCharPanel(EVECharacter character){
         this.character = character;
         setLayout(new BorderLayout());
-        JLabel img = APIHandler.getCharacterIMG(character.id);
+        JLabel img = ImageHandler.getCharacterIMGLabel(character.id);
         img.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
         add(img,BorderLayout.WEST);
         initGrid();

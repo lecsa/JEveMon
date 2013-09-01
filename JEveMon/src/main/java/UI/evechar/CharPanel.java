@@ -4,24 +4,15 @@
  */
 package UI.evechar;
 
-import API.APIHandler;
 import data.EVECharacter;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
+import utils.ImageHandler;
 
 /**
  *
@@ -49,7 +40,7 @@ public class CharPanel extends JPanel{
     
     private void initLabel(){
         JPanel pnIMG = new JPanel(new BorderLayout());
-        pnIMG.add(APIHandler.getCharacterIMG(character.id),BorderLayout.CENTER);
+        pnIMG.add(ImageHandler.getCharacterIMGLabel(character.id),BorderLayout.CENTER);
         this.add(pnIMG);
     }
     
