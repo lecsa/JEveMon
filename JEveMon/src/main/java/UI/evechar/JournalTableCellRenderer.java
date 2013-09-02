@@ -16,7 +16,7 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author lecsa
  */
-public class CellRenderer  extends JLabel implements TableCellRenderer {
+public class JournalTableCellRenderer  extends JLabel implements TableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, final int row, int column) {
