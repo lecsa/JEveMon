@@ -62,7 +62,7 @@ public class MainFrame extends JFrame implements ActionListener{
         setTitle("JEveMon");
         setLayout(new BorderLayout());
         // Set Application Icon
-        this.setIconImage(ImageHandler.getApplicationIcon().getImage());
+        setIconImage(ImageHandler.getApplicationIcon().getImage());
         tk=getToolkit();
         if( tk.getScreenSize().width >= DW && tk.getScreenSize().height >= DH ){
             setBounds((tk.getScreenSize().width-DW)/4, (tk.getScreenSize().height-DH)/2, DW, DH);

@@ -91,7 +91,9 @@ public class ImageHandler {
             try {
                 BufferedImage img = ImageIO.read(f);
                 return new ImageIcon(img);
-            } catch(Exception ex) {}
+            } catch(Exception ex) {
+                System.out.println("Can't find Icon File!");
+            }
         }
         return new ImageIcon();
     }
