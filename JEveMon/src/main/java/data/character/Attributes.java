@@ -63,6 +63,6 @@ public class Attributes extends Implants {
      * @retval int Skill Point / Hour
      */
     public int getSPH( Attribute primary , Attribute secondary ) {
-        return ( getRaw(primary) + ( getRaw(secondary) / 2 ) ) * 60;
+        return ( get(primary) + ( get(secondary) / 2 ) ) * 60;
     }
 }
