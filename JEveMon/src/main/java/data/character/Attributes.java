@@ -55,4 +55,14 @@ public class Attributes extends Implants {
             setRaw( attributeId , value[ attributeId.ordinal() ]);
         }
     }
+    
+    /**
+     * Gets the Skill Point / Hour for the given Primary and Secondary Attributes
+     * @param primary Primary Attribute
+     * @param secondary Secondary Attribute
+     * @retval int Skill Point / Hour
+     */
+    public int getSPH( Attribute primary , Attribute secondary ) {
+        return ( getRaw(primary) + ( getRaw(secondary) / 2 ) ) * 60;
+    }
 }
