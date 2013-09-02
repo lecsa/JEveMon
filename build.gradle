@@ -67,7 +67,9 @@ project("JEveMon") {
     }
 
     task buildScripts(type: Copy) {
-        from scriptsDir;
+        from (scriptsDir) {
+            fileMode=0755;
+        }
         into("$buildDir/scripts");
         filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [jarName: jar.archiveName])
     }
