@@ -49,7 +49,7 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
         this.character = character;
         setLayout(new BorderLayout());
         JLabel img = ImageHandler.getCharacterIMGLabel(character.id);
-        img.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
+        img.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(img,BorderLayout.WEST);
         initGrid();
         setBorder(BorderFactory.createLineBorder(Color.gray,2));
@@ -184,9 +184,9 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
         this.repaint();
     }
     private void initGrid(){
-        gridPanel = new JPanel(new GridLayout(4, 4,10,10));
+        gridPanel = new JPanel(new GridLayout(4, 4,1,1));
         gridPanel.setBackground(Color.WHITE);
-        gridPanel.setBorder(BorderFactory.createEmptyBorder(10, 100, 10, 100));
+        gridPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 10));
         gridPanel.add(new JLabel("Name:"));
         gridPanel.add(new JLabel(character.name));
         gridPanel.add(new JLabel("Corp:"));
