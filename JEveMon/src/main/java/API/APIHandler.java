@@ -12,6 +12,7 @@ import data.Skill;
 import data.SkillInTraining;
 import data.Station;
 import data.TransactionElement;
+import data.character.Attributes;
 import db.DBHandler;
 import java.io.BufferedReader;
 import java.io.File;
@@ -355,13 +356,15 @@ public class APIHandler {
                 try{
                     Element e = (Element)(doc.getElementsByTagName("balance").item(0));
                     c.balance       = Double.parseDouble(e.getTextContent());
-                    
                     c.corpID        = Integer.parseInt( ((Element)(doc.getElementsByTagName("corporationID").item(0))).getTextContent() );
-                    c.intelligence  = Integer.parseInt( ((Element)(doc.getElementsByTagName("intelligence").item(0))).getTextContent() );
-                    c.memory        = Integer.parseInt( ((Element)(doc.getElementsByTagName("memory").item(0))).getTextContent() );
-                    c.charisma      = Integer.parseInt( ((Element)(doc.getElementsByTagName("charisma").item(0))).getTextContent() );
-                    c.perception    = Integer.parseInt( ((Element)(doc.getElementsByTagName("perception").item(0))).getTextContent() );
-                    c.willpower     = Integer.parseInt( ((Element)(doc.getElementsByTagName("willpower").item(0))).getTextContent() );
+                    c.attributes.setRaw( Attributes.Attribute.INTELLIGENCE , Integer.parseInt( ((Element)(doc.getElementsByTagName("intelligence").item(0))).getTextContent() ) );
+                    c.attributes.setRaw( Attributes.Attribute.MEMORY , Integer.parseInt( ((Element)(doc.getElementsByTagName("memory").item(0))).getTextContent() ) );
+                    c.attributes.setRaw( Attributes.Attribute.PERCEPTION, Integer.parseInt( ((Element)(doc.getElementsByTagName("perception").item(0))).getTextContent() ) );
+                    c.attributes.setRaw( Attributes.Attribute.WILLPOWER, Integer.parseInt( ((Element)(doc.getElementsByTagName("willpower").item(0))).getTextContent() ) );
+                    c.attributes.setRaw( Attributes.Attribute.CHARISMA , Integer.parseInt( ((Element)(doc.getElementsByTagName("charisma").item(0))).getTextContent() ) );
+                    /** 
+                     * TODO: Implants Import
+                     */
                     c.cloneSkillpoints = Integer.parseInt( ((Element)(doc.getElementsByTagName("cloneSkillPoints").item(0))).getTextContent() );
                 }catch(NumberFormatException ex){
                     System.out.println("NFE: "+ex.getMessage());

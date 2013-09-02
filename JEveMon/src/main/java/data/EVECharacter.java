@@ -5,6 +5,7 @@
 package data;
 
 import API.APIKey;
+import data.character.Attributes;
 import db.DBHandler;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,12 +29,13 @@ public class EVECharacter {
     public boolean isTraining;
     public int skillpoints = 0;
     public int cloneSkillpoints = 0;
-    public int intelligence,memory,perception,charisma,willpower;
+    public Attributes attributes;
     public APIKey key;
     public ArrayList<Station> assets = new ArrayList();
     public ArrayList<JournalElement> walletJournal = new ArrayList();
     
     public EVECharacter(int id, String name, APIKey key){
+        attributes = new Attributes();
         this.id = id;
         this.name=name;
         this.key = key;
