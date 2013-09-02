@@ -84,12 +84,16 @@ public class APIHandler {
                 
             }catch(SAXException ex){
                 System.out.println("SAXE: "+ex.getMessage());
+                needed = true;
             }catch(ParserConfigurationException ex){
                 System.out.println("PCE: "+ex.getMessage());
+                needed = true;
             }catch(IOException ex){
                 System.out.println("IOE: "+ex.getMessage());
+                needed = true;
             }catch(ParseException ex){
                 System.out.println("PEX: "+ex.getMessage());
+                needed = true;
             }finally{
                 try{
                     fis.close();
