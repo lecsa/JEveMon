@@ -13,18 +13,22 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
+import org.omg.CORBA.portable.ApplicationException;
 import utils.ImageHandler;
 /*
  * TODO: 
@@ -61,6 +65,8 @@ public class MainFrame extends JFrame implements ActionListener{
         ImageHandler.createdirs();
         setTitle("JEveMon");
         setLayout(new BorderLayout());
+        // Set Application Icon
+        this.setIconImage(ImageHandler.getApplicationIcon().getImage());
         tk=getToolkit();
         if( tk.getScreenSize().width >= DW && tk.getScreenSize().height >= DH ){
             setBounds((tk.getScreenSize().width-DW)/4, (tk.getScreenSize().height-DH)/2, DW, DH);

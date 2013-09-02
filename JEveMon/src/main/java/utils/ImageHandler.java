@@ -85,6 +85,17 @@ public class ImageHandler {
     return retval;
     }
     
+    public static ImageIcon getApplicationIcon() {
+        File f = new File("img/logo.png");
+        if( f.exists() ){
+            try {
+                BufferedImage img = ImageIO.read(f);
+                return new ImageIcon(img);
+            } catch(Exception ex) {}
+        }
+        return new ImageIcon();
+    }
+    
     public static ImageIcon getTypeIMG(int typeID){
     File f = new File("cache/img/type/"+Integer.toString(typeID)+"_32.png");
     ImageIcon retval = null;
