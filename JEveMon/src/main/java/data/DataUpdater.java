@@ -6,7 +6,6 @@ package data;
 
 import API.APIHandler;
 import API.APIKey;
-import UI.MainFrame;
 import data.account.Account;
 import data.character.EVECharacter;
 import event.done.DataUpdateFinishedEvent;
