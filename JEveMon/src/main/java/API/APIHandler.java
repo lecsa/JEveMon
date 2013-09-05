@@ -531,6 +531,7 @@ public class APIHandler {
     
     public static EVECharacter[] getCharacters(APIKey key){
         EVECharacter[] chars = new EVECharacter[3];
+        int charactersNumber = 0;
         // get URL content
         
         File f = new File("cache/account/"+key.getName()+".xml");
@@ -563,6 +564,7 @@ public class APIHandler {
                             System.out.println("NEX: "+ex.getMessage());
                         }
                         if( charID != -1 ){
+                            charactersNumber++;
                             chars[i] = new EVECharacter(charID, charName, key);
                             chars[i].setCorpName(corpName);
                         }
@@ -578,7 +580,11 @@ public class APIHandler {
             }
         }
         
-        return chars;
+        // Ez elegge hack szagu, de jobb otletem most nincs ...
+        EVECharacter[] retChars = new EVECharacter[charactersNumber];
+        System.arraycopy(chars, 0, retChars, 0, charactersNumber);
+        
+        return retChars;
     }
     
     public static void fillCharacterAssets(EVECharacter c){
