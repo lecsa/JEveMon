@@ -4,6 +4,7 @@
  */
 package data.type;
 
+import API.AssetListFlags.Flag_t;
 import java.util.ArrayList;
 
 /**
@@ -59,6 +60,10 @@ public class Item extends Type implements Comparable{
 
     public ArrayList<Item> getContainedItems() {
         return containedItems;
+    }
+
+    public int getFlag() {
+        return flag;
     }
     
     

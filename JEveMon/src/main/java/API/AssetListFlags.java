@@ -10,7 +10,8 @@ package API;
  */
 public class AssetListFlags {
     
-    public enum Flag_t{
+    public static enum Flag_t{
+        FLAG_UNKNOWN (-1),
         FLAG_CARGO (5),
         FLAG_LOW_SLOT_1 (11),
         FLAG_LOW_SLOT_2 (12),
@@ -44,7 +45,8 @@ public class AssetListFlags {
         FLAG_RIG_SLOT_5(96),
         FLAG_RIG_SLOT_6(97),
         FLAG_RIG_SLOT_7(98),
-        FLAG_RIG_SLOT_8(99)
+        FLAG_RIG_SLOT_8(99),
+        FLAG_SECONDARY_STORAGE(122)
         ;
         
         private int value;
@@ -56,5 +58,26 @@ public class AssetListFlags {
         return value;
         }
         
+        public static boolean isFlagExists(int flag){
+        boolean exists = false;
+            Flag_t[] vals = Flag_t.values();
+            for(int i=0;i<vals.length && !exists;i++){
+                if(vals[i].getValue() == flag){
+                    exists = true;
+                }
+            }
+        return exists;
+        }
+        
+        public static String getFlagName(int flag){
+            String name = "Unknown";
+            Flag_t[] vals = Flag_t.values();
+            for(int i=0;i<vals.length && name.equals("Unknown");i++){
+                if(vals[i].getValue() == flag){
+                    name = vals[i].name().replace("FLAG_", "").replace("_", " ").toLowerCase();
+                }
+            }
+            return name;
+        }
     }
 }

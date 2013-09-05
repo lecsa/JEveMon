@@ -4,6 +4,7 @@
  */
 package UI.evechar;
 
+import API.AssetListFlags;
 import data.type.Item;
 import data.location.Station;
 import java.awt.Component;
@@ -29,8 +30,12 @@ public class TypeTreeCellRenderer implements TreeCellRenderer{
                 if( item.getContainedItems().isEmpty() && item.getQuantity() != 0 ){
                     amount = " x"+item.getQuantity();
                 }
+                String flagStr = "";
+                if(AssetListFlags.Flag_t.isFlagExists(item.getFlag())){
+                    flagStr = " ("+AssetListFlags.Flag_t.getFlagName(item.getFlag())+")";
+                }
                 label.setIcon(ImageHandler.getTypeIMG(item.getId()));
-                label.setText(item.getName()+amount);
+                label.setText(item.getName()+amount+flagStr);
             } else if( o instanceof Station ) {
                 Station station = (Station)o;
                 label = new JLabel(ImageHandler.getTypeIMG(17366));

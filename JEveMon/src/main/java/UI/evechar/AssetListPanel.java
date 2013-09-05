@@ -5,6 +5,7 @@
 package UI.evechar;
 
 import API.APIHandler;
+import API.AssetListFlags.Flag_t;
 import data.character.EVECharacter;
 import data.type.Item;
 import data.location.Station;
@@ -78,6 +79,7 @@ public class AssetListPanel extends JPanel implements ActionListener{
                     parentItemNode = new DefaultMutableTreeNode(parent);
                     for(int k=0;k<parent.getContainedItems().size();k++){
                         Item child = parent.getContainedItems().get(k);
+                        
                         parentItemNode.add(new DefaultMutableTreeNode(child));
                     }
                 }
