@@ -8,6 +8,7 @@ import API.AssetListFlags;
 import data.type.Item;
 import data.location.Station;
 import java.awt.Component;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -32,7 +33,9 @@ public class TypeTreeCellRenderer implements TreeCellRenderer{
                 }
                 String flagStr = "";
                 if(AssetListFlags.Flag_t.isFlagExists(item.getFlag())){
-                    flagStr = " ("+AssetListFlags.Flag_t.getFlagName(item.getFlag())+")";
+                    if( item.isFitted() ){
+                        flagStr = " ("+AssetListFlags.Flag_t.getFlagName(item.getFlag())+")";
+                    }
                 }
                 label.setIcon(ImageHandler.getTypeIMG(item.getId()));
                 label.setText(item.getName()+amount+flagStr);
@@ -42,6 +45,20 @@ public class TypeTreeCellRenderer implements TreeCellRenderer{
                 label.setIcon(ImageHandler.getTypeIMG(17366));
                 label.setText(station.getName());
                 //17366
+            }else if(o instanceof String){
+                String theString = (String)o;
+                ImageIcon icon = null;
+                if( theString.toLowerCase().equals("fitted") ){
+                    icon = ImageHandler.getImage("img/fitted.png");
+                }else if( theString.toLowerCase().equals("drone bay")){
+                    icon = ImageHandler.getImage("img/drone.png");
+                }else{
+                    icon = ImageHandler.getImage("img/cargo.png");
+                }
+                if( icon!=null ){
+                    label.setIcon(icon);
+                }
+                label.setText(theString);
             }else{
                 label.setIcon(null);
                 label.setText("" + value);

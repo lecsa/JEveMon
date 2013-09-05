@@ -14,6 +14,7 @@ import data.skill.SkillInTraining;
 import data.location.Station;
 import data.journal.TransactionElement;
 import data.character.Attributes;
+import data.type.Ship;
 import db.DBHandler;
 import java.io.BufferedReader;
 import java.io.File;
@@ -615,8 +616,9 @@ public class APIHandler {
                     int typeID = Integer.parseInt(locRows.get(i).getAttribute("typeID"));
                     int quantity = Integer.parseInt(locRows.get(i).getAttribute("quantity"));
                     int flag = Integer.parseInt(locRows.get(i).getAttribute("flag"));
-                    Item parent = new Item(db.getTypeByID(typeID), quantity, flag);
-                    
+                    Item parent = new Item(db.getTypeByID(typeID), quantity, flag);//can be ship
+                    Ship parentShip = new Ship(parent, quantity, flag);
+                    boolean parentIsShip = db.isShip(typeID);
                     if( locRows.get(i).hasChildNodes() ){
                         NodeList childRows = locRows.get(i).getElementsByTagName("row");
                         for(int n=0;n<childRows.getLength();n++){
@@ -625,10 +627,26 @@ public class APIHandler {
                             int childQuantity = Integer.parseInt(e.getAttribute("quantity"));
                             int childFlag = Integer.parseInt(e.getAttribute("flag"));
                             Item child = new Item(db.getTypeByID(childTypeID),childQuantity,childFlag);
-                            parent.getContainedItems().add(child);
+                            if( parentIsShip ){
+                                if(child.isFitted()){
+                                    parentShip.getFittedItems().add(child);
+                                }else if(child.isInDroneBay()){
+                                    parentShip.getDroneBay().add(child);
+                                }else if(child.isInCargoHold()){
+                                    parentShip.getCargoHold().add(child);
+                                }else{
+                                    parentShip.getContainedItems().add(child);
+                                }
+                            }else{
+                                parent.getContainedItems().add(child);
+                            }
                         }
                     }
-                    c.addAsset(parent, locationID);
+                    if( !parentIsShip ){
+                        c.addAsset(parent, locationID);
+                    }else{
+                        c.addAsset(parentShip, locationID);
+                    }
                     }catch(NumberFormatException ex){
                         System.out.println("NFE: "+ex.getMessage());
                     }

@@ -15,8 +15,9 @@ import java.util.ArrayList;
  * @author lecsa
  */
 public class DBHandler {
-    Connection connection = null;
-
+    private Connection connection = null;
+    private static final int SHIP_CATEGORY_ID = 6;
+    
     public DBHandler() {
 
         try {
@@ -101,12 +102,48 @@ public class DBHandler {
         }
     return h;
     }
+    
+    public int getCategoryByGroupID(int groupID){
+        int retval = 0;
+        try{
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM invgroups WHERE groupID='"+Integer.toString(groupID)+"'");
+            ResultSet rs = st.executeQuery();
+            String name=null;
+        while(rs.next()!=false){
+            retval = rs.getInt("categoryID");
+        }
+        }catch(SQLException e){
+            //JOptionPane.showMessageDialog(null, "Adatbázis lekérés hiba. getStationByID()", "Hiba", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return retval;
+    }
+    
+    public boolean isShip(int typeID){
+    boolean ship = false;
+        try{
+            Type t = getTypeByID(typeID);
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM invgroups WHERE groupID='"+Integer.toString(t.getGroupID())+"'");
+            ResultSet rs = st.executeQuery();
+            String name=null;
+        while(rs.next()!=false){
+            ship = SHIP_CATEGORY_ID == rs.getInt("categoryID");
+        }
+        }catch(SQLException e){
+            //JOptionPane.showMessageDialog(null, "Adatbázis lekérés hiba. getStationByID()", "Hiba", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    return ship;
+    }
+    
     public static void main(String[] args) {
         DBHandler db = new DBHandler();
-        Type[] t = db.getTypeByName("station");
+        Type[] t = db.getTypeByName("");
         for(int i=0;i<t.length;i++){
             System.out.println(t[i].getName()+" - "+t[i].getId()+" - "+t[i].getGroupID());
         }
-        
+//        Type t = db.getTypeByID(586);
+//        System.out.println(t.getName());
+//        System.out.println(db.getGroupNameByID(t.getGroupID()));
     }
 }

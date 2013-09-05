@@ -13,15 +13,10 @@ import java.util.ArrayList;
  */
 public class Item extends Type implements Comparable{
 
-    private int quantity = 0;
-    private ArrayList<Item> containedItems = new ArrayList();
-    private int flag;
-    
-    public Item(int id, String name, String description, int marketGroupID, int groupID, int flag) {
-        super(id, name, description, marketGroupID, groupID);
-        this.flag = flag;
-    }
-    
+    protected int quantity = 0;
+    protected ArrayList<Item> containedItems = new ArrayList();
+    protected int flag;
+
     public Item(Type t,int flag){
         super(t.id, t.name, t.description, t.marketGroupID, t.groupID);
         this.flag = flag;
@@ -66,6 +61,18 @@ public class Item extends Type implements Comparable{
         return flag;
     }
     
+    public boolean isFitted(){
+        String fname = Flag_t.getFlagName(flag);
+        return fname.startsWith("low") || fname.startsWith("med") || fname.startsWith("high") || fname.startsWith("rig");
+    }
     
+    public boolean isInDroneBay(){
+        String fname = Flag_t.getFlagName(flag);
+        return fname.startsWith("drone");
+    }
+    public boolean isInCargoHold(){
+        String fname = Flag_t.getFlagName(flag);
+        return fname.startsWith("cargo");
+    }
     
 }

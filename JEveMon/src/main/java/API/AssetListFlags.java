@@ -9,10 +9,10 @@ package API;
  * @author lecsa
  */
 public class AssetListFlags {
-    
+    //DO NOT CHANGE FLAG NAMES!
     public static enum Flag_t{
         FLAG_UNKNOWN (-1),
-        FLAG_CARGO (5),
+        FLAG_CARGO_HOLD (5),
         FLAG_LOW_SLOT_1 (11),
         FLAG_LOW_SLOT_2 (12),
         FLAG_LOW_SLOT_3 (13),
@@ -45,8 +45,7 @@ public class AssetListFlags {
         FLAG_RIG_SLOT_5(96),
         FLAG_RIG_SLOT_6(97),
         FLAG_RIG_SLOT_7(98),
-        FLAG_RIG_SLOT_8(99),
-        FLAG_SECONDARY_STORAGE(122)
+        FLAG_RIG_SLOT_8(99)
         ;
         
         private int value;

@@ -109,6 +109,18 @@ public class ImageHandler {
         }
         return new ImageIcon();
     }
+    public static ImageIcon getImage(String path) {
+        File f = new File(path);
+        if( f.exists() ){
+            try {
+                BufferedImage img = ImageIO.read(f);
+                return new ImageIcon(img);
+            } catch(Exception ex) {
+                System.out.println("Can't find Icon File!");
+            }
+        }
+        return new ImageIcon();
+    }
     public static ImageIcon getTypeIMG(int typeID){
     File f = new File("cache/img/type/"+Integer.toString(typeID)+"_32.png");
     ImageIcon retval = null;
