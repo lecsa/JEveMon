@@ -14,18 +14,22 @@ public class Item extends Type implements Comparable{
 
     private int quantity = 0;
     private ArrayList<Item> containedItems = new ArrayList();
+    private int flag;
     
-    public Item(int id, String name, String description, int marketGroupID, int groupID) {
+    public Item(int id, String name, String description, int marketGroupID, int groupID, int flag) {
         super(id, name, description, marketGroupID, groupID);
+        this.flag = flag;
     }
     
-    public Item(Type t){
+    public Item(Type t,int flag){
         super(t.id, t.name, t.description, t.marketGroupID, t.groupID);
+        this.flag = flag;
     }
     
-    public Item(Type t, int quantity){
+    public Item(Type t, int quantity, int flag){
         super(t.id, t.name, t.description, t.marketGroupID, t.groupID);
         this.quantity = quantity;
+        this.flag = flag;
     }
     @Override
     public String toString() {

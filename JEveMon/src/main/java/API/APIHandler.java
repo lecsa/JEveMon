@@ -614,7 +614,8 @@ public class APIHandler {
                     long locationID = Long.parseLong(locRows.get(i).getAttribute("locationID"));
                     int typeID = Integer.parseInt(locRows.get(i).getAttribute("typeID"));
                     int quantity = Integer.parseInt(locRows.get(i).getAttribute("quantity"));
-                    Item parent = new Item(db.getTypeByID(typeID), quantity);
+                    int flag = Integer.parseInt(locRows.get(i).getAttribute("flag"));
+                    Item parent = new Item(db.getTypeByID(typeID), quantity, flag);
                     
                     if( locRows.get(i).hasChildNodes() ){
                         NodeList childRows = locRows.get(i).getElementsByTagName("row");
@@ -622,7 +623,8 @@ public class APIHandler {
                             Element e = (Element)childRows.item(n);
                             int childTypeID = Integer.parseInt(e.getAttribute("typeID"));
                             int childQuantity = Integer.parseInt(e.getAttribute("quantity"));
-                            Item child = new Item(db.getTypeByID(childTypeID),childQuantity);
+                            int childFlag = Integer.parseInt(e.getAttribute("flag"));
+                            Item child = new Item(db.getTypeByID(childTypeID),childQuantity,childFlag);
                             parent.getContainedItems().add(child);
                         }
                     }
