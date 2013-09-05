@@ -36,7 +36,15 @@ public class AssetListFlags {
         FLAG_HIGH_SLOT_6 (32),
         FLAG_HIGH_SLOT_7 (33),
         FLAG_HIGH_SLOT_8 (34),
-        FLAG_DRONE_BAY(87)
+        FLAG_DRONE_BAY(87),
+        FLAG_RIG_SLOT_1(92),
+        FLAG_RIG_SLOT_2(93),
+        FLAG_RIG_SLOT_3(94),
+        FLAG_RIG_SLOT_4(95),
+        FLAG_RIG_SLOT_5(96),
+        FLAG_RIG_SLOT_6(97),
+        FLAG_RIG_SLOT_7(98),
+        FLAG_RIG_SLOT_8(99)
         ;
         
         private int value;
