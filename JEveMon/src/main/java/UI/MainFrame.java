@@ -43,7 +43,6 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
     private JMenuItem menuItemAPI = new JMenuItem("API keys");
     private APIFrame frAPI = null;
     public static boolean isDebug = true;
-    public static Settings settings = new Settings();
     public static NotificationPanel noti = new NotificationPanel();
     private CharSummeryPanel csp;
     private DataUpdater updater;
@@ -82,7 +81,7 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
                     for(int n=0;n<updater.getDp().getAccounts().get(i).getCharacters().size();n++){
                         if( updater.getDp().getAccounts().get(i).getCharacters().get(n) != null ){
                             allCharacters.add(updater.getDp().getAccounts().get(i).getCharacters().get(n));
-                            if( MainFrame.settings.isDebug ) System.out.println("character added: "+updater.getDp().getAccounts().get(i).getCharacters().get(n).getName());
+                            if( Settings.isDebug ) System.out.println("character added: "+updater.getDp().getAccounts().get(i).getCharacters().get(n).getName());
                         }
                     }
                 }

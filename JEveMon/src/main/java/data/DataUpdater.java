@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import settings.Settings;
 
 /**
  *
@@ -98,12 +99,12 @@ public class DataUpdater {
                     ois = new ObjectInputStream(fis);
                     Object o = ois.readObject();
                     if( o instanceof APIKey ){
-                        if( MainFrame.settings.isDebug ) System.out.println("Adding key: "+((APIKey)o).getName());
+                        if( Settings.isDebug ) System.out.println("Adding key: "+((APIKey)o).getName());
                         Account currentAccount = APIHandler.getAccount((APIKey)o);
                         EVECharacter[] characters = APIHandler.getCharacters((APIKey)o);
-                        if ( MainFrame.settings.isDebug ) System.out.println( "Number of Characters on this Account: " + characters.length);
+                        if ( Settings.isDebug ) System.out.println( "Number of Characters on this Account: " + characters.length);
                         for(int n=0;n<characters.length;n++){
-                            if ( MainFrame.settings.isDebug ) System.out.println( "Filling Character Data for Number #" + n + 1);
+                            if ( Settings.isDebug ) System.out.println( "Filling Character Data for Number #" + n + 1);
                             APIHandler.fillCharacterData(characters[n]);
                             //reload saves asset and journal data
                             for(int k=0;k<assetAndJournalBackup.size();k++){
