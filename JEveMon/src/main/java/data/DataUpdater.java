@@ -27,13 +27,15 @@ public class DataUpdater {
     private DataProvider dp = new DataProvider();
     public static boolean isUpdating = false;
     private DataUpdateFinishedNotifier notifier = new DataUpdateFinishedNotifier();
+    private int updateIn = 5*60;//seconds
+    private int waiting = 0;
+    private boolean forceUpdate = true;
     
     public DataUpdater(){
         
     }
     
     public void addListener(DataUpdateFinishedListener listener){
-        System.out.println("Adding listener: "+listener.getClass());
         notifier.addListener(listener);
     }
     
@@ -47,18 +49,27 @@ public class DataUpdater {
             @Override
             public void run() {
                 while( true ){
-                    fillAccountsAndCharacters();
-                    try {
-                        Thread.sleep(1000*60*5);//update in every 5 minutes
-                        //Thread.sleep(4950);//testing
-                    } catch (InterruptedException ex) {
-                        System.out.println("IEX: "+ex.getMessage());
+                    if( waiting >= updateIn ){
+                        fillAccountsAndCharacters();
+                        waiting = 0;
+                    }else{
+                        try {
+                            Thread.sleep(1000);
+                            //Thread.sleep(4950);//testing
+                            waiting++;
+                            if( forceUpdate ){
+                                waiting = updateIn;
+                                forceUpdate = false;
+                            }
+                        } catch (InterruptedException ex) {
+                            System.out.println("IEX: "+ex.getMessage());
+                        }
                     }
+                    
                 }
             }
         });
         updateThread.start();
-        
     }
     
     private void fillAccountsAndCharacters(){
