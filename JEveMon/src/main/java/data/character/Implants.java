@@ -1,6 +1,7 @@
 package data.character;
 
 import data.character.Attributes.Attribute;
+import settings.Settings;
 
 /**
  * Implant handler class
@@ -28,6 +29,7 @@ public class Implants {
      * @param value Value for selected Attribute Implant
      */
     public void setImplant( Attribute attribute , int value ) {
+        if ( Settings.isDebug ) System.out.println( "Attribute Implant: " + attribute.toString() + " (" + attribute.ordinal() + ") Set to: " + value );
         implantValues[ attribute.ordinal() ] = value;
     }
     
