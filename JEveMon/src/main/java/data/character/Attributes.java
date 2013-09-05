@@ -44,7 +44,7 @@ public class Attributes extends Implants {
      * @param value The value to set the selected attribute
      */
     public void setRaw( Attribute attribute , int value ) {
-        if ( Settings.isDebug ) System.out.println( "Attribute: " + attribute.toString() + " (" + attribute.ordinal() + ") Set to: " + value );
+        if ( Settings.isDebug ) System.out.println( "Attribute: " + attribute.toString() + "(" + attribute.ordinal() + ") Set to: " + value );
         attributesRawValues[ attribute.ordinal() ] = value;
     }
     
