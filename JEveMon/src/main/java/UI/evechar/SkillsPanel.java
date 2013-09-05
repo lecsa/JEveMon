@@ -4,9 +4,9 @@
  */
 package UI.evechar;
 
-import data.EVECharacter;
-import data.Skill;
-import data.SkillGroup;
+import data.character.EVECharacter;
+import data.skill.Skill;
+import data.skill.SkillGroup;
 import db.DBHandler;
 import java.awt.BorderLayout;
 import java.io.File;

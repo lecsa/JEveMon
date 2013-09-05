@@ -7,7 +7,7 @@ package UI;
 import UI.evechar.CharSummeryPanel;
 import API.APIHandler;
 import API.APIKey;
-import data.EVECharacter;
+import data.character.EVECharacter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Toolkit;

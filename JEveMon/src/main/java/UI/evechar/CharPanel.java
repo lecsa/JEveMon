@@ -4,7 +4,7 @@
  */
 package UI.evechar;
 
-import data.EVECharacter;
+import data.character.EVECharacter;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;

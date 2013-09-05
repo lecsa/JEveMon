@@ -8,7 +8,7 @@ import UI.evechar.CharPanel;
 import API.APIHandler;
 import API.APIKey;
 import API.APIKeyIO;
-import data.EVECharacter;
+import data.character.EVECharacter;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;

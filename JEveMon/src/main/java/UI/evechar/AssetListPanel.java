@@ -5,9 +5,9 @@
 package UI.evechar;
 
 import API.APIHandler;
-import data.EVECharacter;
-import data.Item;
-import data.Station;
+import data.character.EVECharacter;
+import data.type.Item;
+import data.location.Station;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;

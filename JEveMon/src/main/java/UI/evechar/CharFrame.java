@@ -4,7 +4,7 @@
  */
 package UI.evechar;
 
-import data.EVECharacter;
+import data.character.EVECharacter;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;

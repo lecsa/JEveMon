@@ -5,8 +5,8 @@
 package UI.evechar;
 
 import API.APIHandler;
-import data.EVECharacter;
-import data.JournalElement;
+import data.character.EVECharacter;
+import data.journal.JournalElement;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;

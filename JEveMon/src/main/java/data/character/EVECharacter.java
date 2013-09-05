@@ -2,9 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package data;
+package data.character;
 
 import API.APIKey;
+import data.type.Item;
+import data.journal.JournalElement;
+import data.skill.Skill;
+import data.skill.SkillInTraining;
+import data.location.Station;
 import data.character.Attributes;
 import db.DBHandler;
 import java.util.ArrayList;

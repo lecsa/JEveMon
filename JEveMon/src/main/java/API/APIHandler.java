@@ -5,13 +5,13 @@
 package API;
 
 import UI.Msg;
-import data.EVECharacter;
-import data.Item;
-import data.JournalElement;
-import data.Skill;
-import data.SkillInTraining;
-import data.Station;
-import data.TransactionElement;
+import data.character.EVECharacter;
+import data.type.Item;
+import data.journal.JournalElement;
+import data.skill.Skill;
+import data.skill.SkillInTraining;
+import data.location.Station;
+import data.journal.TransactionElement;
 import data.character.Attributes;
 import db.DBHandler;
 import java.io.BufferedReader;

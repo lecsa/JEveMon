@@ -4,7 +4,7 @@
  */
 package UI.evechar;
 
-import data.EVECharacter;
+import data.character.EVECharacter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

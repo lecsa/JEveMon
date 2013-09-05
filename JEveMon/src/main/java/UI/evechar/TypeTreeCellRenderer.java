@@ -4,8 +4,8 @@
  */
 package UI.evechar;
 
-import data.Item;
-import data.Station;
+import data.type.Item;
+import data.location.Station;
 import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTree;

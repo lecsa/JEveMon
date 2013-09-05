@@ -6,8 +6,8 @@ package UI.evechar;
 
 import UI.MainFrame;
 import UI.Msg;
-import data.EVECharacter;
-import data.SkillInTraining;
+import data.character.EVECharacter;
+import data.skill.SkillInTraining;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;

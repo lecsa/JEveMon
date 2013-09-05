@@ -5,8 +5,8 @@
 package db;
 
 import API.APIHandler;
-import data.Station;
-import data.Type;
+import data.location.Station;
+import data.type.Type;
 
 import java.sql.*;
 import java.util.ArrayList;
