@@ -12,7 +12,13 @@ public class Attributes extends Implants {
      * The main character Attributes
      */
     public enum Attribute {
-        INTELLIGENCE, MEMORY, PERCEPTION, WILLPOWER, CHARISMA
+        INTELLIGENCE, MEMORY, PERCEPTION, WILLPOWER, CHARISMA;
+        
+        @Override 
+        public String toString() {
+            String s = super.toString();
+            return s.substring(0, 1) + s.substring(1).toLowerCase();
+        }
     }
     
     /**
