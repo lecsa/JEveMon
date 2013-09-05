@@ -20,6 +20,12 @@ import java.io.ObjectOutputStream;
 public class Settings implements Externalizable{
     
     /*
+     * Static Settings
+     */
+    public final static String APPNAME = "jEveMon";
+    public final static String USERPATH = System.getProperty("user.home") + "/." + APPNAME;
+    
+    /*
      * Settings
      */
     public transient static boolean isDebug = true;

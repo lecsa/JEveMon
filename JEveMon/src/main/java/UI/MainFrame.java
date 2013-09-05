@@ -49,12 +49,16 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
     
     @SuppressWarnings("LeakingThisInConstructor")
     public MainFrame(){
+        if ( Settings.isDebug ) {
+            System.out.println("App Name: " + Settings.APPNAME);
+            System.out.println("User Home Path: " + Settings.USERPATH);
+        }
         updater = new DataUpdater();
         updater.addListener(this);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         APIHandler.createdirs();
         ImageHandler.createdirs();
-        setTitle("JEveMon");
+        setTitle(Settings.APPNAME);
         setLayout(new BorderLayout());
         // Set Application Icon
         setIconImage(ImageHandler.getApplicationIcon().getImage());
