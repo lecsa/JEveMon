@@ -8,6 +8,7 @@ import UI.evechar.CharPanel;
 import API.APIHandler;
 import API.APIKey;
 import API.APIKeyIO;
+import data.DataUpdater;
 import data.character.EVECharacter;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -31,24 +32,22 @@ import javax.swing.filechooser.FileFilter;
  * @author lecsa
  */
 public class APIFrame extends JFrame implements ActionListener{
-    private final int DW = 700, DH = 680;
+    private final int DW = 700, DH = 220;
     private JButton btOpen = new JButton("Open");
     private JButton btSave = new JButton("Save");
     private JButton btDelete = new JButton("Delete");
-    private JButton btFetch = new JButton("Fetch characters");
     private JTextField tfName = new JTextField();
     private JTextField tfKeyID = new JTextField();
     private JTextField tfVCode = new JTextField();
-    private final JPanel pnChars = new JPanel(new GridLayout(3, 1, 5, 5));
-    
-    public APIFrame(){
+    private DataUpdater updater;
+    public APIFrame(DataUpdater updater){
+        this.updater = updater;
         APIHandler.createdirs();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
         setBounds(100, 100, DW, DH);
         setTitle("API management");
         initAPIPanels();
-        initCharPanels();
         btSave.addActionListener(this);
         btOpen.addActionListener(this);
         btDelete.addActionListener(this);
@@ -83,17 +82,7 @@ public class APIFrame extends JFrame implements ActionListener{
         pnMain.add(pnButtons);
         this.add(pnMain,BorderLayout.NORTH);
     }
-    private void initCharPanels(){
-        JPanel pnMain = new JPanel(new BorderLayout());
-        
-        JPanel btPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        btPanel.add(btFetch);
-        btFetch.addActionListener(this);
-        pnMain.add(btPanel,BorderLayout.NORTH);
-        pnMain.add(pnChars,BorderLayout.CENTER);
-        this.add(pnMain,BorderLayout.CENTER);
-        
-    }
+    
     private void save(){
         String name = tfName.getText().trim();
         String keyID = tfKeyID.getText().trim();
@@ -114,6 +103,7 @@ public class APIFrame extends JFrame implements ActionListener{
             if(save){
                 APIKey savable = new APIKey(name, keyID, vCode);
                 boolean retval = APIKeyIO.saveAPIKey(savable, f);
+                updater.forceNextUpdate();
                 if(retval){
                     Msg.infoMsg("File saved successfully.");
                 }else{
@@ -121,6 +111,7 @@ public class APIFrame extends JFrame implements ActionListener{
                 }
             }
         }
+        
     }
     
     private void open(){
@@ -181,31 +172,6 @@ public class APIFrame extends JFrame implements ActionListener{
         }
     }
     
-    private void fetch(){
-        final String name = tfName.getText().trim();
-        final String keyID = tfKeyID.getText().trim();
-        final String vCode = tfVCode.getText().trim();
-        if(name.equals("") || keyID.equals("") || vCode.equals("")){
-            Msg.errorMsg("You need to fill every fields.");
-        }else{
-            Thread t = new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    EVECharacter[] chars = APIHandler.getCharacters(new APIKey(name, keyID, vCode));
-                    pnChars.removeAll();
-                    for(int i=0;i<chars.length;i++){
-                        if(chars[i]!=null){
-                            pnChars.add(new CharPanel(chars[i]));
-                        }
-                    }
-                    pnChars.revalidate();
-                }
-            });
-            t.start();
-        }
-    }
-    
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(btSave)){
@@ -214,12 +180,10 @@ public class APIFrame extends JFrame implements ActionListener{
             open();
         }else if(e.getSource().equals(btDelete)){
             delete();
-        }else if(e.getSource().equals(btFetch)){
-            fetch();
         }
     }
     
     public static void main(String[] args) {
-        new APIFrame();
+        new APIFrame(null);
     }
 }

@@ -121,7 +121,7 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(menuItemAPI)){
             if(frAPI == null){
-                frAPI = new APIFrame();
+                frAPI = new APIFrame(updater);
                 setVisible(true);
             }else{
                 if(frAPI.isVisible()){

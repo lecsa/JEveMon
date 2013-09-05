@@ -71,7 +71,9 @@ public class DataUpdater {
         });
         updateThread.start();
     }
-    
+    public void forceNextUpdate(){
+        forceUpdate = true;
+    }
     private void fillAccountsAndCharacters(){
         isUpdating = true;
         //backup asset and journal data
