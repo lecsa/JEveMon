@@ -53,7 +53,7 @@ public class ImageHandler {
                 System.out.println("IOE: "+ex.getMessage());
             }finally{
                 try{
-                    fos.close();
+                    if ( fos != null ) fos.close();
                 }catch(Exception ex){
                     
                 }

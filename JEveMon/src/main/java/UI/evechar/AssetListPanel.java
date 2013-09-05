@@ -75,7 +75,7 @@ public class AssetListPanel extends JPanel implements ActionListener{
             
             for(int n=0;n<sta.getItems().size();n++){
                 Item parent = sta.getItems().get(n);
-                DefaultMutableTreeNode parentItemNode = null;
+                DefaultMutableTreeNode parentItemNode;
                 if(parent instanceof Ship){//ship
                     Ship parentShip = (Ship)parent;
                     if( parentShip.getContainedItems().isEmpty() &&

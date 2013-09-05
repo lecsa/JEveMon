@@ -130,7 +130,7 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
         if( currSkill == null ){
             character.setTraining(false);
         }
-        if( character.isTraining() ){
+        if( character.isTraining() && currSkill != null ){
             
             lbTaining.setText(currSkill.getType().getName()+" lvl "+currSkill.getSkillLevel());
             lbTaining.setForeground(GREEN);
@@ -202,7 +202,7 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
         if( currSkill == null ){
             character.setTraining(false);
         }
-        if( character.isTraining() ){
+        if( character.isTraining() && currSkill != null ){
             gridPanel.add(new JLabel("Training:"));
             lbTaining = new JLabel(currSkill.getType().getName()+" lvl "+currSkill.getSkillLevel());
             lbTaining.setForeground(GREEN);

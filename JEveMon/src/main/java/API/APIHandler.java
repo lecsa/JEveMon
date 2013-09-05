@@ -98,7 +98,7 @@ public class APIHandler {
                 needed = true;
             }finally{
                 try{
-                    fis.close();
+                    if ( fis != null ) fis.close();
                 }catch(Exception ex){
                     
                 }
@@ -137,8 +137,8 @@ public class APIHandler {
                 System.out.println("IOE: "+ex.getMessage());
             }finally{
                 try{
-                    br.close();
-                    fos.close();
+                    if ( br != null ) br.close();
+                    if ( fos != null ) fos.close();
                 }catch(Exception ex){
                 }
             }
@@ -392,7 +392,7 @@ public class APIHandler {
                             }
                         }
                     }
-                    if( foundSkills ){
+                    if( foundSkills && skillNode != null ){
                         NodeList rows = skillNode.getChildNodes();
                         DBHandler db = new DBHandler();
                         c.setSkillpoints(0);

@@ -47,7 +47,7 @@ public class TypeTreeCellRenderer implements TreeCellRenderer{
                 //17366
             }else if(o instanceof String){
                 String theString = (String)o;
-                ImageIcon icon = null;
+                ImageIcon icon;
                 if( theString.toLowerCase().equals("fitted") ){
                     icon = ImageHandler.getImage("img/fitted.png");
                 }else if( theString.toLowerCase().equals("drone bay")){

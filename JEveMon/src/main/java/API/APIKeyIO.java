@@ -38,8 +38,8 @@ public class APIKeyIO {
             System.out.println(ex.getMessage());
         }finally{
             try{
-            fos.close();
-            oos.close();
+            if ( fos != null ) fos.close();
+            if ( oos != null ) oos.close();
             }catch(Exception ex){
                 System.out.println(ex.getMessage());
             }
@@ -66,8 +66,8 @@ public class APIKeyIO {
             System.out.println(ex.getMessage());
         }finally{
             try{
-            fis.close();
-            ois.close();
+            if ( fis != null ) fis.close();
+            if ( ois != null ) ois.close();
             }catch(Exception ex){
                 System.out.println(ex.getMessage());
             }

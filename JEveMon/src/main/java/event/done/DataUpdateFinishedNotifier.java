@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author lecsa
  */
 public class DataUpdateFinishedNotifier {
-    ArrayList<DataUpdateFinishedListener> listeners = new ArrayList<DataUpdateFinishedListener>();
+    ArrayList<DataUpdateFinishedListener> listeners = new ArrayList<>();
     public DataUpdateFinishedNotifier () {
       
     }

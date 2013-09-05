@@ -24,8 +24,8 @@ public class DBHandler {
             Class.forName("org.sqlite.JDBC");
             //relative to jar location
             connection = DriverManager.getConnection("jdbc:sqlite:database/eve.db");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace(System.out);
         }
     }
 
@@ -73,7 +73,7 @@ public class DBHandler {
         return retval;
     }
     public Station getStationByLocationID(long locationID){
-        Station station = null;
+        Station station;
         station = APIHandler.getStationByID(locationID);
         if( station.getName().startsWith("Unknown") ){//NPC station
             station = this.getStationByID(locationID);
@@ -98,7 +98,7 @@ public class DBHandler {
         }
         }catch(SQLException e){
             //JOptionPane.showMessageDialog(null, "Adatbázis lekérés hiba. getStationByID()", "Hiba", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     return h;
     }
@@ -114,7 +114,7 @@ public class DBHandler {
         }
         }catch(SQLException e){
             //JOptionPane.showMessageDialog(null, "Adatbázis lekérés hiba. getStationByID()", "Hiba", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return retval;
     }
@@ -131,7 +131,7 @@ public class DBHandler {
         }
         }catch(SQLException e){
             //JOptionPane.showMessageDialog(null, "Adatbázis lekérés hiba. getStationByID()", "Hiba", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     return ship;
     }

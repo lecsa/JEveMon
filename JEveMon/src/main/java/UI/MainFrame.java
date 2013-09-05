@@ -48,6 +48,7 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
     private CharSummeryPanel csp;
     private DataUpdater updater;
     
+    @SuppressWarnings("LeakingThisInConstructor")
     public MainFrame(){
         updater = new DataUpdater();
         updater.addListener(this);

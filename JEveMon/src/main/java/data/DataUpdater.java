@@ -124,8 +124,8 @@ public class DataUpdater {
                     System.out.println("CNFE: "+ex.getMessage());
                 }finally{
                     try{
-                        ois.close();
-                        fis.close();
+                        if ( ois != null ) ois.close();
+                        if ( fis != null ) fis.close();
                     }catch(Exception e){
                     
                     }

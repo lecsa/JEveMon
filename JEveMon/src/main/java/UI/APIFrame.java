@@ -4,12 +4,10 @@
  */
 package UI;
 
-import UI.evechar.CharPanel;
 import API.APIHandler;
 import API.APIKey;
 import API.APIKeyIO;
 import data.DataUpdater;
-import data.character.EVECharacter;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -40,6 +38,7 @@ public class APIFrame extends JFrame implements ActionListener{
     private JTextField tfKeyID = new JTextField();
     private JTextField tfVCode = new JTextField();
     private DataUpdater updater;
+    
     public APIFrame(DataUpdater updater){
         this.updater = updater;
         APIHandler.createdirs();
