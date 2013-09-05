@@ -36,39 +36,39 @@ public class SkillsPanel extends JPanel{
         this.character = character;
         setLayout(new BorderLayout());
         DBHandler db = new DBHandler();
-        for(int i=0;i<character.skills.size();i++){
-            Skill currentSkill = character.skills.get(i);
-            if( isGroupExists(currentSkill.type.groupID) ){
-                getGroup(currentSkill.type.groupID).addSkill(currentSkill);
+        for(int i=0;i<character.getSkills().size();i++){
+            Skill currentSkill = character.getSkills().get(i);
+            if( isGroupExists(currentSkill.getType().getGroupID()) ){
+                getGroup(currentSkill.getType().getGroupID()).addSkill(currentSkill);
             }else{
-                this.groups.add(new SkillGroup(currentSkill.type.groupID,db.getGroupNameByID(currentSkill.type.groupID)));
-                getGroup(currentSkill.type.groupID).addSkill(currentSkill);
+                this.groups.add(new SkillGroup(currentSkill.getType().getGroupID(),db.getGroupNameByID(currentSkill.getType().getGroupID())));
+                getGroup(currentSkill.getType().getGroupID()).addSkill(currentSkill);
             }
         }
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("Skills");
         int countlvl5=0;
         for(int i=0;i<groups.size();i++){
-            DefaultMutableTreeNode currentGroup = new DefaultMutableTreeNode(groups.get(i).name+" - "+Utils.formatLong(groups.get(i).groupSP)+" SP - "+groups.get(i).lvl5+" skills on lvl5");
+            DefaultMutableTreeNode currentGroup = new DefaultMutableTreeNode(groups.get(i).getName()+" - "+Utils.formatLong(groups.get(i).getGroupSP())+" SP - "+groups.get(i).getLvl5()+" skills on lvl5");
             for(int n=0;n<groups.get(i).getSkills().size();n++){
                 Skill currentSkill = groups.get(i).getSkills().get(n);
-                if( currentSkill.skillevel == 4 ){
-                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#117777>"+currentSkill+" - lvl "+currentSkill.skillevel+"</font></html>");
+                if( currentSkill.getSkillLevel() == 4 ){
+                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#117777>"+currentSkill+" - lvl "+currentSkill.getSkillLevel()+"</font></html>");
                     currentGroup.add(currSkillNode);
-                }else if( currentSkill.skillevel == 5 ){
-                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#117711>"+currentSkill+" - lvl "+currentSkill.skillevel+"</font></html>");
+                }else if( currentSkill.getSkillLevel() == 5 ){
+                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#117711>"+currentSkill+" - lvl "+currentSkill.getSkillLevel()+"</font></html>");
                     currentGroup.add(currSkillNode);
                 }else{
-                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#771111>"+currentSkill+" - lvl "+currentSkill.skillevel+"</font></html>");
+                    DefaultMutableTreeNode currSkillNode = new DefaultMutableTreeNode("<html><font color=#771111>"+currentSkill+" - lvl "+currentSkill.getSkillLevel()+"</font></html>");
                     currentGroup.add(currSkillNode);
                 }
             }
-            countlvl5+=groups.get(i).lvl5;
+            countlvl5+=groups.get(i).getLvl5();
             top.add(currentGroup);
         }
-        top.setUserObject("Skills - "+Utils.formatLong(character.skillpoints)+" - "+countlvl5+" skills on lvl5");
+        top.setUserObject("Skills - "+Utils.formatLong(character.getSkillpoints())+" - "+countlvl5+" skills on lvl5");
         tree = new JTree(top);
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
-        ImageIcon leaf = ImageHandler.getTypeIMG(character.skills.get(0).type.id);
+        ImageIcon leaf = ImageHandler.getTypeIMG(character.getSkills().get(0).getType().getId());
         ImageIcon root = null;
         try{
             root = new ImageIcon(ImageIO.read(new File("img/0_32.png")));
@@ -95,7 +95,7 @@ public class SkillsPanel extends JPanel{
     private boolean isGroupExists(int groupID){
     boolean exists = false;
         for(int i=0;i<groups.size() && !exists;i++){
-            if(groups.get(i).id == groupID){
+            if(groups.get(i).getId() == groupID){
                 exists = true;
             }
         }
@@ -105,7 +105,7 @@ public class SkillsPanel extends JPanel{
     private SkillGroup getGroup(int groupID){
     SkillGroup grp = null;
         for(int i=0;i<groups.size() && grp == null;i++){
-            if(groups.get(i).id == groupID){
+            if(groups.get(i).getId() == groupID){
                 grp = groups.get(i);
             }
         }

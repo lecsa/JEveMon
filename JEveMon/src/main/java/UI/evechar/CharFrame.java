@@ -25,7 +25,7 @@ public class CharFrame extends JFrame implements WindowListener{
         this.parent = parent;
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setTitle(parent.getCharacter().name+" - "+parent.getCharacter().corpName);
+        setTitle(parent.getCharacter().getName()+" - "+parent.getCharacter().getCorpName());
         tk=getToolkit();
         if( tk.getScreenSize().width >= DW && tk.getScreenSize().height >= DH ){
             setBounds((tk.getScreenSize().width-DW)/4, (tk.getScreenSize().height-DH)/2, DW, DH);

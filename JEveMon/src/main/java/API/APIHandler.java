@@ -230,19 +230,19 @@ public class APIHandler {
         if( JournalElement.refTypes == null ){
             initRefTypes();
         }
-        File cache = new File("cache/char/journal_"+c.id+".xml");
+        File cache = new File("cache/char/journal_"+c.getId()+".xml");
         if( isCacheNeeded(cache) ){
             try{
-                URL url = new URL(c.key.getURL("char", "WalletJournal.xml.aspx")+"&characterID="+c.id);
+                URL url = new URL(c.getKey().getURL("char", "WalletJournal.xml.aspx")+"&characterID="+c.getId());
                 cache(cache, url);
             }catch(MalformedURLException ex){
                 System.out.println("MUE: "+ex.getMessage());
             }
         }
-        File cache2 = new File("cache/char/transactions_"+c.id+".xml");
+        File cache2 = new File("cache/char/transactions_"+c.getId()+".xml");
         if( isCacheNeeded(cache2) ){
             try{
-                URL url = new URL(c.key.getURL("char", "WalletTransactions.xml.aspx")+"&characterID="+c.id);
+                URL url = new URL(c.getKey().getURL("char", "WalletTransactions.xml.aspx")+"&characterID="+c.getId());
                 cache(cache2, url);
             }catch(MalformedURLException ex){
                 System.out.println("MUE: "+ex.getMessage());
@@ -283,7 +283,7 @@ public class APIHandler {
                                 je.transaction.transactionType = "donation";
                             }
                             
-                            c.walletJournal.add(je);
+                            c.getWalletJournal().add(je);
                         }catch(NumberFormatException ex){
                             System.out.println("NEX: "+ex.getMessage());
                         }
@@ -312,7 +312,7 @@ public class APIHandler {
     
     public static Element getTransactionDOMElement(EVECharacter c, long refID){
         Element el = null;
-        File cache = new File("cache/char/transactions_"+c.id+".xml");
+        File cache = new File("cache/char/transactions_"+c.getId()+".xml");
         if( cache.exists() && cache.isFile() ){
             try{
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -344,10 +344,10 @@ public class APIHandler {
     }
     
     public static EVECharacter fillCharacterData(EVECharacter c){
-        File cache = new File("cache/char/sheet_"+c.id+".xml");
+        File cache = new File("cache/char/sheet_"+c.getId()+".xml");
         if( isCacheNeeded(cache) ){
             try{
-                URL url = new URL(c.key.getURL("char", "CharacterSheet.xml.aspx")+"&characterID="+c.id);
+                URL url = new URL(c.getKey().getURL("char", "CharacterSheet.xml.aspx")+"&characterID="+c.getId());
                 cache(cache, url);
             }catch(MalformedURLException ex){
                 System.out.println("MUE: "+ex.getMessage());
@@ -360,22 +360,22 @@ public class APIHandler {
                 Document doc = dBuilder.parse(cache);
                 try{
                     Element e = (Element)(doc.getElementsByTagName("balance").item(0));
-                    c.balance       = Double.parseDouble(e.getTextContent());
-                    c.corpID        = Integer.parseInt( ((Element)(doc.getElementsByTagName("corporationID").item(0))).getTextContent() );
-                    c.attributes.setRaw( Attributes.Attribute.INTELLIGENCE , Integer.parseInt( ((Element)(doc.getElementsByTagName("intelligence").item(0))).getTextContent() ) );
-                    c.attributes.setRaw( Attributes.Attribute.MEMORY , Integer.parseInt( ((Element)(doc.getElementsByTagName("memory").item(0))).getTextContent() ) );
-                    c.attributes.setRaw( Attributes.Attribute.PERCEPTION, Integer.parseInt( ((Element)(doc.getElementsByTagName("perception").item(0))).getTextContent() ) );
-                    c.attributes.setRaw( Attributes.Attribute.WILLPOWER, Integer.parseInt( ((Element)(doc.getElementsByTagName("willpower").item(0))).getTextContent() ) );
-                    c.attributes.setRaw( Attributes.Attribute.CHARISMA , Integer.parseInt( ((Element)(doc.getElementsByTagName("charisma").item(0))).getTextContent() ) );
+                    c.setBalance( Double.parseDouble(e.getTextContent()) );
+                    c.setCorpID( Integer.parseInt( ((Element)(doc.getElementsByTagName("corporationID").item(0))).getTextContent()) );
+                    c.getAttributes().setRaw( Attributes.Attribute.INTELLIGENCE , Integer.parseInt( ((Element)(doc.getElementsByTagName("intelligence").item(0))).getTextContent() ) );
+                    c.getAttributes().setRaw( Attributes.Attribute.MEMORY , Integer.parseInt( ((Element)(doc.getElementsByTagName("memory").item(0))).getTextContent() ) );
+                    c.getAttributes().setRaw( Attributes.Attribute.PERCEPTION, Integer.parseInt( ((Element)(doc.getElementsByTagName("perception").item(0))).getTextContent() ) );
+                    c.getAttributes().setRaw( Attributes.Attribute.WILLPOWER, Integer.parseInt( ((Element)(doc.getElementsByTagName("willpower").item(0))).getTextContent() ) );
+                    c.getAttributes().setRaw( Attributes.Attribute.CHARISMA , Integer.parseInt( ((Element)(doc.getElementsByTagName("charisma").item(0))).getTextContent() ) );
                     /** 
                      * TODO: Implants Import
                      */
-                    c.cloneSkillpoints = Integer.parseInt( ((Element)(doc.getElementsByTagName("cloneSkillPoints").item(0))).getTextContent() );
+                    c.setCloneSkillpoints( Integer.parseInt(((Element)(doc.getElementsByTagName("cloneSkillPoints").item(0))).getTextContent()) );
                 }catch(NumberFormatException ex){
                     System.out.println("NFE: "+ex.getMessage());
                 }
-                c.cloneName     = ((Element)(doc.getElementsByTagName("cloneName").item(0))).getTextContent();
-                c.dayOfBirth    = ((Element)(doc.getElementsByTagName("DoB").item(0))).getTextContent();
+                c.setCloneName( ((Element)(doc.getElementsByTagName("cloneName").item(0))).getTextContent() );
+                c.setDayOfBirth( ((Element)(doc.getElementsByTagName("DoB").item(0))).getTextContent() );
                 //----- SKILLS ------
                 //get all rowset nodes
                 NodeList rowsets = doc.getElementsByTagName("rowset");
@@ -393,7 +393,7 @@ public class APIHandler {
                 if( foundSkills ){
                     NodeList rows = skillNode.getChildNodes();
                     DBHandler db = new DBHandler();
-                    c.skillpoints = 0;
+                    c.setSkillpoints(0);
                     for( int i=0;i<rows.getLength();i++ ){
                         if( rows.item(i).getNodeType() != Node.TEXT_NODE ){
                             Element e = (Element)rows.item(i);
@@ -401,8 +401,8 @@ public class APIHandler {
                                 int typeID      = Integer.parseInt(e.getAttribute("typeID").toString());
                                 int skillpoint  = Integer.parseInt(e.getAttribute("skillpoints").toString());
                                 int level       = Integer.parseInt(e.getAttribute("level").toString());
-                                c.skills.add(new Skill(db.getTypeByID(typeID), skillpoint, level));
-                                c.skillpoints+=skillpoint;
+                                c.getSkills().add(new Skill(db.getTypeByID(typeID), skillpoint, level));
+                                c.setSkillpoints(c.getSkillpoints()+skillpoint);
                             }catch(NumberFormatException ex){
                                 System.out.println("NEX: "+ex.getMessage());
                             }
@@ -419,15 +419,15 @@ public class APIHandler {
         
         }
         c = fillSkillQueue(c);
-        c.isTraining = isCharacterTraining(c);
+        c.setIsTraining(isCharacterTraining(c));
     return c;
     }
     
     public static EVECharacter fillSkillQueue(EVECharacter c){
-        File cache = new File("cache/char/queue_"+c.id+".xml");
+        File cache = new File("cache/char/queue_"+c.getId()+".xml");
         if( isCacheNeeded(cache) ){
             try{
-                URL url = new URL(c.key.getURL("char", "SkillQueue.xml.aspx")+"&characterID="+c.id);
+                URL url = new URL(c.getKey().getURL("char", "SkillQueue.xml.aspx")+"&characterID="+c.getId());
                 cache(cache, url);
             }catch(MalformedURLException ex){
                 System.out.println("MUE: "+ex.getMessage());
@@ -450,7 +450,7 @@ public class APIHandler {
                             int skillpoints = endsp-startsp;
                             String starttime = ((Element)rows.item(i)).getAttribute("startTime").toString();
                             String endtime = ((Element)rows.item(i)).getAttribute("endTime").toString();
-                            c.trainingQueue.add(new SkillInTraining(db.getTypeByID(typeID), skillpoints, level, starttime, endtime, startsp, endsp));
+                            c.getTrainingQueue().add(new SkillInTraining(db.getTypeByID(typeID), skillpoints, level, starttime, endtime, startsp, endsp));
                         }catch(NumberFormatException ex){
                             System.out.println("NFE: "+ex.getMessage());
                         }
@@ -469,10 +469,10 @@ public class APIHandler {
     
     public static boolean isCharacterTraining(EVECharacter c){
     boolean isTraining = false;
-    File cache = new File("cache/char/training_"+c.id+".xml");
+    File cache = new File("cache/char/training_"+c.getId()+".xml");
         if( isCacheNeeded(cache) ){
             try{
-                URL url = new URL(c.key.getURL("char", "SkillInTraining.xml.aspx")+"&characterID="+c.id);
+                URL url = new URL(c.getKey().getURL("char", "SkillInTraining.xml.aspx")+"&characterID="+c.getId());
                 cache(cache, url);
             }catch(MalformedURLException ex){
                 System.out.println("MUE: "+ex.getMessage());
@@ -563,7 +563,7 @@ public class APIHandler {
                         }
                         if( charID != -1 ){
                             chars[i] = new EVECharacter(charID, charName, key);
-                            chars[i].corpName = corpName;
+                            chars[i].setCorpName(corpName);
                         }
                         
                     }
@@ -581,10 +581,10 @@ public class APIHandler {
     }
     
     public static void fillCharacterAssets(EVECharacter c){
-        File cache = new File("cache/char/assets_"+c.id+".xml");
+        File cache = new File("cache/char/assets_"+c.getId()+".xml");
         if( isCacheNeeded(cache) ){
             try{
-                URL url = new URL(c.key.getURL("char", "AssetList.xml.aspx")+"&characterID="+c.id);
+                URL url = new URL(c.getKey().getURL("char", "AssetList.xml.aspx")+"&characterID="+c.getId());
                 cache(cache, url);
             }catch(MalformedURLException ex){
                 System.out.println("MUE: "+ex.getMessage());
@@ -623,7 +623,7 @@ public class APIHandler {
                             int childTypeID = Integer.parseInt(e.getAttribute("typeID"));
                             int childQuantity = Integer.parseInt(e.getAttribute("quantity"));
                             Item child = new Item(db.getTypeByID(childTypeID),childQuantity);
-                            parent.containedItems.add(child);
+                            parent.getContainedItems().add(child);
                         }
                     }
                     c.addAsset(parent, locationID);
@@ -631,11 +631,11 @@ public class APIHandler {
                         System.out.println("NFE: "+ex.getMessage());
                     }
                 }
-                Collections.sort(c.assets);
-                for(int i=0;i<c.assets.size();i++){
-                    Collections.sort(c.assets.get(i).items);
+                Collections.sort(c.getAssets());
+                for(int i=0;i<c.getAssets().size();i++){
+                    Collections.sort(c.getAssets().get(i).getItems());
                 }
-//                System.out.println("asset size: "+c.assets.size());
+//                System.out.println("asset size: "+c.getAssets().size());
             }catch(SAXException ex){
                 System.out.println("SAXE: "+ex.getMessage());
             }catch(ParserConfigurationException ex){

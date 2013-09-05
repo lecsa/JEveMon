@@ -74,10 +74,10 @@ public class DBHandler {
     public Station getStationByLocationID(long locationID){
         Station station = null;
         station = APIHandler.getStationByID(locationID);
-        if( station.name.startsWith("Unknown") ){//NPC station
+        if( station.getName().startsWith("Unknown") ){//NPC station
             station = this.getStationByID(locationID);
         }
-        if( station.name.startsWith("Unknown") ){//not found
+        if( station.getName().startsWith("Unknown") ){//not found
             station = new Station(locationID,"Unknown location: "+locationID);
         }
         return station;
@@ -105,7 +105,7 @@ public class DBHandler {
         DBHandler db = new DBHandler();
         Type[] t = db.getTypeByName("station");
         for(int i=0;i<t.length;i++){
-            System.out.println(t[i].name+" - "+t[i].id+" - "+t[i].groupID);
+            System.out.println(t[i].getName()+" - "+t[i].getId()+" - "+t[i].getGroupID());
         }
         
     }

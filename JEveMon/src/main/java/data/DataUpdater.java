@@ -106,9 +106,9 @@ public class DataUpdater {
                             //reload saves asset and journal data
                             for(int k=0;k<assetAndJournalBackup.size();k++){
                                 if( characters[n] != null ){
-                                    if( assetAndJournalBackup.get(k).id == characters[n].id ){
-                                        characters[n].assets = assetAndJournalBackup.get(k).assets;
-                                        characters[n].walletJournal = assetAndJournalBackup.get(k).walletJournal;
+                                    if( assetAndJournalBackup.get(k).getId() == characters[n].getId() ){
+                                        characters[n].setAssets( assetAndJournalBackup.get(k).getAssets() );
+                                        characters[n].setWalletJournal( assetAndJournalBackup.get(k).getWalletJournal() );
                                     }
                                 }
                             }

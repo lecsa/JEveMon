@@ -12,9 +12,9 @@ import java.util.ArrayList;
  * @author lecsa
  */
 public class Station implements Comparable{
-    public long stationID;
-    public String name;
-    public ArrayList<Item> items = new ArrayList();
+    private long stationID;
+    private String name;
+    private ArrayList<Item> items = new ArrayList();
     
     public Station(long stationID, String name) {
         this.stationID = stationID;
@@ -36,6 +36,18 @@ public class Station implements Comparable{
             }
         }
         return retval;
+    }
+
+    public long getStationID() {
+        return stationID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Item> getItems() {
+        return items;
     }
 
     

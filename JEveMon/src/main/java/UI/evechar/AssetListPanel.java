@@ -52,7 +52,7 @@ public class AssetListPanel extends JPanel implements ActionListener{
                 public void run() {
                     btFetch.setEnabled(false);
                     APIHandler.fillCharacterAssets(character);
-//                    System.out.println(character.assets.size());
+//                    System.out.println(character.getAssets().size());
                     updateAssetList();
                     btFetch.setEnabled(true);
                 }
@@ -65,19 +65,19 @@ public class AssetListPanel extends JPanel implements ActionListener{
     private void updateAssetList(){
         this.remove(treeView);
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("Assets");
-        for(int i=0;i<character.assets.size();i++){
+        for(int i=0;i<character.getAssets().size();i++){
             //stations
-            Station sta = character.assets.get(i);
+            Station sta = character.getAssets().get(i);
             DefaultMutableTreeNode stationNode = new DefaultMutableTreeNode(sta);
-            for(int n=0;n<sta.items.size();n++){
-                Item parent = sta.items.get(n);
+            for(int n=0;n<sta.getItems().size();n++){
+                Item parent = sta.getItems().get(n);
                 DefaultMutableTreeNode parentItemNode;
-                if(parent.containedItems.isEmpty()){
+                if(parent.getContainedItems().isEmpty()){
                     parentItemNode = new DefaultMutableTreeNode(parent);
                 }else{
                     parentItemNode = new DefaultMutableTreeNode(parent);
-                    for(int k=0;k<parent.containedItems.size();k++){
-                        Item child = parent.containedItems.get(k);
+                    for(int k=0;k<parent.getContainedItems().size();k++){
+                        Item child = parent.getContainedItems().get(k);
                         parentItemNode.add(new DefaultMutableTreeNode(child));
                     }
                 }

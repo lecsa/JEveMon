@@ -12,10 +12,10 @@ import data.type.Type;
  */
 public class SkillInTraining extends Skill{
 
-    public int startSP = 0;
-    public int endSP = 0;
-    public String startTime;
-    public String endTime;
+    private int startSP = 0;
+    private int endSP = 0;
+    private String startTime;
+    private String endTime;
     
     public SkillInTraining(Type type, long skillpoints, int skillevel, String startTime, String endTime, int startSP, int endSP) {
         super(type, skillpoints, skillevel);
@@ -23,6 +23,22 @@ public class SkillInTraining extends Skill{
         this.startSP = startSP;
         this.endTime = endTime;
         this.startTime = startTime;
+    }
+
+    public int getStartSP() {
+        return startSP;
+    }
+
+    public int getEndSP() {
+        return endSP;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
     }
     
 }

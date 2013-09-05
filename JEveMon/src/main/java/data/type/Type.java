@@ -9,11 +9,11 @@ package data.type;
  * @author lecsa
  */
 public class Type {
-    public int id;
-    public String name;
-    public String description;
-    public int marketGroupID;
-    public int groupID;
+    protected int id;
+    protected String name;
+    protected String description;
+    protected int marketGroupID;
+    protected int groupID;
 
     public Type(int id, String name, String description, int marketGroupID, int groupID) {
         this.id = id;
@@ -25,6 +25,26 @@ public class Type {
     @Override
     public String toString() {
         return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getMarketGroupID() {
+        return marketGroupID;
+    }
+
+    public int getGroupID() {
+        return groupID;
     }
     
 }

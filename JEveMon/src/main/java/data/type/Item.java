@@ -12,8 +12,8 @@ import java.util.ArrayList;
  */
 public class Item extends Type implements Comparable{
 
-    public int quantity = 0;
-    public ArrayList<Item> containedItems = new ArrayList();
+    private int quantity = 0;
+    private ArrayList<Item> containedItems = new ArrayList();
     
     public Item(int id, String name, String description, int marketGroupID, int groupID) {
         super(id, name, description, marketGroupID, groupID);
@@ -47,6 +47,14 @@ public class Item extends Type implements Comparable{
             }
         }
         return retval;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public ArrayList<Item> getContainedItems() {
+        return containedItems;
     }
     
     

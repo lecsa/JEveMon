@@ -33,7 +33,7 @@ public class CharSummeryPanel extends JPanel implements ActionListener{
         JPanel spaceFillerPanel = new JPanel();
         for(int i=0;i<characters.size();i++){
             panels[i] = new ExtendedCharPanel(characters.get(i));
-            if(characters.get(i).isTraining){
+            if(characters.get(i).isTraining()){
                 visiblePanels.add(panels[i]);
             }
 
@@ -54,9 +54,9 @@ public class CharSummeryPanel extends JPanel implements ActionListener{
     private void updateVisibility(){
         visiblePanels = new ArrayList();
         for(int i=0;i<panels.length;i++){
-            if( panels[i].getCharacter().isTraining && cbActive.isSelected() ){
+            if( panels[i].getCharacter().isTraining() && cbActive.isSelected() ){
                 visiblePanels.add(panels[i]);
-            }else if( !panels[i].getCharacter().isTraining && cbInactive.isSelected() ){
+            }else if( !panels[i].getCharacter().isTraining() && cbInactive.isSelected() ){
                 visiblePanels.add(panels[i]);
             }
         }

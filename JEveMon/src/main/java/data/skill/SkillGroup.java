@@ -11,11 +11,11 @@ import java.util.ArrayList;
  * @author lecsa
  */
 public class SkillGroup {
-    public int id;
-    public String name;
-    public long groupSP = 0;
-    public int lvl5 = 0;
-    public int lvl4 = 0;
+    private int id;
+    private String name;
+    private long groupSP = 0;
+    private int lvl5 = 0;
+    private int lvl4 = 0;
     
     private ArrayList<Skill> skills = new ArrayList();
 
@@ -30,12 +30,34 @@ public class SkillGroup {
     
     public void addSkill(Skill s){
         skills.add(s);
-        groupSP+=s.skillpoints;
-        if(s.skillevel == 5){
+        groupSP+=s.getSkillpoints();
+        if(s.getSkillLevel() == 5){
             lvl5++;
-        }else if(s.skillevel == 4){
+        }else if(s.getSkillLevel() == 4){
             lvl4++;
         }
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public long getGroupSP() {
+        return groupSP;
+    }
+
+    public int getLvl5() {
+        return lvl5;
+    }
+
+    public int getLvl4() {
+        return lvl4;
+    }
+
+    
     
 }

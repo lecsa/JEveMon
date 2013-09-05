@@ -85,9 +85,9 @@ public class JournalPanel extends JPanel implements ActionListener{
         "Reason"                //12
         };
         //build data
-        Object[][] data = new Object[character.walletJournal.size()][columnNames.length];
-        for(int i=0;i<character.walletJournal.size();i++){
-            JournalElement e = character.walletJournal.get(i);
+        Object[][] data = new Object[character.getWalletJournal().size()][columnNames.length];
+        for(int i=0;i<character.getWalletJournal().size();i++){
+            JournalElement e = character.getWalletJournal().get(i);
             DecimalFormat f = new DecimalFormat("###,###,###,###");
             String s,c = "</font></html>";
             if( e.iskAmount < 0 ){

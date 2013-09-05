@@ -26,16 +26,16 @@ public class TypeTreeCellRenderer implements TreeCellRenderer{
             if (o instanceof Item) {
                 String amount = "";
                 Item item = (Item)o;
-                if( item.containedItems.isEmpty() && item.quantity != 0 ){
-                    amount = " x"+item.quantity;
+                if( item.getContainedItems().isEmpty() && item.getQuantity() != 0 ){
+                    amount = " x"+item.getQuantity();
                 }
-                label.setIcon(ImageHandler.getTypeIMG(item.id));
-                label.setText(item.name+amount);
+                label.setIcon(ImageHandler.getTypeIMG(item.getId()));
+                label.setText(item.getName()+amount);
             } else if( o instanceof Station ) {
                 Station station = (Station)o;
                 label = new JLabel(ImageHandler.getTypeIMG(17366));
                 label.setIcon(ImageHandler.getTypeIMG(17366));
-                label.setText(station.name);
+                label.setText(station.getName());
                 //17366
             }else{
                 label.setIcon(null);

@@ -11,17 +11,30 @@ import data.type.Type;
  * @author lecsa
  */
 public class Skill {
-    public Type type;
-    public long skillpoints;
-    public int skillevel;
+    private Type type;
+    private long skillpoints;
+    private int skillLevel;
 
     public Skill(Type type, long skillpoints, int skillevel) {
         this.type = type;
         this.skillpoints = skillpoints;
-        this.skillevel = skillevel;
+        this.skillLevel = skillevel;
     }
     @Override
     public String toString() {
-        return type.name;
+        return type.getName();
     }
+
+    public Type getType() {
+        return type;
+    }
+
+    public long getSkillpoints() {
+        return skillpoints;
+    }
+
+    public int getSkillLevel() {
+        return skillLevel;
+    }
+    
 }

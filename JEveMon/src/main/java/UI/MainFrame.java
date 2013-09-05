@@ -6,7 +6,6 @@ package UI;
 
 import UI.evechar.CharSummeryPanel;
 import API.APIHandler;
-import API.APIKey;
 import data.DataUpdater;
 import data.character.EVECharacter;
 import event.done.DataUpdateFinishedEvent;
@@ -16,19 +15,13 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import settings.Settings;
 import utils.ImageHandler;
 /*
@@ -95,7 +88,7 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
                     for(int n=0;n<updater.getDp().getAccounts().get(i).getCharacters().size();n++){
                         if( updater.getDp().getAccounts().get(i).getCharacters().get(n) != null ){
                             allCharacters.add(updater.getDp().getAccounts().get(i).getCharacters().get(n));
-                            if( MainFrame.settings.isDebug ) System.out.println("character added: "+updater.getDp().getAccounts().get(i).getCharacters().get(n).name);
+                            if( MainFrame.settings.isDebug ) System.out.println("character added: "+updater.getDp().getAccounts().get(i).getCharacters().get(n).getName());
                         }
                     }
                 }

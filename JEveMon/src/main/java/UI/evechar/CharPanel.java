@@ -33,14 +33,14 @@ public class CharPanel extends JPanel{
     
     private void initData(){
         JPanel pnData = new JPanel(new GridLayout(2, 1,10,10));
-        pnData.add(new JLabel(character.name));
-        pnData.add(new JLabel(character.corpName));
+        pnData.add(new JLabel(character.getName()));
+        pnData.add(new JLabel(character.getCorpName()));
         this.add(pnData);
     }
     
     private void initLabel(){
         JPanel pnIMG = new JPanel(new BorderLayout());
-        pnIMG.add(ImageHandler.getCharacterIMGLabel(character.id),BorderLayout.CENTER);
+        pnIMG.add(ImageHandler.getCharacterIMGLabel(character.getId()),BorderLayout.CENTER);
         this.add(pnIMG);
     }
     

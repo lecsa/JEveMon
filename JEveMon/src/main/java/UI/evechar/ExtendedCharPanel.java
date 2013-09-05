@@ -48,7 +48,7 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
     public ExtendedCharPanel(EVECharacter character){
         this.character = character;
         setLayout(new BorderLayout());
-        JLabel img = ImageHandler.getCharacterIMGLabel(character.id);
+        JLabel img = ImageHandler.getCharacterIMGLabel(character.getId());
         img.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(img,BorderLayout.WEST);
         initGrid();
@@ -116,10 +116,10 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
     }
     
     public void updateLabels(){
-        lbSP.setText(Utils.formatInt(character.skillpoints)+" / "+Utils.formatInt(character.cloneSkillpoints));
-        if( character.skillpoints >= character.cloneSkillpoints ){
+        lbSP.setText(Utils.formatInt(character.getSkillpoints())+" / "+Utils.formatInt(character.getCloneSkillpoints()));
+        if( character.getSkillpoints() >= character.getCloneSkillpoints() ){
             if( lowCloneCount == 0 ){
-                MainFrame.noti.addLine("Clone upgrade needed: "+character.name);
+                MainFrame.noti.addLine("Clone upgrade needed: "+character.getName());
             }
             lowCloneCount++;
             if(lowCloneCount == NOTIFICATION_IN_SEC){
@@ -128,21 +128,21 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
         }
         SkillInTraining currSkill = character.getSkillInTraining();
         if( currSkill == null ){
-            character.isTraining = false;
+            character.setTraining(false);
         }
-        if( character.isTraining ){
+        if( character.isTraining() ){
             
-            lbTaining.setText(currSkill.type.name+" lvl "+currSkill.skillevel);
+            lbTaining.setText(currSkill.getType().getName()+" lvl "+currSkill.getSkillLevel());
             lbTaining.setForeground(GREEN);
             Date now = Utils.getNowUTC();
-            Date fin = Utils.getUTC(currSkill.endTime);
+            Date fin = Utils.getUTC(currSkill.getEndTime());
             int s = (int)((fin.getTime()-now.getTime())/1000);
             if( (s*1000) <= UPDATE_RATE ){
-                MainFrame.noti.addLine("Skill training completed: "+character.name+" "+currSkill.type.name+" lvl "+currSkill.skillevel);
+                MainFrame.noti.addLine("Skill training completed: "+character.getName()+" "+currSkill.getType().getName()+" lvl "+currSkill.getSkillLevel());
             }
             lbFinishes.setText(Utils.formatTime(s));
-            if( !character.trainingQueue.isEmpty() ){
-                fin = Utils.getUTC(character.trainingQueue.get(character.trainingQueue.size()-1).endTime);
+            if( !character.getTrainingQueue().isEmpty() ){
+                fin = Utils.getUTC(character.getTrainingQueue().get(character.getTrainingQueue().size()-1).getEndTime());
                 s = (int)((fin.getTime()-now.getTime())/1000);
                 lbQueue.setText(Utils.formatTime(s));
                 if(Utils.formatTime(s).startsWith("0")){
@@ -150,7 +150,7 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
                     setBackground(LIGHT_RED);
                     gridPanel.setBackground(LIGHT_RED);
                     if( lowQueueCount == 0 ){
-                        MainFrame.noti.addLine("Skill queue low: "+character.name);
+                        MainFrame.noti.addLine("Skill queue low: "+character.getName());
                     }
                     lowQueueCount++;
                     if(lowQueueCount == NOTIFICATION_IN_SEC){
@@ -163,10 +163,10 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
                 }
                 
                 String tooltip = "<html>";
-                for(int i=0;i<character.trainingQueue.size();i++){
-                    fin = Utils.getUTC(character.trainingQueue.get(i).endTime);
+                for(int i=0;i<character.getTrainingQueue().size();i++){
+                    fin = Utils.getUTC(character.getTrainingQueue().get(i).getEndTime());
                     if(fin.after(now)){
-                        tooltip+=character.trainingQueue.get(i).type.name+" "+character.trainingQueue.get(i).skillevel+"<br />"; 
+                        tooltip+=character.getTrainingQueue().get(i).getType().getName()+" "+character.getTrainingQueue().get(i).getSkillLevel()+"<br />"; 
                     }
                 }
                     tooltip+="</html>";
@@ -180,7 +180,7 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
             lbFinishes.setText("-");
             lbQueue.setText("-");
         }
-        lbISK.setText(Utils.formatLong((long)character.balance));
+        lbISK.setText(Utils.formatLong((long)character.getBalance()));
         this.repaint();
     }
     private void initGrid(){
@@ -188,48 +188,48 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
         gridPanel.setBackground(Color.WHITE);
         gridPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 10));
         gridPanel.add(new JLabel("Name:"));
-        gridPanel.add(new JLabel(character.name));
+        gridPanel.add(new JLabel(character.getName()));
         gridPanel.add(new JLabel("Corp:"));
-        gridPanel.add(new JLabel(character.corpName));
+        gridPanel.add(new JLabel(character.getCorpName()));
         gridPanel.add(new JLabel("DoB:"));
-        gridPanel.add(new JLabel(character.dayOfBirth));
+        gridPanel.add(new JLabel(character.getDayOfBirth()));
         gridPanel.add(new JLabel("Skills / clone:"));
-        gridPanel.add((lbSP = new JLabel(Utils.formatInt(character.skillpoints)+" / "+Utils.formatInt(character.cloneSkillpoints))));
-        if( character.cloneSkillpoints <= character.skillpoints ){
-            Msg.warningMsg(character.name+" needs clone upgrade!");
+        gridPanel.add((lbSP = new JLabel(Utils.formatInt(character.getSkillpoints())+" / "+Utils.formatInt(character.getCloneSkillpoints()))));
+        if( character.getCloneSkillpoints() <= character.getSkillpoints() ){
+            Msg.warningMsg(character.getName()+" needs clone upgrade!");
         }
         SkillInTraining currSkill = character.getSkillInTraining();
         if( currSkill == null ){
-            character.isTraining = false;
+            character.setTraining(false);
         }
-        if( character.isTraining ){
+        if( character.isTraining() ){
             gridPanel.add(new JLabel("Training:"));
-            lbTaining = new JLabel(currSkill.type.name+" lvl "+currSkill.skillevel);
+            lbTaining = new JLabel(currSkill.getType().getName()+" lvl "+currSkill.getSkillLevel());
             lbTaining.setForeground(GREEN);
             gridPanel.add(lbTaining);
             gridPanel.add(new JLabel("Finishes:"));
             Date now = Utils.getNowUTC();
-            Date fin = Utils.getUTC(currSkill.endTime);
+            Date fin = Utils.getUTC(currSkill.getEndTime());
             int s = (int)((fin.getTime()-now.getTime())/1000);
             gridPanel.add((lbFinishes = new JLabel(Utils.formatTime(s))));
             
             gridPanel.add(new JLabel("Queue:"));
-            if( !character.trainingQueue.isEmpty() ){
-                fin = Utils.getUTC(character.trainingQueue.get(character.trainingQueue.size()-1).endTime);
+            if( !character.getTrainingQueue().isEmpty() ){
+                fin = Utils.getUTC(character.getTrainingQueue().get(character.getTrainingQueue().size()-1).getEndTime());
                 s = (int)((fin.getTime()-now.getTime())/1000);
                 lbQueue = new JLabel(Utils.formatTime(s));
                 if(Utils.formatTime(s).startsWith("0")){
                     lbQueue.setForeground(RED);
-                    Msg.infoMsg("Skill queue low: "+character.name);
+                    Msg.infoMsg("Skill queue low: "+character.getName());
                 }else{
                     lbQueue.setForeground(GREEN);
                 }
                 gridPanel.add(lbQueue);
                 String tooltip = "<html>";
-                for(int i=0;i<character.trainingQueue.size();i++){
-                    fin = Utils.getUTC(character.trainingQueue.get(i).endTime);
+                for(int i=0;i<character.getTrainingQueue().size();i++){
+                    fin = Utils.getUTC(character.getTrainingQueue().get(i).getEndTime());
                     if(fin.after(now)){
-                        tooltip+=character.trainingQueue.get(i).type.name+" "+character.trainingQueue.get(i).skillevel+"<br />";
+                        tooltip+=character.getTrainingQueue().get(i).getType().getName()+" "+character.getTrainingQueue().get(i).getSkillLevel()+"<br />";
                     }
                 }
                     tooltip+="</html>";
