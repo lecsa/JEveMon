@@ -40,6 +40,7 @@ public class AssetListPanel extends JPanel implements ActionListener{
         treeView = new JScrollPane(tree);
         treeView.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         add(treeView,BorderLayout.CENTER);
+        updateAssetList();
     }
 
     @Override

@@ -40,6 +40,7 @@ public class DataUpdater {
     public DataProvider getDp() {
         return dp;
     }
+    
     public void start(){
         Thread updateThread = new Thread(new Runnable() {
 
@@ -49,6 +50,7 @@ public class DataUpdater {
                     fillAccountsAndCharacters();
                     try {
                         Thread.sleep(1000*60*5);//update in every 5 minutes
+                        //Thread.sleep(4950);//testing
                     } catch (InterruptedException ex) {
                         System.out.println("IEX: "+ex.getMessage());
                     }
@@ -58,8 +60,19 @@ public class DataUpdater {
         updateThread.start();
         
     }
+    
     private void fillAccountsAndCharacters(){
         isUpdating = true;
+        //backup asset and journal data
+        ArrayList<EVECharacter> assetAndJournalBackup = new ArrayList();
+        for(int i=0;i<dp.accounts.size();i++){
+            for(int n=0;n<dp.accounts.get(i).getCharacters().size();n++){
+                if( dp.accounts.get(i).getCharacters().get(n) != null ){
+                    assetAndJournalBackup.add(dp.accounts.get(i).getCharacters().get(n));
+                }
+            }
+        }
+        
         File keysdir = new File("apikeys");
         if( keysdir.exists() && keysdir.isDirectory() ){
             File[] list = keysdir.listFiles();
@@ -77,6 +90,15 @@ public class DataUpdater {
                         EVECharacter[] characters = APIHandler.getCharacters((APIKey)o);
                         for(int n=0;n<characters.length;n++){
                             APIHandler.fillCharacterData(characters[n]);
+                            //reload saves asset and journal data
+                            for(int k=0;k<assetAndJournalBackup.size();k++){
+                                if( characters[n] != null ){
+                                    if( assetAndJournalBackup.get(k).id == characters[n].id ){
+                                        characters[n].assets = assetAndJournalBackup.get(k).assets;
+                                        characters[n].walletJournal = assetAndJournalBackup.get(k).walletJournal;
+                                    }
+                                }
+                            }
                             currentAccount.addCharacter(characters[n]);
                         }
                         accounts.add(currentAccount);
@@ -96,6 +118,8 @@ public class DataUpdater {
             }
             this.dp.accounts = accounts;
         }
+        
+        
         notifier.notifyListeners(new DataUpdateFinishedEvent(this));
         isUpdating = false;
     }

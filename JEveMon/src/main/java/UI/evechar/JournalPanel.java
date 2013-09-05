@@ -20,7 +20,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import utils.Utils;
 
 /**
  *
@@ -47,6 +46,7 @@ public class JournalPanel extends JPanel implements ActionListener{
         view = new JScrollPane(table);
         view.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         add(view,BorderLayout.CENTER);
+        updateJournalTable();
     }
     
     @Override
