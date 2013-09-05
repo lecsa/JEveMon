@@ -5,6 +5,7 @@
 package API;
 
 import UI.Msg;
+import data.account.Account;
 import data.character.EVECharacter;
 import data.type.Item;
 import data.journal.JournalElement;
@@ -495,6 +496,37 @@ public class APIHandler {
     return isTraining;
     }
     
+    public static Account getAccount(APIKey key){
+    Account acc = null;
+        File f = new File("cache/account/"+key.getName()+"_status.xml");
+        if( isCacheNeeded(f) ){
+            try{
+                URL url = new URL(key.getURL("account", "AccountStatus.xml.aspx"));
+                cache(f, url);
+                
+            }catch(MalformedURLException ex){
+                System.out.println("MUE: "+ex.getMessage());
+            }
+        }
+        if( f.exists() && f.isFile() ){
+            try{
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(f);
+                Node paidUntilNode = doc.getElementsByTagName("paidUntil").item(0);
+                acc = new Account(paidUntilNode.getTextContent().toString());
+                }catch(SAXException ex){
+                System.out.println("SAXE: "+ex.getMessage());
+            }catch(ParserConfigurationException ex){
+                System.out.println("PCE: "+ex.getMessage());
+            }catch(IOException ex){
+                System.out.println("IOE: "+ex.getMessage());
+            }finally{
+            }
+        }
+        
+    return acc;
+    }
     
     public static EVECharacter[] getCharacters(APIKey key){
         EVECharacter[] chars = new EVECharacter[3];
