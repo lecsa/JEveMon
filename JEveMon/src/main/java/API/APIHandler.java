@@ -345,82 +345,84 @@ public class APIHandler {
     }
     
     public static EVECharacter fillCharacterData(EVECharacter c){
-        File cache = new File("cache/char/sheet_"+c.getId()+".xml");
-        if( isCacheNeeded(cache) ){
-            try{
-                URL url = new URL(c.getKey().getURL("char", "CharacterSheet.xml.aspx")+"&characterID="+c.getId());
-                cache(cache, url);
-            }catch(MalformedURLException ex){
-                System.out.println("MUE: "+ex.getMessage());
-            }
-        }
-        if( cache.exists() && cache.isFile() ){
-            try{
-                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                Document doc = dBuilder.parse(cache);
+        if( c != null ){
+            File cache = new File("cache/char/sheet_"+c.getId()+".xml");
+            if( isCacheNeeded(cache) ){
                 try{
-                    Element e = (Element)(doc.getElementsByTagName("balance").item(0));
-                    c.setBalance( Double.parseDouble(e.getTextContent()) );
-                    c.setCorpID( Integer.parseInt( ((Element)(doc.getElementsByTagName("corporationID").item(0))).getTextContent()) );
-                    c.getAttributes().setRaw( Attributes.Attribute.INTELLIGENCE , Integer.parseInt( ((Element)(doc.getElementsByTagName("intelligence").item(0))).getTextContent() ) );
-                    c.getAttributes().setRaw( Attributes.Attribute.MEMORY , Integer.parseInt( ((Element)(doc.getElementsByTagName("memory").item(0))).getTextContent() ) );
-                    c.getAttributes().setRaw( Attributes.Attribute.PERCEPTION, Integer.parseInt( ((Element)(doc.getElementsByTagName("perception").item(0))).getTextContent() ) );
-                    c.getAttributes().setRaw( Attributes.Attribute.WILLPOWER, Integer.parseInt( ((Element)(doc.getElementsByTagName("willpower").item(0))).getTextContent() ) );
-                    c.getAttributes().setRaw( Attributes.Attribute.CHARISMA , Integer.parseInt( ((Element)(doc.getElementsByTagName("charisma").item(0))).getTextContent() ) );
-                    /** 
-                     * TODO: Implants Import
-                     */
-                    c.setCloneSkillpoints( Integer.parseInt(((Element)(doc.getElementsByTagName("cloneSkillPoints").item(0))).getTextContent()) );
-                }catch(NumberFormatException ex){
-                    System.out.println("NFE: "+ex.getMessage());
+                    URL url = new URL(c.getKey().getURL("char", "CharacterSheet.xml.aspx")+"&characterID="+c.getId());
+                    cache(cache, url);
+                }catch(MalformedURLException ex){
+                    System.out.println("MUE: "+ex.getMessage());
                 }
-                c.setCloneName( ((Element)(doc.getElementsByTagName("cloneName").item(0))).getTextContent() );
-                c.setDayOfBirth( ((Element)(doc.getElementsByTagName("DoB").item(0))).getTextContent() );
-                //----- SKILLS ------
-                //get all rowset nodes
-                NodeList rowsets = doc.getElementsByTagName("rowset");
-                boolean foundSkills = false;
-                Node skillNode = null;
-                for(int i=0;i<rowsets.getLength() && ! foundSkills;i++){
-                    if( rowsets.item(i).hasAttributes() ){
-                        Element currentRowset = (Element)rowsets.item(i);
-                        if( currentRowset.getAttribute("name").toString().equals("skills") ){
-                            skillNode = rowsets.item(i);
-                            foundSkills = true;
-                        }
+            }
+            if( cache.exists() && cache.isFile() ){
+                try{
+                    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                    Document doc = dBuilder.parse(cache);
+                    try{
+                        Element e = (Element)(doc.getElementsByTagName("balance").item(0));
+                        c.setBalance( Double.parseDouble(e.getTextContent()) );
+                        c.setCorpID( Integer.parseInt( ((Element)(doc.getElementsByTagName("corporationID").item(0))).getTextContent()) );
+                        c.getAttributes().setRaw( Attributes.Attribute.INTELLIGENCE , Integer.parseInt( ((Element)(doc.getElementsByTagName("intelligence").item(0))).getTextContent() ) );
+                        c.getAttributes().setRaw( Attributes.Attribute.MEMORY , Integer.parseInt( ((Element)(doc.getElementsByTagName("memory").item(0))).getTextContent() ) );
+                        c.getAttributes().setRaw( Attributes.Attribute.PERCEPTION, Integer.parseInt( ((Element)(doc.getElementsByTagName("perception").item(0))).getTextContent() ) );
+                        c.getAttributes().setRaw( Attributes.Attribute.WILLPOWER, Integer.parseInt( ((Element)(doc.getElementsByTagName("willpower").item(0))).getTextContent() ) );
+                        c.getAttributes().setRaw( Attributes.Attribute.CHARISMA , Integer.parseInt( ((Element)(doc.getElementsByTagName("charisma").item(0))).getTextContent() ) );
+                        /** 
+                         * TODO: Implants Import
+                         */
+                        c.setCloneSkillpoints( Integer.parseInt(((Element)(doc.getElementsByTagName("cloneSkillPoints").item(0))).getTextContent()) );
+                    }catch(NumberFormatException ex){
+                        System.out.println("NFE: "+ex.getMessage());
                     }
-                }
-                if( foundSkills ){
-                    NodeList rows = skillNode.getChildNodes();
-                    DBHandler db = new DBHandler();
-                    c.setSkillpoints(0);
-                    for( int i=0;i<rows.getLength();i++ ){
-                        if( rows.item(i).getNodeType() != Node.TEXT_NODE ){
-                            Element e = (Element)rows.item(i);
-                            try{
-                                int typeID      = Integer.parseInt(e.getAttribute("typeID").toString());
-                                int skillpoint  = Integer.parseInt(e.getAttribute("skillpoints").toString());
-                                int level       = Integer.parseInt(e.getAttribute("level").toString());
-                                c.getSkills().add(new Skill(db.getTypeByID(typeID), skillpoint, level));
-                                c.setSkillpoints(c.getSkillpoints()+skillpoint);
-                            }catch(NumberFormatException ex){
-                                System.out.println("NEX: "+ex.getMessage());
+                    c.setCloneName( ((Element)(doc.getElementsByTagName("cloneName").item(0))).getTextContent() );
+                    c.setDayOfBirth( ((Element)(doc.getElementsByTagName("DoB").item(0))).getTextContent() );
+                    //----- SKILLS ------
+                    //get all rowset nodes
+                    NodeList rowsets = doc.getElementsByTagName("rowset");
+                    boolean foundSkills = false;
+                    Node skillNode = null;
+                    for(int i=0;i<rowsets.getLength() && ! foundSkills;i++){
+                        if( rowsets.item(i).hasAttributes() ){
+                            Element currentRowset = (Element)rowsets.item(i);
+                            if( currentRowset.getAttribute("name").toString().equals("skills") ){
+                                skillNode = rowsets.item(i);
+                                foundSkills = true;
                             }
                         }
                     }
+                    if( foundSkills ){
+                        NodeList rows = skillNode.getChildNodes();
+                        DBHandler db = new DBHandler();
+                        c.setSkillpoints(0);
+                        for( int i=0;i<rows.getLength();i++ ){
+                            if( rows.item(i).getNodeType() != Node.TEXT_NODE ){
+                                Element e = (Element)rows.item(i);
+                                try{
+                                    int typeID      = Integer.parseInt(e.getAttribute("typeID").toString());
+                                    int skillpoint  = Integer.parseInt(e.getAttribute("skillpoints").toString());
+                                    int level       = Integer.parseInt(e.getAttribute("level").toString());
+                                    c.getSkills().add(new Skill(db.getTypeByID(typeID), skillpoint, level));
+                                    c.setSkillpoints(c.getSkillpoints()+skillpoint);
+                                }catch(NumberFormatException ex){
+                                    System.out.println("NEX: "+ex.getMessage());
+                                }
+                            }
+                        }
+                    }
+                }catch(SAXException ex){
+                    System.out.println("SAXE: "+ex.getMessage());
+                }catch(ParserConfigurationException ex){
+                    System.out.println("PCE: "+ex.getMessage());
+                }catch(IOException ex){
+                    System.out.println("IOE: "+ex.getMessage());
                 }
-            }catch(SAXException ex){
-                System.out.println("SAXE: "+ex.getMessage());
-            }catch(ParserConfigurationException ex){
-                System.out.println("PCE: "+ex.getMessage());
-            }catch(IOException ex){
-                System.out.println("IOE: "+ex.getMessage());
+
             }
-        
+            c = fillSkillQueue(c);
+            c.setIsTraining(isCharacterTraining(c));
         }
-        c = fillSkillQueue(c);
-        c.setIsTraining(isCharacterTraining(c));
     return c;
     }
     
