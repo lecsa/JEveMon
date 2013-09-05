@@ -6,4 +6,4 @@ cd $APPDIR
 CLASSPATH="@jarName@"
 export CLASSPATH
 
-java UI.MainFrame
+java -Duser.home=$HOME UI.MainFrame
