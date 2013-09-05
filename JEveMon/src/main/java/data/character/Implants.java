@@ -29,7 +29,7 @@ public class Implants {
      * @param value Value for selected Attribute Implant
      */
     public void setImplant( Attribute attribute , int value ) {
-        if ( Settings.isDebug ) System.out.println( "Attribute Implant: " + attribute.toString() + "(" + attribute.ordinal() + ") Set to: " + value );
+        if ( Settings.isDebug ) System.out.println( "Attribute " + attribute.toString() + " set to: " + value );
         implantValues[ attribute.ordinal() ] = value;
     }
     
