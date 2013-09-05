@@ -22,7 +22,7 @@ public class Settings implements Externalizable{
     /*
      * Static Settings
      */
-    public final static String APPNAME = "jEveMon";
+    public final static String APPNAME = "JEveMon";
     public final static String USERPATH = System.getProperty("user.home") + "/." + APPNAME;
     
     /*
@@ -48,7 +48,7 @@ public class Settings implements Externalizable{
     public static boolean save(String fileName) {
         Settings instance = new Settings();
         if ( Settings.isDebug ) System.out.println("Saving Settings ... (File Name: " + fileName + ")");
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream( fileName ))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream( USERPATH + "/" + fileName ))) {
             oos.writeObject(instance);
         } catch (Exception ex ) {
             if ( Settings.isDebug ) System.out.println("Error saving Settings: ");
@@ -64,7 +64,7 @@ public class Settings implements Externalizable{
      * @return true on success, false on fail
      */
     public static boolean load(String fileName) {
-        try ( ObjectInputStream ois = new ObjectInputStream(new FileInputStream( fileName )) ) {
+        try ( ObjectInputStream ois = new ObjectInputStream(new FileInputStream( USERPATH + "/" + fileName )) ) {
             Settings instance = (Settings) ois.readObject();
         } catch( Exception ex ) {
             if ( Settings.isDebug ) System.out.println("Error loading Settings: ");

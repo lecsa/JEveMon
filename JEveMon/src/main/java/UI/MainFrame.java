@@ -49,6 +49,7 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
     
     @SuppressWarnings("LeakingThisInConstructor")
     public MainFrame(){
+        if ( !Settings.load("settings.conf") ) Settings.save("settings.conf");
         if ( Settings.isDebug ) {
             System.out.println("App Name: " + Settings.APPNAME);
             System.out.println("User Home Path: " + Settings.USERPATH);
