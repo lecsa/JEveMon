@@ -13,6 +13,7 @@ import data.location.Station;
 import db.DBHandler;
 import java.util.ArrayList;
 import java.util.Date;
+import settings.Settings;
 import utils.Utils;
 
 /**
@@ -70,7 +71,7 @@ public class EVECharacter {
             assets.add(s);
         }
         s.getItems().add(i);
-        //System.out.println("Adding: "+i.name+" x"+i.quantity+" to "+s.name);
+        if ( Settings.isDebug ) System.out.println("Adding: "+i.getName()+" x"+i.getQuantity()+" to "+s.getName());
     }
     
     private Station getStation(long stationID){

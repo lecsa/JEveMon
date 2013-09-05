@@ -70,6 +70,7 @@ public class Item extends Type implements Comparable{
         String fname = Flag_t.getFlagName(flag);
         return fname.startsWith("drone");
     }
+    
     public boolean isInCargoHold(){
         String fname = Flag_t.getFlagName(flag);
         return fname.startsWith("cargo");
