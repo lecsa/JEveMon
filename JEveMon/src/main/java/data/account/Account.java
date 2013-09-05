@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Account {
     private String expires;
-    private ArrayList<EVECharacter> characters = new ArrayList<EVECharacter>();
+    private ArrayList<EVECharacter> characters = new ArrayList<>();
 
     public Account(String expires) {
         this.expires = expires;

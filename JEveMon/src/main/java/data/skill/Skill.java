@@ -20,6 +20,7 @@ public class Skill {
         this.skillpoints = skillpoints;
         this.skillLevel = skillevel;
     }
+    
     @Override
     public String toString() {
         return type.getName();
