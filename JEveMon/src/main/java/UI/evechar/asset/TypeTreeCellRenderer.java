@@ -25,11 +25,9 @@ public class TypeTreeCellRenderer implements TreeCellRenderer{
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         Object o = ((DefaultMutableTreeNode) value).getUserObject();
         JLabel label = new JLabel();
-            if(o instanceof ItemTreeElement){
-                ItemTreeElement itemrow = (ItemTreeElement)o;
-                label = itemrow.getLabel();
+            if(o instanceof Item){
                     String amount = "";
-                    Item item = itemrow.getItem();
+                    Item item = (Item)o;
                     if( item.getContainedItems().isEmpty() && item.getQuantity() != 0 ){
                         amount = " x"+item.getQuantity();
                     }
@@ -40,7 +38,7 @@ public class TypeTreeCellRenderer implements TreeCellRenderer{
                         }
                     }
                     label.setText(item.getName()+amount+flagStr);
-                
+                    label.setIcon(ImageHandler.getTypeIMG(item.getId()));
             } else if( o instanceof Station ) {
                 Station station = (Station)o;
                 label = new JLabel(ImageHandler.getTypeIMG(17366));

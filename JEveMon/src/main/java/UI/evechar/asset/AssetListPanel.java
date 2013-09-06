@@ -36,7 +36,6 @@ public class AssetListPanel extends JPanel implements ActionListener{
     private JButton btFetch = new JButton("Get asset data");
     private EVECharacter character;
     private JScrollPane treeView;
-    private ConcurrentLinkedQueue<ItemTreeElement> itemRowsToUpdate = new ConcurrentLinkedQueue();
     
     public AssetListPanel(EVECharacter c){
         this.character = c;
@@ -82,13 +81,11 @@ public class AssetListPanel extends JPanel implements ActionListener{
             for(int n=0;n<sta.getShips().size();n++){
                 DefaultMutableTreeNode parentItemNode;
                 Ship parentShip = sta.getShips().get(n);
-                ItemTreeElement parentShipRow = new ItemTreeElement(parentShip, new JLabel());
-                itemRowsToUpdate.offer(parentShipRow);
                 if( parentShip.getContainedItems().isEmpty() &&
                     parentShip.getDroneBay().isEmpty() &&
                     parentShip.getFittedItems().isEmpty() &&
                     parentShip.getCargoHold().isEmpty()){
-                    parentItemNode = new DefaultMutableTreeNode(parentShipRow);
+                    parentItemNode = new DefaultMutableTreeNode(parentShip);
                 }else{
                     DefaultMutableTreeNode fittedNode = new DefaultMutableTreeNode("fitted");
                     DefaultMutableTreeNode droneBayNode = new DefaultMutableTreeNode("drone bay");
@@ -96,29 +93,21 @@ public class AssetListPanel extends JPanel implements ActionListener{
                     DefaultMutableTreeNode otherNode = new DefaultMutableTreeNode("other");
                     for(int k=0;k<parentShip.getFittedItems().size();k++){//fitted items
                         Item child = parentShip.getFittedItems().get(k);
-                        ItemTreeElement childRow = new ItemTreeElement(child, new JLabel());
-                        itemRowsToUpdate.offer(childRow);
-                        fittedNode.add(new DefaultMutableTreeNode(childRow));
+                        fittedNode.add(new DefaultMutableTreeNode(child));
                     }
                     for(int k=0;k<parentShip.getDroneBay().size();k++){//fitted items
                         Item child = parentShip.getDroneBay().get(k);
-                        ItemTreeElement childRow = new ItemTreeElement(child, new JLabel());
-                        itemRowsToUpdate.offer(childRow);
-                        droneBayNode.add(new DefaultMutableTreeNode(childRow));
+                        droneBayNode.add(new DefaultMutableTreeNode(child));
                     }
                     for(int k=0;k<parentShip.getCargoHold().size();k++){//fitted items
                         Item child = parentShip.getCargoHold().get(k);
-                        ItemTreeElement childRow = new ItemTreeElement(child, new JLabel());
-                        itemRowsToUpdate.offer(childRow);
-                        cargoNode.add(new DefaultMutableTreeNode(childRow));
+                        cargoNode.add(new DefaultMutableTreeNode(child));
                     }
                     for(int k=0;k<parentShip.getContainedItems().size();k++){//fitted items
                         Item child = parentShip.getContainedItems().get(k);
-                        ItemTreeElement childRow = new ItemTreeElement(child, new JLabel());
-                        itemRowsToUpdate.offer(childRow);         
-                        otherNode.add(new DefaultMutableTreeNode(childRow));
+                        otherNode.add(new DefaultMutableTreeNode(child));
                     }
-                    parentItemNode = new DefaultMutableTreeNode(parentShipRow);
+                    parentItemNode = new DefaultMutableTreeNode(parentShip);
                     parentItemNode.add(fittedNode);
                     parentItemNode.add(droneBayNode);
                     parentItemNode.add(cargoNode);
@@ -128,18 +117,14 @@ public class AssetListPanel extends JPanel implements ActionListener{
             }
             for(int n=0;n<sta.getItems().size();n++){
                 Item parent = sta.getItems().get(n);
-                ItemTreeElement parentRow = new ItemTreeElement(parent,new JLabel());
-                itemRowsToUpdate.offer(parentRow);         
                 DefaultMutableTreeNode parentItemNode;
                 if(parent.getContainedItems().isEmpty()){
-                    parentItemNode = new DefaultMutableTreeNode(parentRow);
+                    parentItemNode = new DefaultMutableTreeNode(parent);
                 }else{
-                    parentItemNode = new DefaultMutableTreeNode(parentRow);
+                    parentItemNode = new DefaultMutableTreeNode(parent);
                     for(int k=0;k<parent.getContainedItems().size();k++){
                         Item child = parent.getContainedItems().get(k);
-                        ItemTreeElement childRow = new ItemTreeElement(child, new JLabel());
-                        itemRowsToUpdate.offer(childRow);         
-                        parentItemNode.add(new DefaultMutableTreeNode(childRow));
+                        parentItemNode.add(new DefaultMutableTreeNode(child));
                     }
                 }
                 stationNode.add(parentItemNode);
@@ -154,19 +139,7 @@ public class AssetListPanel extends JPanel implements ActionListener{
         add(treeView,BorderLayout.CENTER);
         revalidate();
         repaint();
-        //download images..
-        ItemTreeElement currentRow = null;
-        while((currentRow=itemRowsToUpdate.poll())!=null){
-            if( currentRow != null ){
-                try{
-                    ExecutorService exe = Executors.newFixedThreadPool(1);
-                    Callable<Void> command = new TypeImageDownloader(currentRow);
-                    Future<Void> done = exe.submit(command);
-                }catch(Exception ex){
-                    if( Settings.isDebug ) System.out.println("Error while downloading type image (typeID="+currentRow.getItem().getId()+"): "+ex.getMessage());
-                }
-            }
-        }
+        
     }
     
 }
