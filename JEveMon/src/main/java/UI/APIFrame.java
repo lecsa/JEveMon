@@ -27,7 +27,7 @@ import javax.swing.filechooser.FileFilter;
 import utils.FileSystem;
 
 /**
- *
+ * Add, remove, modify, delete apikey files.
  * @author lecsa
  */
 public class APIFrame extends JFrame implements ActionListener{
@@ -53,7 +53,9 @@ public class APIFrame extends JFrame implements ActionListener{
         btDelete.addActionListener(this);
         setVisible(true);
     }
-    
+    /**
+     * Init panels.
+     */
     private void initAPIPanels(){
         JPanel pnMain = new JPanel(new GridLayout(4, 1,5,5));
         pnMain.setBorder(BorderFactory.createTitledBorder("API settings"));
@@ -82,7 +84,9 @@ public class APIFrame extends JFrame implements ActionListener{
         pnMain.add(pnButtons);
         this.add(pnMain,BorderLayout.NORTH);
     }
-    
+    /**
+     * Save apikey file (to predefined directory).
+     */
     private void save(){
         String name = tfName.getText().trim();
         String keyID = tfKeyID.getText().trim();
@@ -113,7 +117,9 @@ public class APIFrame extends JFrame implements ActionListener{
         }
         
     }
-    
+    /**
+     * Open apikey file.
+     */
     private void open(){
         JFileChooser jfc = new JFileChooser(FileSystem.getFile("apikeys"));
         FileFilter ff = new FileFilter() {
@@ -142,7 +148,9 @@ public class APIFrame extends JFrame implements ActionListener{
         }
     
     }
-    
+    /**
+     * delete apikey file.
+     */
     private void delete(){
         JFileChooser jfc = new JFileChooser(new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()));
         FileFilter ff = new FileFilter() {

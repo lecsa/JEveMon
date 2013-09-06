@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package UI.evechar;
+package UI.evechar.journal;
 
 import java.awt.Component;
 import java.awt.Font;

@@ -1,4 +1,4 @@
-package UI.evechar;
+package UI.evechar.journal;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;

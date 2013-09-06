@@ -24,12 +24,29 @@ import utils.FileSystem;
  * @author lecsa
  */
 public class DataUpdater {
-    
+    /**
+     * Data source for the UI.
+     */
     private DataProvider dp = new DataProvider();
+    /**
+     * is update in progress.
+     */
     public static boolean isUpdating = false;
+    /**
+     * This object will notify all of the listeners after a data update.
+     */
     private DataUpdateFinishedNotifier notifier = new DataUpdateFinishedNotifier();
+    /**
+     * update in every updateIn seconds.
+     */
     private int updateIn = 5*60;//seconds
+    /**
+     * elapsed seconds since the last update.
+     */
     private int waiting = 0;
+    /**
+     * force next update.
+     */
     private boolean forceUpdate = true;
     
     public DataUpdater(){
@@ -40,10 +57,12 @@ public class DataUpdater {
         notifier.addListener(listener);
     }
     
-    public DataProvider getDp() {
+    public DataProvider getDataProvider() {
         return dp;
     }
-    
+    /**
+     * Starts the updating thread.
+     */
     public void start(){
         Thread updateThread = new Thread(new Runnable() {
 
@@ -56,7 +75,6 @@ public class DataUpdater {
                     }else{
                         try {
                             Thread.sleep(1000);
-                            //Thread.sleep(4950);//testing
                             waiting++;
                             if( forceUpdate ){
                                 waiting = updateIn;
@@ -72,9 +90,15 @@ public class DataUpdater {
         });
         updateThread.start();
     }
+    /**
+     * update in the next second.
+     */
     public void forceNextUpdate(){
         forceUpdate = true;
     }
+    /**
+     * Fills the account and character objects in the DataProvider instance and notifies all listeners after the update is done.
+     */
     private void fillAccountsAndCharacters(){
         isUpdating = true;
         //backup asset and journal data

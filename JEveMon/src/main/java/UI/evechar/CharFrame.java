@@ -4,6 +4,7 @@
  */
 package UI.evechar;
 
+import UI.evechar.journal.JournalPanel;
 import UI.evechar.asset.AssetListPanel;
 import data.character.EVECharacter;
 import java.awt.Toolkit;
@@ -13,18 +14,29 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 /**
- *
+ * Main character frame.
  * @author lecsa
  */
 public class CharFrame extends JFrame implements WindowListener{
+    /**
+     * for screen size information.
+     */
     private Toolkit tk;
+    /**
+     * default width and height values.
+     */
     private final static int DW=1380,DH=768;
+    /**
+     * \"Parent\" object. The source of the frame creation event (Mouse click).
+     */
     private ExtendedCharPanel parent;
+    /**
+     * Tabbed pane for the subpanels of the main character frame.
+     */
     private JTabbedPane tabbedPane = new JTabbedPane();
     
     public CharFrame(ExtendedCharPanel parent){
         this.parent = parent;
-
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle(parent.getCharacter().getName()+" - "+parent.getCharacter().getCorpName());
         tk=getToolkit();

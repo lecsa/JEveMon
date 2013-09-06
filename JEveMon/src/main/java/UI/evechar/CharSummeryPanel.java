@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
- *
+ * A summary panel for all characters.
  * @author lecsa
  */
 public class CharSummeryPanel extends JPanel implements ActionListener{

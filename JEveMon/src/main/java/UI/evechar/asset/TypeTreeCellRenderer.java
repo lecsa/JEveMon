@@ -16,7 +16,7 @@ import javax.swing.tree.TreeCellRenderer;
 import utils.ImageHandler;
 
 /**
- *
+ * Tree cell renderer for items.
  * @author lecsa
  */
 public class TypeTreeCellRenderer implements TreeCellRenderer{

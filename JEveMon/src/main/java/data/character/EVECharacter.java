@@ -18,26 +18,73 @@ import settings.Settings;
 import utils.Utils;
 
 /**
- *
+ * Representation of 1 EVE character.
  * @author lecsa
  */
 public class EVECharacter {
-    
+    /**
+     * Character id.
+     */
     private int id;
+    /**
+     * Character name.
+     */
     private String name;
+    /**
+     * Balance.
+     */
     private double balance;
+    /**
+     * Corporation id of the character.
+     */
     private int corpID;
+    /**
+     * Corporation name of the character.
+     */
     private String corpName;
+    /**
+     * The name of the currently active clone.
+     */
     private String cloneName;
+    /**
+     * Day of birth.
+     */
     private String dayOfBirth;
+    /**
+     * Skills of the character.
+     */
     private ArrayList<Skill> skills = new ArrayList();
+    /**
+     * Training queue of the character.
+     */
     private ArrayList<SkillInTraining> trainingQueue = new ArrayList();
+    /**
+     * is the character training?
+     */
     private boolean isTraining;
+    /**
+     * Skillpoints of the character.
+     */
     private int skillpoints = 0;
+    /**
+     * Skillpoints held by the currently active clone.
+     */
     private int cloneSkillpoints = 0;
+    /**
+     * Character attributes.
+     */
     private Attributes attributes;
+    /**
+     * APIKey of the character.
+     */
     private APIKey key;
+    /**
+     * Assets of the character.
+     */
     private ArrayList<Station> assets = new ArrayList();
+    /**
+     * WalletJournal.
+     */
     private ArrayList<JournalElement> walletJournal = new ArrayList();
     
     public EVECharacter(int id, String name, APIKey key){
@@ -46,7 +93,10 @@ public class EVECharacter {
         this.name=name;
         this.key = key;
     }
-    
+    /**
+     * Get the currently trained skill.
+     * @return 
+     */
     public SkillInTraining getSkillInTraining(){
         SkillInTraining retval = null;
             for(int i=0;i<trainingQueue.size() && retval == null;i++){
@@ -62,7 +112,11 @@ public class EVECharacter {
             }
         return retval;
     }
-    
+    /**
+     * Add non-ship items to assets (specified station).
+     * @param i the item
+     * @param stationID id of the station
+     */
     public void addItemToAssets(Item i,long stationID){
         Station s = getStation(stationID);
         
@@ -74,6 +128,11 @@ public class EVECharacter {
         s.getItems().add(i);
         if ( Settings.isDebug ) System.out.println("Adding: "+i.getName()+" x"+i.getQuantity()+" to "+s.getName());
     }
+    /**
+     * Add ship items to assets (specified station).
+     * @param i ship
+     * @param stationID id of the station
+     */
     public void addShipToAssets(Ship i,long stationID){
         Station s = getStation(stationID);
         
@@ -85,6 +144,11 @@ public class EVECharacter {
         s.getShips().add(i);
         if ( Settings.isDebug ) System.out.println("Adding: "+i.getName()+" x"+i.getQuantity()+" to "+s.getName());
     }
+    /**
+     * Get the station object of the given id if it exists in the assets arraylist.
+     * @param stationID id of the station
+     * @return existing station object or null
+     */
     private Station getStation(long stationID){
     Station sta = null;
         for(int i=0;i<assets.size() && sta == null;i++){

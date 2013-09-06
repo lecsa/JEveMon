@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
- * Modális ablakok megjelenítésére használt osztály.
+ * Simplified messages.
  * @author lecsa
  */
 public class Msg {
@@ -15,21 +15,21 @@ public class Msg {
         Msg.parent = parent;
     }
     /**
-     * Hibaüzenet megjelenítése modális ablakban.
+     * Error message in modal window.
      * @param msg 
      */
     public static void errorMsg(String msg){
         JOptionPane.showMessageDialog(parent, msg, "Error", JOptionPane.ERROR_MESSAGE);
     }
     /**
-     * Információ megjelenítése modális ablakban.
+     * Info message in modal window.
      * @param msg 
      */
     public static void infoMsg(String msg){
         JOptionPane.showMessageDialog(parent, msg, "Information", JOptionPane.INFORMATION_MESSAGE);
     }
     /**
-     * Figyelmeztetés megjelenítése modális ablakban.
+     * Warning message in modal window.
      * @param msg 
      */
     public static void warningMsg(String msg){

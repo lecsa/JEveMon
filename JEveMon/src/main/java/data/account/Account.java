@@ -8,7 +8,7 @@ import data.character.EVECharacter;
 import java.util.ArrayList;
 
 /**
- *
+ * Representation of 1 Account.
  * @author lecsa
  */
 public class Account {

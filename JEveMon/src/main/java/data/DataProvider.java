@@ -8,7 +8,7 @@ import data.account.Account;
 import java.util.ArrayList;
 
 /**
- *
+ * Main data source.
  * @author lecsa
  */
 public class DataProvider {

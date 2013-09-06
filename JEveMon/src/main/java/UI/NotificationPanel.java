@@ -19,9 +19,14 @@ import javax.swing.JTextArea;
  * @author lecsa
  */
 public class NotificationPanel extends JPanel implements ActionListener{
-    
+    /**
+     * Notification texts.
+     */
     private JTextArea textArea = new JTextArea();
     private JPanel pnFlow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    /**
+     * Clear notifications button.
+     */
     private JButton btClear = new JButton("Clear notifications");
     
     public NotificationPanel(){
@@ -40,9 +45,17 @@ public class NotificationPanel extends JPanel implements ActionListener{
         add(pnFlow,BorderLayout.NORTH);
         textArea.setText("Notifications:\n");
     }
+    /**
+     * Add new notification line.
+     * @param line 
+     */
     public void addLine(String line){
         textArea.setText(textArea.getText()+line+"\n");
     }
+    /**
+     * Clear notifications.
+     * @param e 
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         textArea.setText("Notifications:\n");

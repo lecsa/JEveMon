@@ -39,15 +39,41 @@ import utils.ImageHandler;
  * @author lecsa
  */
 public class MainFrame extends JFrame implements ActionListener, DataUpdateFinishedListener{
+    /**
+     * for screen size information.
+     */
     private Toolkit tk;
+    /**
+     * default width and height values.
+     */
     private final static int DW=1360,DH=960;
+    /**
+     * menu bar.
+     */
     private JMenuBar jmb = new JMenuBar();
+    /**
+     * Settings menu.
+     */
     private JMenu menuSettings = new JMenu("Settings");
+    /**
+     * API keys menuitem in the settings menu.
+     */
     private JMenuItem menuItemAPI = new JMenuItem("API keys");
+    /**
+     * API frame.
+     */
     private APIFrame frAPI = null;
-    public static boolean isDebug = true;
+    /**
+     * Notification panel.
+     */
     public static NotificationPanel noti = new NotificationPanel();
+    /**
+     * Character summery panel. Shows genereal informations.
+     */
     private CharSummeryPanel csp;
+    /**
+     * Main data updater class.
+     */
     private DataUpdater updater;
     
     @SuppressWarnings("LeakingThisInConstructor")
@@ -78,18 +104,21 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
         setVisible(true);
         updater.start();
     }
-
+    /**
+     * Data update finished event handling. Updates character panels.
+     * @param e 
+     */
     @Override
     public void dataUpdateFinishedEvent(DataUpdateFinishedEvent e) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 ArrayList<EVECharacter> allCharacters = new ArrayList();
-                for(int i=0;i<updater.getDp().getAccounts().size();i++){
-                    for(int n=0;n<updater.getDp().getAccounts().get(i).getCharacters().size();n++){
-                        if( updater.getDp().getAccounts().get(i).getCharacters().get(n) != null ){
-                            allCharacters.add(updater.getDp().getAccounts().get(i).getCharacters().get(n));
-                            if( Settings.isDebug ) System.out.println("character added: "+updater.getDp().getAccounts().get(i).getCharacters().get(n).getName());
+                for(int i=0;i<updater.getDataProvider().getAccounts().size();i++){
+                    for(int n=0;n<updater.getDataProvider().getAccounts().get(i).getCharacters().size();n++){
+                        if( updater.getDataProvider().getAccounts().get(i).getCharacters().get(n) != null ){
+                            allCharacters.add(updater.getDataProvider().getAccounts().get(i).getCharacters().get(n));
+                            if( Settings.isDebug ) System.out.println("character added: "+updater.getDataProvider().getAccounts().get(i).getCharacters().get(n).getName());
                         }
                     }
                 }
@@ -103,7 +132,9 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
             }
         });
     }
-    
+    /**
+     * Init menu.
+     */
     private void initMenu(){
         menuSettings.add(menuItemAPI);
         jmb.add(menuSettings);
