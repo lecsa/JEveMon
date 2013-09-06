@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package UI.evechar;
+package UI.evechar.asset;
 
 import API.APIHandler;
 import data.character.EVECharacter;
@@ -13,12 +13,19 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import settings.Settings;
 
 /**
  *
@@ -29,6 +36,8 @@ public class AssetListPanel extends JPanel implements ActionListener{
     private JButton btFetch = new JButton("Get asset data");
     private EVECharacter character;
     private JScrollPane treeView;
+    private ConcurrentLinkedQueue<ItemTreeElement> itemRowsToUpdate = new ConcurrentLinkedQueue();
+    
     public AssetListPanel(EVECharacter c){
         this.character = c;
         setLayout(new BorderLayout());
@@ -71,14 +80,15 @@ public class AssetListPanel extends JPanel implements ActionListener{
             Station sta = character.getAssets().get(i);
             DefaultMutableTreeNode stationNode = new DefaultMutableTreeNode(sta);
             for(int n=0;n<sta.getShips().size();n++){
-                Ship parent = sta.getShips().get(n);
                 DefaultMutableTreeNode parentItemNode;
-                Ship parentShip = (Ship)parent;
+                Ship parentShip = sta.getShips().get(n);
+                ItemTreeElement parentShipRow = new ItemTreeElement(parentShip, new JLabel());
+                itemRowsToUpdate.offer(parentShipRow);
                 if( parentShip.getContainedItems().isEmpty() &&
                     parentShip.getDroneBay().isEmpty() &&
                     parentShip.getFittedItems().isEmpty() &&
                     parentShip.getCargoHold().isEmpty()){
-                    parentItemNode = new DefaultMutableTreeNode(parentShip);
+                    parentItemNode = new DefaultMutableTreeNode(parentShipRow);
                 }else{
                     DefaultMutableTreeNode fittedNode = new DefaultMutableTreeNode("fitted");
                     DefaultMutableTreeNode droneBayNode = new DefaultMutableTreeNode("drone bay");
@@ -86,21 +96,29 @@ public class AssetListPanel extends JPanel implements ActionListener{
                     DefaultMutableTreeNode otherNode = new DefaultMutableTreeNode("other");
                     for(int k=0;k<parentShip.getFittedItems().size();k++){//fitted items
                         Item child = parentShip.getFittedItems().get(k);
-                        fittedNode.add(new DefaultMutableTreeNode(child));
+                        ItemTreeElement childRow = new ItemTreeElement(child, new JLabel());
+                        itemRowsToUpdate.offer(childRow);
+                        fittedNode.add(new DefaultMutableTreeNode(childRow));
                     }
                     for(int k=0;k<parentShip.getDroneBay().size();k++){//fitted items
                         Item child = parentShip.getDroneBay().get(k);
-                        droneBayNode.add(new DefaultMutableTreeNode(child));
+                        ItemTreeElement childRow = new ItemTreeElement(child, new JLabel());
+                        itemRowsToUpdate.offer(childRow);
+                        droneBayNode.add(new DefaultMutableTreeNode(childRow));
                     }
                     for(int k=0;k<parentShip.getCargoHold().size();k++){//fitted items
                         Item child = parentShip.getCargoHold().get(k);
-                        cargoNode.add(new DefaultMutableTreeNode(child));
+                        ItemTreeElement childRow = new ItemTreeElement(child, new JLabel());
+                        itemRowsToUpdate.offer(childRow);
+                        cargoNode.add(new DefaultMutableTreeNode(childRow));
                     }
                     for(int k=0;k<parentShip.getContainedItems().size();k++){//fitted items
                         Item child = parentShip.getContainedItems().get(k);
-                        otherNode.add(new DefaultMutableTreeNode(child));
+                        ItemTreeElement childRow = new ItemTreeElement(child, new JLabel());
+                        itemRowsToUpdate.offer(childRow);         
+                        otherNode.add(new DefaultMutableTreeNode(childRow));
                     }
-                    parentItemNode = new DefaultMutableTreeNode(parentShip);
+                    parentItemNode = new DefaultMutableTreeNode(parentShipRow);
                     parentItemNode.add(fittedNode);
                     parentItemNode.add(droneBayNode);
                     parentItemNode.add(cargoNode);
@@ -110,14 +128,18 @@ public class AssetListPanel extends JPanel implements ActionListener{
             }
             for(int n=0;n<sta.getItems().size();n++){
                 Item parent = sta.getItems().get(n);
+                ItemTreeElement parentRow = new ItemTreeElement(parent,new JLabel());
+                itemRowsToUpdate.offer(parentRow);         
                 DefaultMutableTreeNode parentItemNode;
                 if(parent.getContainedItems().isEmpty()){
-                    parentItemNode = new DefaultMutableTreeNode(parent);
+                    parentItemNode = new DefaultMutableTreeNode(parentRow);
                 }else{
-                    parentItemNode = new DefaultMutableTreeNode(parent);
+                    parentItemNode = new DefaultMutableTreeNode(parentRow);
                     for(int k=0;k<parent.getContainedItems().size();k++){
                         Item child = parent.getContainedItems().get(k);
-                        parentItemNode.add(new DefaultMutableTreeNode(child));
+                        ItemTreeElement childRow = new ItemTreeElement(child, new JLabel());
+                        itemRowsToUpdate.offer(childRow);         
+                        parentItemNode.add(new DefaultMutableTreeNode(childRow));
                     }
                 }
                 stationNode.add(parentItemNode);
@@ -132,6 +154,19 @@ public class AssetListPanel extends JPanel implements ActionListener{
         add(treeView,BorderLayout.CENTER);
         revalidate();
         repaint();
+        //download images..
+        ItemTreeElement currentRow = null;
+        while((currentRow=itemRowsToUpdate.poll())!=null){
+            if( currentRow != null ){
+                try{
+                    ExecutorService exe = Executors.newFixedThreadPool(1);
+                    Callable<Void> command = new TypeImageDownloader(currentRow);
+                    Future<Void> done = exe.submit(command);
+                }catch(Exception ex){
+                    if( Settings.isDebug ) System.out.println("Error while downloading type image (typeID="+currentRow.getItem().getId()+"): "+ex.getMessage());
+                }
+            }
+        }
     }
     
 }

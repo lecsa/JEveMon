@@ -6,6 +6,7 @@ package data.type;
 
 import API.AssetListFlags.Flag_t;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -16,7 +17,8 @@ public class Item extends Type implements Comparable{
     protected int quantity = 0;
     protected ArrayList<Item> containedItems = new ArrayList();
     protected int flag;
-
+    public volatile ImageIcon icon;
+    
     public Item(Type t,int flag){
         super(t.id, t.name, t.description, t.marketGroupID, t.groupID);
         this.flag = flag;

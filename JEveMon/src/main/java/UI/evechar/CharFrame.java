@@ -4,6 +4,7 @@
  */
 package UI.evechar;
 
+import UI.evechar.asset.AssetListPanel;
 import data.character.EVECharacter;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
