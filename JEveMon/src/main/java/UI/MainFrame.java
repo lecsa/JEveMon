@@ -28,8 +28,10 @@ import utils.ImageHandler;
  * - Account expires DoB helyett
  * - SP / hour
  * - Skill queue gui
- * 
- * 
+ * - Comparable when we want to compare Ship to Item
+ * - Modal msg after the 5min update cycle is annoying
+ * - Notification class + notification settings. Unique id generation for serializable notifications.
+ * - Account expires notification
  * 
  */
 /**
