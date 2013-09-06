@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import settings.Settings;
+import utils.FileSystem;
 
 /**
  *
@@ -86,7 +87,7 @@ public class DataUpdater {
             }
         }
         
-        File keysdir = new File("apikeys");
+        File keysdir = FileSystem.getFile("apikeys");
         if( keysdir.exists() && keysdir.isDirectory() ){
             File[] list = keysdir.listFiles();
             FileInputStream fis = null;

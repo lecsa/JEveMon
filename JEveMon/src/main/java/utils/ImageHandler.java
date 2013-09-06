@@ -27,11 +27,9 @@ public class ImageHandler {
     private static boolean msgImgServerOffline = true;
     
     public static void createdirs(){
-        File f = new File("cache/img/char");
-        f.mkdirs();
-        f = new File("cache/img/type");
-        f.mkdirs();
+        FileSystem.createDirs();
     }
+    
     private static boolean cache(File f, URL url){
         boolean success = false;
         if( !f.exists() ){//cache
@@ -63,7 +61,7 @@ public class ImageHandler {
     }
     
     public static JLabel getCharacterIMGLabel(int characterID){
-    File f = new File("cache/img/char/"+Integer.toString(characterID)+"_128.jpg");
+    File f = FileSystem.getFile("cache/img/char/"+Integer.toString(characterID)+"_128.jpg");
     JLabel retval = new JLabel("IMG unavailable");
     if( !f.exists() ){
         try{
@@ -122,7 +120,7 @@ public class ImageHandler {
         return new ImageIcon();
     }
     public static ImageIcon getTypeIMG(int typeID){
-    File f = new File("cache/img/type/"+Integer.toString(typeID)+"_32.png");
+    File f = FileSystem.getFile("cache/img/type/"+Integer.toString(typeID)+"_32.png");
     ImageIcon retval = null;
     if( !f.exists() ){
         try{

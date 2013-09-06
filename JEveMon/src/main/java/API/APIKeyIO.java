@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import utils.FileSystem;
 
 /**
  *
@@ -25,10 +26,8 @@ public class APIKeyIO {
         FileOutputStream fos = null;
         ObjectOutputStream oos = null;
         try{
-            File dircheck = new File(API_DIR);
-            if( !dircheck.exists() ){
-                dircheck.mkdirs();
-            }
+            File dircheck = FileSystem.getFile(API_DIR);
+            if( !dircheck.exists() ) FileSystem.createDir(API_DIR);
             fos = new FileOutputStream(f);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(key);

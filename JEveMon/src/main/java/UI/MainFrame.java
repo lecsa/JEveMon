@@ -21,6 +21,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 import settings.Settings;
+import utils.FileSystem;
 import utils.ImageHandler;
 /*
  * TODO: 
@@ -52,7 +53,7 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
         if ( !Settings.load("settings.conf") ) Settings.save("settings.conf");
         if ( Settings.isDebug ) {
             System.out.println("App Name: " + Settings.APPNAME);
-            System.out.println("User Home Path: " + Settings.USERPATH);
+            System.out.println("User Home Path: " + FileSystem.USERPATH);
         }
         updater = new DataUpdater();
         updater.addListener(this);

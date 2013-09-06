@@ -43,6 +43,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import utils.FileSystem;
     //  cache/accounts
     //  cache/char
 /**
@@ -55,12 +56,7 @@ public class APIHandler {
     
     
     public static void createdirs(){
-        File f = new File("cache/account");
-        f.mkdirs();
-        f = new File("cache/char");
-        f.mkdirs();
-        f = new File("cache/static");
-        f.mkdirs();
+        FileSystem.createDirs();
     }
     
     public static boolean isCacheNeeded(File f){
@@ -155,7 +151,7 @@ public class APIHandler {
     public static Station getStationByID(long stationID){
     
     Station h=new Station(stationID,"Unknown station: "+stationID);
-    File cache = new File("cache/static/outposts.xml");
+    File cache = FileSystem.getFile("cache/static/outposts.xml");
         if( isCacheNeeded(cache) ){
             try{
                 URL url = new URL("https://"+Defaults.SERVER+"/eve/ConquerableStationList.xml.aspx");
@@ -190,7 +186,7 @@ public class APIHandler {
     
     private static void initRefTypes(){
         JournalElement.refTypes = new HashMap();
-        File cache = new File("cache/static/reftypes.xml");
+        File cache = FileSystem.getFile("cache/static/reftypes.xml");
         if( isCacheNeeded(cache) ){
             try{
                 URL url = new URL("https://"+Defaults.SERVER+"/eve/RefTypes.xml.aspx");
@@ -231,7 +227,9 @@ public class APIHandler {
         if( JournalElement.refTypes == null ){
             initRefTypes();
         }
-        File cache = new File("cache/char/journal_"+c.getId()+".xml");
+        
+        File cache = FileSystem.getFile("cache/char/journal_"+c.getId()+".xml");
+        
         if( isCacheNeeded(cache) ){
             try{
                 URL url = new URL(c.getKey().getURL("char", "WalletJournal.xml.aspx")+"&characterID="+c.getId());
@@ -240,7 +238,8 @@ public class APIHandler {
                 System.out.println("MUE: "+ex.getMessage());
             }
         }
-        File cache2 = new File("cache/char/transactions_"+c.getId()+".xml");
+        
+        File cache2 = FileSystem.getFile("cache/char/transactions_"+c.getId()+".xml");
         if( isCacheNeeded(cache2) ){
             try{
                 URL url = new URL(c.getKey().getURL("char", "WalletTransactions.xml.aspx")+"&characterID="+c.getId());
@@ -313,7 +312,7 @@ public class APIHandler {
     
     public static Element getTransactionDOMElement(EVECharacter c, long refID){
         Element el = null;
-        File cache = new File("cache/char/transactions_"+c.getId()+".xml");
+        File cache = FileSystem.getFile("cache/char/transactions_"+c.getId()+".xml");
         if( cache.exists() && cache.isFile() ){
             try{
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -346,7 +345,7 @@ public class APIHandler {
     
     public static EVECharacter fillCharacterData(EVECharacter c){
         if( c != null ){
-            File cache = new File("cache/char/sheet_"+c.getId()+".xml");
+            File cache = FileSystem.getFile("cache/char/sheet_"+c.getId()+".xml");
             if( isCacheNeeded(cache) ){
                 try{
                     URL url = new URL(c.getKey().getURL("char", "CharacterSheet.xml.aspx")+"&characterID="+c.getId());
@@ -427,7 +426,7 @@ public class APIHandler {
     }
     
     public static EVECharacter fillSkillQueue(EVECharacter c){
-        File cache = new File("cache/char/queue_"+c.getId()+".xml");
+        File cache = FileSystem.getFile("cache/char/queue_"+c.getId()+".xml");
         if( isCacheNeeded(cache) ){
             try{
                 URL url = new URL(c.getKey().getURL("char", "SkillQueue.xml.aspx")+"&characterID="+c.getId());
@@ -472,7 +471,7 @@ public class APIHandler {
     
     public static boolean isCharacterTraining(EVECharacter c){
     boolean isTraining = false;
-    File cache = new File("cache/char/training_"+c.getId()+".xml");
+    File cache = FileSystem.getFile("cache/char/training_"+c.getId()+".xml");
         if( isCacheNeeded(cache) ){
             try{
                 URL url = new URL(c.getKey().getURL("char", "SkillInTraining.xml.aspx")+"&characterID="+c.getId());
@@ -501,7 +500,7 @@ public class APIHandler {
     
     public static Account getAccount(APIKey key){
     Account acc = null;
-        File f = new File("cache/account/"+key.getName()+"_status.xml");
+        File f = FileSystem.getFile("cache/account/"+key.getName()+"_status.xml");
         if( isCacheNeeded(f) ){
             try{
                 URL url = new URL(key.getURL("account", "AccountStatus.xml.aspx"));
@@ -536,7 +535,7 @@ public class APIHandler {
         int charactersNumber = 0;
         // get URL content
         
-        File f = new File("cache/account/"+key.getName()+".xml");
+        File f = FileSystem.getFile("cache/account/"+key.getName()+".xml");
         if( isCacheNeeded(f) ){
             try{
                 URL url = new URL(key.getURL("account", "Characters.xml.aspx"));
@@ -590,7 +589,7 @@ public class APIHandler {
     }
     
     public static void fillCharacterAssets(EVECharacter c){
-        File cache = new File("cache/char/assets_"+c.getId()+".xml");
+        File cache = FileSystem.getFile("cache/char/assets_"+c.getId()+".xml");
         if( isCacheNeeded(cache) ){
             try{
                 URL url = new URL(c.getKey().getURL("char", "AssetList.xml.aspx")+"&characterID="+c.getId());

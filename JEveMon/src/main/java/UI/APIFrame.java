@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
+import utils.FileSystem;
 
 /**
  *
@@ -89,7 +90,7 @@ public class APIFrame extends JFrame implements ActionListener{
         if(name.equals("") || keyID.equals("") || vCode.equals("")){
             Msg.errorMsg("You need to fill every fields.");
         }else{
-            File f = new File(APIKeyIO.API_DIR+"/"+name+APIKeyIO.EXTENSION);
+            File f = FileSystem.getFile(APIKeyIO.API_DIR+"/"+name+APIKeyIO.EXTENSION);
             boolean save = true;
             if( f.exists() ){
                 int answer = JOptionPane.showConfirmDialog(this, "File ("+f.getName()+") already exists. Would you like to overwrite?", "File exists", JOptionPane.YES_NO_OPTION);
@@ -114,7 +115,7 @@ public class APIFrame extends JFrame implements ActionListener{
     }
     
     private void open(){
-        JFileChooser jfc = new JFileChooser(new File("apikeys"));
+        JFileChooser jfc = new JFileChooser(FileSystem.getFile("apikeys"));
         FileFilter ff = new FileFilter() {
 
             @Override
