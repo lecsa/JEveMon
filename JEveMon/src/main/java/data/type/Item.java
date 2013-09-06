@@ -67,13 +67,11 @@ public class Item extends Type implements Comparable{
     }
     
     public boolean isInDroneBay(){
-        String fname = Flag_t.getFlagName(flag);
-        return fname.startsWith("drone");
+        return flag == Flag_t.FLAG_DRONE_BAY.getValue();
     }
     
     public boolean isInCargoHold(){
-        String fname = Flag_t.getFlagName(flag);
-        return fname.startsWith("cargo");
+        return flag == Flag_t.FLAG_CARGO_HOLD.getValue();
     }
     
 }

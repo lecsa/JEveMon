@@ -5,6 +5,7 @@
 package data.location;
 
 import data.type.Item;
+import data.type.Ship;
 import java.util.ArrayList;
 
 /**
@@ -15,6 +16,7 @@ public class Station implements Comparable{
     private long stationID;
     private String name;
     private ArrayList<Item> items = new ArrayList();
+    private ArrayList<Ship> ships = new ArrayList();
     
     public Station(long stationID, String name) {
         this.stationID = stationID;
@@ -48,6 +50,10 @@ public class Station implements Comparable{
 
     public ArrayList<Item> getItems() {
         return items;
+    }
+
+    public ArrayList<Ship> getShips() {
+        return ships;
     }
 
     

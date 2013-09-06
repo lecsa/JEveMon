@@ -10,6 +10,7 @@ import data.journal.JournalElement;
 import data.skill.Skill;
 import data.skill.SkillInTraining;
 import data.location.Station;
+import data.type.Ship;
 import db.DBHandler;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,7 +63,7 @@ public class EVECharacter {
         return retval;
     }
     
-    public void addAsset(Item i,long stationID){
+    public void addItemToAssets(Item i,long stationID){
         Station s = getStation(stationID);
         
         if( s == null ){
@@ -73,7 +74,17 @@ public class EVECharacter {
         s.getItems().add(i);
         if ( Settings.isDebug ) System.out.println("Adding: "+i.getName()+" x"+i.getQuantity()+" to "+s.getName());
     }
-    
+    public void addShipToAssets(Ship i,long stationID){
+        Station s = getStation(stationID);
+        
+        if( s == null ){
+            DBHandler db = new DBHandler();
+            s = db.getStationByLocationID(stationID);
+            assets.add(s);
+        }
+        s.getShips().add(i);
+        if ( Settings.isDebug ) System.out.println("Adding: "+i.getName()+" x"+i.getQuantity()+" to "+s.getName());
+    }
     private Station getStation(long stationID){
     Station sta = null;
         for(int i=0;i<assets.size() && sta == null;i++){

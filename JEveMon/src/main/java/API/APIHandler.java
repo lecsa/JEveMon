@@ -650,9 +650,9 @@ public class APIHandler {
                         }
                     }
                     if( !parentIsShip ){
-                        c.addAsset(parent, locationID);
+                        c.addItemToAssets(parent, locationID);
                     }else{
-                        c.addAsset(parentShip, locationID);
+                        c.addShipToAssets(parentShip, locationID);
                     }
                     }catch(NumberFormatException ex){
                         System.out.println("NFE: "+ex.getMessage());
@@ -661,6 +661,7 @@ public class APIHandler {
                 Collections.sort(c.getAssets());
                 for(int i=0;i<c.getAssets().size();i++){
                     Collections.sort(c.getAssets().get(i).getItems());
+                    Collections.sort(c.getAssets().get(i).getShips());
                 }
 //                System.out.println("asset size: "+c.getAssets().size());
             }catch(SAXException ex){
