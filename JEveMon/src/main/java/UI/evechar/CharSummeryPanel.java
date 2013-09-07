@@ -54,7 +54,7 @@ public class CharSummeryPanel extends JPanel implements ActionListener{
         }else{
             JPanel pnFlow = new JPanel(new FlowLayout());
             JLabel lb;
-            pnFlow.add(lb = new JLabel("<html><center>There are no characters.<br />You can add api keys in the Settings menu.</center></html>"));
+            pnFlow.add(lb = new JLabel("<html><center><br />There are no characters.<br />You can add api keys in the Settings menu.</center></html>"));
             lb.setFont(new Font("Serif",Font.PLAIN,25));
             jsp = new JScrollPane(pnFlow);
             add(jsp,BorderLayout.CENTER);
@@ -97,7 +97,7 @@ public class CharSummeryPanel extends JPanel implements ActionListener{
                     JPanel pnFlow = new JPanel(new FlowLayout());
                     String str = "";
                     if( !cbActive.isSelected() && !cbInactive.isSelected() )
-                        str = "You need to check one of the checkboxes above.";
+                        str = "You need to check at least one of the checkboxes above.";
                     else if( cbActive.isSelected() && !cbInactive.isSelected() )
                         str = "No characters found in training.";
                     else if( !cbActive.isSelected() && cbInactive.isSelected() )
@@ -105,7 +105,7 @@ public class CharSummeryPanel extends JPanel implements ActionListener{
                     else if( cbActive.isSelected() && cbInactive.isSelected() )
                         str = "There are no characters.<br />You can add api keys in the Settings menu.";
                     JLabel lb;
-                    pnFlow.add(lb = new JLabel("<html><center>"+str+"</center></html>"));
+                    pnFlow.add(lb = new JLabel("<html><center><br />"+str+"</center></html>"));
                     lb.setFont(new Font("Serif",Font.PLAIN,25));
                     jsp = new JScrollPane(pnFlow);
                 }
