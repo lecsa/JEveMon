@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -29,26 +30,35 @@ public class CharSummeryPanel extends JPanel implements ActionListener{
 
     public CharSummeryPanel(ArrayList<EVECharacter> characters){
         setLayout(new BorderLayout());
-        panels = new ExtendedCharPanel[characters.size()];
-        JPanel spaceFillerPanel = new JPanel();
-        for(int i=0;i<characters.size();i++){
-            panels[i] = new ExtendedCharPanel(characters.get(i));
-            if(characters.get(i).isTraining()){
-                visiblePanels.add(panels[i]);
-            }
+        if( characters.size() > 0 ){
+            panels = new ExtendedCharPanel[characters.size()];
+            JPanel spaceFillerPanel = new JPanel();
+            for(int i=0;i<characters.size();i++){
+                panels[i] = new ExtendedCharPanel(characters.get(i));
+                if(characters.get(i).isTraining()){
+                    visiblePanels.add(panels[i]);
+                }
 
+            }
+            JPanel pnTop = new JPanel(new FlowLayout());
+            cbActive.addActionListener(this);
+            cbInactive.addActionListener(this);
+            pnTop.add(cbInactive);
+            pnTop.add(cbActive);
+            cbActive.setSelected(true);
+            add(pnTop,BorderLayout.NORTH);
+            grid = new JPanel(new GridBagLayout());
+            jsp = new JScrollPane(grid);
+            add(jsp,BorderLayout.CENTER);
+            updateGrid();
+        }else{
+            JPanel pnFlow = new JPanel(new FlowLayout());
+            JLabel lb;
+            pnFlow.add(lb = new JLabel("<html><center>There are no characters.<br />You can add api keys in the Settings menu.</center></html>"));
+            lb.setFont(new Font("Serif",Font.PLAIN,25));
+            jsp = new JScrollPane(pnFlow);
+            add(jsp,BorderLayout.CENTER);
         }
-        JPanel pnTop = new JPanel(new FlowLayout());
-        cbActive.addActionListener(this);
-        cbInactive.addActionListener(this);
-        pnTop.add(cbInactive);
-        pnTop.add(cbActive);
-        cbActive.setSelected(true);
-        add(pnTop,BorderLayout.NORTH);
-        grid = new JPanel(new GridBagLayout());
-        jsp = new JScrollPane(grid);
-        add(jsp,BorderLayout.CENTER);
-        updateGrid();
     }
 
     private void updateVisibility(){
@@ -68,20 +78,37 @@ public class CharSummeryPanel extends JPanel implements ActionListener{
             public void run() {
                 updateVisibility();
                 remove(jsp);
-                grid = new JPanel(new GridBagLayout());
-                grid.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-                GridBagConstraints gbc = new GridBagConstraints();
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-                gbc.anchor = GridBagConstraints.NORTH;
+                if( visiblePanels.size() > 0 ){
+                    grid = new JPanel(new GridBagLayout());
+                    grid.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+                    GridBagConstraints gbc = new GridBagConstraints();
+                    gbc.fill = GridBagConstraints.HORIZONTAL;
+                    gbc.anchor = GridBagConstraints.NORTH;
 
-                for (int i = 0; i < visiblePanels.size(); i++) {
-                    gbc.gridy = gbc.gridy + 1;
-                    grid.add(visiblePanels.get(i), gbc);
+                    for (int i = 0; i < visiblePanels.size(); i++) {
+                        gbc.gridy = gbc.gridy + 1;
+                        grid.add(visiblePanels.get(i), gbc);
+                    }
+                    gbc.weighty=1;
+                    grid.add(new JPanel(), gbc);
+                    jsp = new JScrollPane(grid);
+                    jsp.getVerticalScrollBar().setUnitIncrement(16);
+                }else{
+                    JPanel pnFlow = new JPanel(new FlowLayout());
+                    String str = "";
+                    if( !cbActive.isSelected() && !cbInactive.isSelected() )
+                        str = "You need to check one of the checkboxes above.";
+                    else if( cbActive.isSelected() && !cbInactive.isSelected() )
+                        str = "No characters found in training.";
+                    else if( !cbActive.isSelected() && cbInactive.isSelected() )
+                        str = "There are no inactive characters.";
+                    else if( cbActive.isSelected() && cbInactive.isSelected() )
+                        str = "There are no characters.<br />You can add api keys in the Settings menu.";
+                    JLabel lb;
+                    pnFlow.add(lb = new JLabel("<html><center>"+str+"</center></html>"));
+                    lb.setFont(new Font("Serif",Font.PLAIN,25));
+                    jsp = new JScrollPane(pnFlow);
                 }
-                gbc.weighty=1;
-                grid.add(new JPanel(), gbc);
-                jsp = new JScrollPane(grid);
-                jsp.getVerticalScrollBar().setUnitIncrement(16);
                 add(jsp,BorderLayout.CENTER);
                 jsp.repaint();
                 revalidate();
