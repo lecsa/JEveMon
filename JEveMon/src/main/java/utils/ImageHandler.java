@@ -30,7 +30,7 @@ public class ImageHandler {
         FileSystem.createDirs();
     }
     
-    private static boolean cache(File f, URL url){
+    public static boolean cache(File f, URL url){
         boolean success = false;
         if( !f.exists() ){//cache
             FileOutputStream fos = null;

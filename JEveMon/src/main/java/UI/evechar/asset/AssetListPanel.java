@@ -13,12 +13,18 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import utils.ImageHandler;
+import utils.TypeImageSaver;
 
 /**
  *
@@ -31,6 +37,7 @@ public class AssetListPanel extends JPanel implements ActionListener{
     private JScrollPane treeView;
     
     public AssetListPanel(EVECharacter c){
+        ImageHandler.getTypeIMG(1);//cache no type found image
         this.character = c;
         setLayout(new BorderLayout());
         JPanel flow = new JPanel(new FlowLayout());
@@ -74,6 +81,7 @@ public class AssetListPanel extends JPanel implements ActionListener{
             for(int n=0;n<sta.getShips().size();n++){
                 DefaultMutableTreeNode parentItemNode;
                 Ship parentShip = sta.getShips().get(n);
+                cacheTypeImgIfNeeded(parentShip.getId());
                 if( parentShip.getContainedItems().isEmpty() &&
                     parentShip.getDroneBay().isEmpty() &&
                     parentShip.getFittedItems().isEmpty() &&
@@ -87,18 +95,22 @@ public class AssetListPanel extends JPanel implements ActionListener{
                     for(int k=0;k<parentShip.getFittedItems().size();k++){//fitted items
                         Item child = parentShip.getFittedItems().get(k);
                         fittedNode.add(new DefaultMutableTreeNode(child));
+                        cacheTypeImgIfNeeded(child.getId());
                     }
                     for(int k=0;k<parentShip.getDroneBay().size();k++){//fitted items
                         Item child = parentShip.getDroneBay().get(k);
                         droneBayNode.add(new DefaultMutableTreeNode(child));
+                        cacheTypeImgIfNeeded(child.getId());
                     }
                     for(int k=0;k<parentShip.getCargoHold().size();k++){//fitted items
                         Item child = parentShip.getCargoHold().get(k);
                         cargoNode.add(new DefaultMutableTreeNode(child));
+                        cacheTypeImgIfNeeded(child.getId());
                     }
                     for(int k=0;k<parentShip.getContainedItems().size();k++){//fitted items
                         Item child = parentShip.getContainedItems().get(k);
                         otherNode.add(new DefaultMutableTreeNode(child));
+                        cacheTypeImgIfNeeded(child.getId());
                     }
                     parentItemNode = new DefaultMutableTreeNode(parentShip);
                     parentItemNode.add(fittedNode);
@@ -111,6 +123,7 @@ public class AssetListPanel extends JPanel implements ActionListener{
             for(int n=0;n<sta.getItems().size();n++){
                 Item parent = sta.getItems().get(n);
                 DefaultMutableTreeNode parentItemNode;
+                cacheTypeImgIfNeeded(parent.getId());
                 if(parent.getContainedItems().isEmpty()){
                     parentItemNode = new DefaultMutableTreeNode(parent);
                 }else{
@@ -118,12 +131,15 @@ public class AssetListPanel extends JPanel implements ActionListener{
                     for(int k=0;k<parent.getContainedItems().size();k++){
                         Item child = parent.getContainedItems().get(k);
                         parentItemNode.add(new DefaultMutableTreeNode(child));
+                        cacheTypeImgIfNeeded(child.getId());
                     }
                 }
                 stationNode.add(parentItemNode);
             }
             top.add(stationNode);
         }
+        //download icons
+        
         tree = new JTree(top);
         TypeTreeCellRenderer renderer = new TypeTreeCellRenderer();
         tree.setCellRenderer(renderer);
@@ -132,7 +148,11 @@ public class AssetListPanel extends JPanel implements ActionListener{
         add(treeView,BorderLayout.CENTER);
         revalidate();
         repaint();
-        
+    }
+    
+    private void cacheTypeImgIfNeeded(int typeID){
+        Thread downloader = new Thread(new TypeImageSaver(typeID));
+        downloader.start();
     }
     
 }

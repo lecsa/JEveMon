@@ -8,12 +8,21 @@ import API.AssetListFlags;
 import data.type.Item;
 import data.location.Station;
 import java.awt.Component;
+import java.net.MalformedURLException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
+import settings.Settings;
+import utils.FileSystem;
 import utils.ImageHandler;
+import utils.TypeImageSaver;
 
 /**
  * Tree cell renderer for items.
@@ -37,8 +46,19 @@ public class TypeTreeCellRenderer implements TreeCellRenderer{
                             flagStr = " ("+AssetListFlags.Flag_t.getFlagName(item.getFlag())+")";
                         }
                     }
+                    ImageIcon icon = null;
+                    if(!TypeImageSaver.isLocked(item.getId())){
+                        icon = ImageHandler.getImage(FileSystem.getPath("cache/img/type/"+item.getId()+"_32.png"));
+                    }else{
+                        icon = ImageHandler.getImage(FileSystem.getPath("cache/img/type/1_32.png"));
+                    }
+                    if(icon == null){
+                        icon = ImageHandler.getImage(FileSystem.getPath("cache/img/type/1_32.png"));
+                    }
                     label.setText(item.getName()+amount+flagStr);
-                    label.setIcon(ImageHandler.getTypeIMG(item.getId()));
+                    if(icon != null){
+                        label.setIcon(icon);
+                    }
             } else if( o instanceof Station ) {
                 Station station = (Station)o;
                 label = new JLabel(ImageHandler.getTypeIMG(17366));
