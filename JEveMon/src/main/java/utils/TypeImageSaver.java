@@ -5,8 +5,6 @@
 package utils;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import settings.Settings;
