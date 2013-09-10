@@ -6,6 +6,7 @@ package UI;
 
 import UI.evechar.CharSummeryPanel;
 import API.APIHandler;
+import data.DataProvider;
 import data.DataUpdater;
 import data.character.EVECharacter;
 import event.done.DataUpdateFinishedEvent;
@@ -74,7 +75,8 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
     /**
      * Main data updater class.
      */
-    private DataUpdater updater;
+    private static DataUpdater updater;
+    public static DataProvider dp;
     
     @SuppressWarnings("LeakingThisInConstructor")
     public MainFrame(){
@@ -114,11 +116,12 @@ public class MainFrame extends JFrame implements ActionListener, DataUpdateFinis
             @Override
             public void run() {
                 ArrayList<EVECharacter> allCharacters = new ArrayList();
-                for(int i=0;i<updater.getDataProvider().getAccounts().size();i++){
-                    for(int n=0;n<updater.getDataProvider().getAccounts().get(i).getCharacters().size();n++){
-                        if( updater.getDataProvider().getAccounts().get(i).getCharacters().get(n) != null ){
-                            allCharacters.add(updater.getDataProvider().getAccounts().get(i).getCharacters().get(n));
-                            if( Settings.isDebug ) System.out.println("character added: "+updater.getDataProvider().getAccounts().get(i).getCharacters().get(n).getName());
+                dp = updater.getDataProvider();
+                for(int i=0;i<dp.getAccounts().size();i++){
+                    for(int n=0;n<dp.getAccounts().get(i).getCharacters().size();n++){
+                        if( dp.getAccounts().get(i).getCharacters().get(n) != null ){
+                            allCharacters.add(dp.getAccounts().get(i).getCharacters().get(n));
+                            if( Settings.isDebug ) System.out.println("character added: "+dp.getAccounts().get(i).getCharacters().get(n).getName());
                         }
                     }
                 }

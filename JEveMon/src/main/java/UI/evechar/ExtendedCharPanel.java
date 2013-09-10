@@ -6,6 +6,7 @@ package UI.evechar;
 
 import UI.MainFrame;
 import UI.Msg;
+import data.account.Account;
 import data.character.EVECharacter;
 import data.skill.SkillInTraining;
 import java.awt.BorderLayout;
@@ -191,8 +192,13 @@ public class ExtendedCharPanel extends JPanel implements Runnable,MouseListener{
         gridPanel.add(new JLabel(character.getName()));
         gridPanel.add(new JLabel("Corp:"));
         gridPanel.add(new JLabel(character.getCorpName()));
-        gridPanel.add(new JLabel("DoB:"));
-        gridPanel.add(new JLabel(character.getDayOfBirth()));
+        gridPanel.add(new JLabel("Account paid:"));
+        Account charAcc = MainFrame.dp.getAccountByCharacterID(character.getId());
+        JLabel accExpires = new JLabel("Unknown account");
+        if( charAcc != null ){
+            accExpires.setText(charAcc.getExpires());
+        }
+        gridPanel.add(accExpires);
         gridPanel.add(new JLabel("Skills / clone:"));
         gridPanel.add((lbSP = new JLabel(Utils.formatInt(character.getSkillpoints())+" / "+Utils.formatInt(character.getCloneSkillpoints()))));
         if( character.getCloneSkillpoints() <= character.getSkillpoints() ){

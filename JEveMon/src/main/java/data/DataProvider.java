@@ -21,4 +21,15 @@ public class DataProvider {
         return accounts;
     }
     
+    public Account getAccountByCharacterID(int characterID){
+        Account retval = null;
+            for(int i=0;i<accounts.size() && retval == null;i++){
+                for(int n=0;n<accounts.get(i).getCharacters().size() && retval == null;n++){
+                    if(accounts.get(i).getCharacters().get(n).getId() == characterID){
+                        retval = accounts.get(i);
+                    }
+                }
+            }
+        return retval;
+    }
 }
