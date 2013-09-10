@@ -15,7 +15,7 @@ import utils.ImageHandler;
  * @author lecsa
  */
 public class CCPPanel extends JPanel{
-    private final String CCP_COPYRIGHT = "EVE Online, the EVE logo, "
+    private final static String CCP_COPYRIGHT = "EVE Online, the EVE logo, "
             + "EVE and all associated logos and designs are the intellectual property of CCP hf. "
             + "All artwork, screenshots, characters, vehicles, storylines, "
             + "world facts or other recognizable features of the intellectual property relating "
